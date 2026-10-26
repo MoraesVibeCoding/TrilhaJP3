@@ -1,0 +1,62 @@
+/* Moraes CodeVibe — Design Tokens, marca V2 (evolução de 2026-10-23).
+   Valores de docs/brand/evolucao/tokens-v2.json. O kit original, com a V1, segue em docs/brand/tokens.
+   Nomes: ink = Tinta, forest = Floresta, leaf = Folha, mint = Neblina, paper = Papel, gold = Âmbar, pulse = Pulso.
+   Âmbar e Pulso nunca são texto nem borda sobre o papel claro (contraste de 2,7:1 e 1,3:1). */
+
+:root {
+  /* Cores — light (padrão) */
+  --mcv-ink: #0f1f14;
+  --mcv-forest: #1b4d2e;
+  --mcv-leaf: #2f7d4b;
+  --mcv-leaf-soft: #a8c69a;
+  --mcv-mint: #edf4e7;
+  --mcv-paper: #f8faf5;
+  --mcv-gold: #d4892a;
+  --mcv-stone: #7c8a76;
+  --mcv-line: #d5dfcc;
+  --mcv-card: #ffffff;
+  --mcv-pulse: #a6f26b;
+
+  /* Tipografia */
+  --mcv-font-display: "Geist", system-ui, sans-serif;
+  --mcv-font-body: "Geist", system-ui, -apple-system, sans-serif;
+  --mcv-font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Raio e espaçamento base */
+  --mcv-radius-sm: 8px;
+  --mcv-radius-md: 12px;
+  --mcv-radius-lg: 20px;
+  --mcv-space-unit: 8px;
+}
+
+/* Modo escuro — segue a preferência do sistema */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --mcv-ink: #eef3e8;
+    --mcv-forest: #a8c69a;
+    --mcv-leaf: #8fb877;
+    --mcv-leaf-soft: #4d6b45;
+    --mcv-mint: #1c2b1e;
+    --mcv-paper: #0f1f14;
+    --mcv-gold: #d4892a;
+    --mcv-stone: #9db092;
+    --mcv-line: #2c4733;
+    --mcv-card: #15271a;
+    --mcv-pulse: #a6f26b;
+  }
+}
+
+/* Modo escuro forçado via atributo (toggle manual) */
+:root[data-theme="dark"] {
+  --mcv-ink: #eef3e8;
+  --mcv-forest: #a8c69a;
+  --mcv-leaf: #8fb877;
+  --mcv-leaf-soft: #4d6b45;
+  --mcv-mint: #1c2b1e;
+  --mcv-paper: #0f1f14;
+  --mcv-gold: #d4892a;
+  --mcv-stone: #9db092;
+  --mcv-line: #2c4733;
+  --mcv-card: #15271a;
+  --mcv-pulse: #a6f26b;
+}

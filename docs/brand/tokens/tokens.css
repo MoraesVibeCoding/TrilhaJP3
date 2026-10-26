@@ -1,0 +1,57 @@
+/* Moraes CodeVibe — Design Tokens
+   Cole isto no seu arquivo CSS global (ex.: globals.css, tokens.css). */
+
+:root {
+  /* Cores — light (padrão) */
+  --mcv-ink: #16241a;
+  --mcv-forest: #2b4a30;
+  --mcv-leaf: #6f9959;
+  --mcv-leaf-soft: #a8c69a;
+  --mcv-mint: #eef3e8;
+  --mcv-paper: #f9faf6;
+  --mcv-gold: #b9843f;
+  --mcv-stone: #7c8a76;
+  --mcv-line: #d8e0d0;
+  --mcv-card: #ffffff;
+
+  /* Tipografia */
+  --mcv-font-display: "Fraunces", Georgia, serif;
+  --mcv-font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --mcv-font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Raio e espaçamento base */
+  --mcv-radius-sm: 8px;
+  --mcv-radius-md: 12px;
+  --mcv-radius-lg: 20px;
+  --mcv-space-unit: 8px;
+}
+
+/* Modo escuro — segue a preferência do sistema */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --mcv-ink: #eef3e8;
+    --mcv-forest: #a8c69a;
+    --mcv-leaf: #8fb877;
+    --mcv-leaf-soft: #4d6b45;
+    --mcv-mint: #1c2b1e;
+    --mcv-paper: #141d16;
+    --mcv-gold: #d9a35f;
+    --mcv-stone: #9db092;
+    --mcv-line: #2c3b2a;
+    --mcv-card: #1a2519;
+  }
+}
+
+/* Modo escuro forçado via atributo (toggle manual) */
+:root[data-theme="dark"] {
+  --mcv-ink: #eef3e8;
+  --mcv-forest: #a8c69a;
+  --mcv-leaf: #8fb877;
+  --mcv-leaf-soft: #4d6b45;
+  --mcv-mint: #1c2b1e;
+  --mcv-paper: #141d16;
+  --mcv-gold: #d9a35f;
+  --mcv-stone: #9db092;
+  --mcv-line: #2c3b2a;
+  --mcv-card: #1a2519;
+}

@@ -1,0 +1,33 @@
+{
+  "_note": "Marca V2, lida do artefato https://claude.ai/artifact/9KJch3JzimL176JVtLETBq em 2026-10-23. Aplicada ao app em 2026-10-23 (tokens em src/styles/tokens.css). A versão de 2026-10-26 com 8 pranchas (fundamentos-v2.md) traz os mesmos valores.",
+  "color": {
+    "tinta": "#0F1F14",
+    "floresta": "#1B4D2E",
+    "folha": "#2F7D4B",
+    "pulso": "#A6F26B",
+    "neblina": "#EDF4E7",
+    "papel": "#F8FAF5",
+    "ambar": "#D4892A",
+    "texto-suave": "#526350",
+    "linha": "#D5DFCC",
+    "linha-suave": "#E3EADC",
+    "sobre-escuro-texto": "#B4C5AF",
+    "sobre-floresta-texto": "#C9DBC3",
+    "linha-escuro": "#2C4733"
+  },
+  "font": {
+    "display": "Fraunces 600 (itálico 500 para ênfase)",
+    "corpo": "Inter 400/500/600",
+    "codigo-e-rotulos": "JetBrains Mono 400/500/600"
+  },
+  "logo": {
+    "area-de-respiro": "altura do ícone em todos os lados",
+    "tamanho-minimo-px": 24,
+    "abaixo-de-32px": "sem terminais e traço mais grosso",
+    "pulso": "único ponto lime; só muda de cor na versão de uma cor"
+  },
+  "regras": {
+    "pulso": "IA e destaque; no feed, uma vez por peça",
+    "ambar": "alertas e ação secundária"
+  }
+}

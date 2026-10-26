@@ -1,0 +1,17 @@
+import { defineConfig, devices } from "@playwright/test";
+
+export default defineConfig({
+  testDir: "e2e",
+  forbidOnly: !!process.env.CI,
+  use: {
+    baseURL: "http://localhost:3000",
+    // shortcut: local sandbox ships its own Chromium; CI installs the matching one.
+    launchOptions: { executablePath: process.env.E2E_CHROMIUM_PATH },
+  },
+  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+  webServer: {
+    command: "npm run dev",
+    url: "http://localhost:3000",
+    reuseExistingServer: !process.env.CI,
+  },
+});

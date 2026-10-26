@@ -1,0 +1,10 @@
+.next
+node_modules
+.claude
+docs
+package-lock.json
+next-env.d.ts
+.agents
+.claude/skills
+.claude/agents
+.impeccable
