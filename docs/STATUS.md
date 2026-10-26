@@ -1,10 +1,10 @@
 # STATUS — TrilhaJp3
 
-Atualizado em 2026-10-26. Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
+Atualizado em 2026-10-26 (T12). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
 
 ## Próxima ação
 
-Pedro: testar a T5b com `npm run dev` (abrir uma demanda, ver o endereço `/demandas/d1`, Voltar e Avançar, "Abrir em página inteira", "Copiar link", recarregar a página) e cadastrar as variáveis do Supabase no ambiente de nuvem desta conta (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` e o token de migração). Eu: T5 e T2 quando as variáveis chegarem.
+Pedro: instalar o app no iPad para conferir o ícone e a tela cheia (o endereço precisa ser HTTPS público: porta 3000 do Codespace como Public, ou a Vercel) e cadastrar as variáveis do Supabase no ambiente de nuvem. Eu: T2 e T5 assim que uma sessão nova tiver as variáveis; até lá, barra lateral recolhível ou T7.
 
 ## Repositório e ambiente (2026-10-26)
 
@@ -55,12 +55,11 @@ Comandos: `npm test`, `npm run test:e2e`, `npm run lint`, `npm run typecheck`, `
 
 ## Pendências
 
-1. **Pedro:** ligar o Secret scanning em Settings, Code security, do repositório no GitHub.
-2. **Supabase de teste:** projeto `https://exemplo.supabase.co`. As variáveis não chegam ao ambiente de nuvem atual (nenhuma `SUPABASE_*`). Cadastrar de novo nas configurações do ambiente; só uma sessão nova as lê. A chave de serviço nunca vai para o repositório nem para variável `NEXT_PUBLIC_`.
-3. **Migrações (T2):** alterar o banco exige uma credencial extra (token de acesso do Supabase), a cadastrar junto com as variáveis acima.
-4. **Docker:** o ambiente de nuvem não tem daemon do Docker, então o Supabase local não sobe lá. Os testes de RLS usam o projeto Supabase de teste.
-5. **Marca:** o pedido de registro no INPI ainda não foi feito. O Pedro disse que fará.
-6. `npm audit --audit-level=high`: 0 vulnerabilidades em 2026-10-26 (os 5 alertas antigos do ESLint sumiram).
+1. **Supabase de teste:** projeto `https://exemplo.supabase.co`. As variáveis não chegam ao ambiente de nuvem atual (nenhuma `SUPABASE_*`). Cadastrar de novo nas configurações do ambiente; só uma sessão nova as lê. A chave de serviço nunca vai para o repositório nem para variável `NEXT_PUBLIC_`.
+2. **Migrações (T2):** alterar o banco exige uma credencial extra (token de acesso do Supabase), a cadastrar junto com as variáveis acima.
+3. **Docker:** o ambiente de nuvem não tem daemon do Docker, então o Supabase local não sobe lá. Os testes de RLS usam o projeto Supabase de teste.
+4. **Marca:** o pedido de registro no INPI ainda não foi feito. O Pedro disse que fará.
+5. `npm audit --audit-level=high`: 0 vulnerabilidades em 2026-10-26 (os 5 alertas antigos do ESLint sumiram).
 
 ## Notas de ambiente
 

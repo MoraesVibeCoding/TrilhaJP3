@@ -1,0 +1,36 @@
+import { expect, test } from "vitest";
+import manifest from "./manifest";
+
+test("the app installs as TrilhaJp3 in full screen with the brand icons", () => {
+  const m = manifest();
+  expect(m).toMatchObject({
+    name: "TrilhaJp3",
+    short_name: "TrilhaJp3",
+    lang: "pt-BR",
+    start_url: "/",
+    scope: "/",
+    display: "standalone",
+    background_color: "#F8FAF5",
+    theme_color: "#1B4D2E",
+  });
+  expect(m.icons).toEqual([
+    {
+      src: "/icons/icon-192.png",
+      sizes: "192x192",
+      type: "image/png",
+      purpose: "any",
+    },
+    {
+      src: "/icons/icon-512.png",
+      sizes: "512x512",
+      type: "image/png",
+      purpose: "any",
+    },
+    {
+      src: "/icons/icon-maskable-512.png",
+      sizes: "512x512",
+      type: "image/png",
+      purpose: "maskable",
+    },
+  ]);
+});
