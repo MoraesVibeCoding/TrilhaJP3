@@ -1,6 +1,6 @@
 # T3: Login e sessão
 
-Status: **rascunho com as 3 decisões respondidas, aguardando aprovação do Pedro.** Nenhum código foi escrito e nenhuma configuração do Supabase foi alterada. Base: `docs/SPEC.md` (seções 4.1 e 4.3), ADR 0003, `tasks/t2-spec.md`, `CONSTRAINTS.md`.
+Status: **aprovada pelo Pedro em 2026-10-26; em construção.** Base: `docs/SPEC.md` (seções 4.1 e 4.3), ADR 0003, `tasks/t2-spec.md`, `CONSTRAINTS.md`.
 
 ## 1. Objetivo
 
