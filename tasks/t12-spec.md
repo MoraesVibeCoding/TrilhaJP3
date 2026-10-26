@@ -1,6 +1,6 @@
 # T12: PWA (app instalável)
 
-Status: **rascunho, aguardando aprovação do Pedro.** Escolhido em 2026-10-26 como próxima tarefa enquanto o Supabase não chega.
+Status: **aprovada pelo Pedro em 2026-10-26 (ícone A, Floresta); construída.** Escolhido em 2026-10-26 como próxima tarefa enquanto o Supabase não chega.
 
 ## 1. Objetivo
 

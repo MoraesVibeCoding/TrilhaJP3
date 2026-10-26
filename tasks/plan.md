@@ -31,8 +31,8 @@ Tarefas rastreadas em GitHub Issues (`docs/agents/issue-tracker.md`). Os issues 
 
 **R1. Conferir CI e ligar varredura de segredos** (Pedro, XS)
 
-- [ ] Aba Actions: CI do último commit da branch verde.
-- [ ] Settings, Code security: Secret scanning ligado.
+- [x] Aba Actions: CI do último commit da branch verde (repositório público, 2026-10-26).
+- [x] Settings, Code security: Secret scanning ligado (2026-10-26).
 - Dependências: nenhuma.
 
 **R2. Auditar o código contra os docs do Next 16** (S)
@@ -129,7 +129,7 @@ Cada tarefa 🎨 repete a regra 1 (3 propostas, aprovação, revisor final). Cri
 
 ### Fase 4: Entrega
 
-**T12. 🎨 PWA** (S): manifest e ícones do kit; instalável no computador, iPad (manual) e celular.
+**T12. 🎨 PWA** (S) — ✅ construída (2026-10-26), ícone A (Floresta): manifest e ícones do kit; instalável no computador, iPad (manual) e celular. Spec em `tasks/t12-spec.md`.
 **T13. Endurecimento e observabilidade** (M): revisão OWASP sem pendência crítica, cabeçalhos de segurança, logs estruturados, métricas RED, rotina de backup documentada (`security-and-hardening`, `observability-and-instrumentation`).
 **T14. Produção** (M): migração para Vercel Pro e Supabase Pro (D1 e D2) **antes de dado real**, deploy progressivo, rollback testado, domínio `trilhajp3.com` se aprovado (`shipping-and-launch`, `ci-cd-and-automation`).
 
