@@ -11,7 +11,7 @@ Quem escreve código lê este arquivo antes. **Não se afrouxa este arquivo para
 - Sem segredo no código.
 - Este arquivo não é enfraquecido para fazer algo passar.
 
-Verificado por: `node scripts/floor-guard.mjs --base origin/main` (leitura do diff; olha `src/`, `e2e/` e `scripts/`, os limites de cobertura do `vitest.config.mts` e este arquivo, não o plugin de terceiros em `.claude/`).
+Verificado por: `node scripts/floor-guard.mjs --base origin/main` (leitura do diff; olha `src/`, `e2e/`, `scripts/` e `supabase/`, os limites de cobertura do `vitest.config.mts` e este arquivo, não o plugin de terceiros em `.claude/`).
 
 ## Imposto com números
 

@@ -50,6 +50,18 @@ test("a new suppression comment in untracked code exits 1 and names the rule", (
   expect(r.stderr).toContain("silenced-checker");
 });
 
+test("a skipped database test under supabase/ is caught", () => {
+  const dir = repo();
+  mkdirSync(join(dir, "supabase/tests"), { recursive: true });
+  writeFileSync(
+    join(dir, "supabase/tests/rls.test.ts"),
+    "test.skip('x', () => {});\n",
+  );
+  const r = run(dir);
+  expect(r.status).toBe(1);
+  expect(r.stderr).toContain("test-made-easier");
+});
+
 test("an empty catch and a skipped test are caught", () => {
   const dir = repo();
   writeFileSync(join(dir, "src/c.ts"), "try { x(); } catch {}\n");
