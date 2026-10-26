@@ -1,6 +1,6 @@
 # T3: Login e sessão
 
-Status: **aprovada pelo Pedro em 2026-10-26; em construção.** Base: `docs/SPEC.md` (seções 4.1 e 4.3), ADR 0003, `tasks/t2-spec.md`, `CONSTRAINTS.md`.
+Status: **aprovada pelo Pedro em 2026-10-26; construída.** Ajustes durante a construção: o vínculo do dono fica fora do repositório (seção 3.7); o `src/proxy.ts` entrou junto com a tela; o teste de cabeçalhos de cache do Proxy é unitário (renovar o token num E2E exigiria esperar ele expirar). Base: `docs/SPEC.md` (seções 4.1 e 4.3), ADR 0003, `tasks/t2-spec.md`, `CONSTRAINTS.md`.
 
 ## 1. Objetivo
 

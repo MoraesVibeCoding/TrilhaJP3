@@ -1,10 +1,10 @@
 # STATUS — TrilhaJp3
 
-Atualizado em 2026-10-26 (T2 construída: empresas, vínculos e RLS no Supabase de teste). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
+Atualizado em 2026-10-26 (T3 construída: login, sessão e tela de entrada). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
 
 ## Próxima ação
 
-Pedro: escolher a proposta da tela de entrada da T3 quando eu trouxer as 3; instalar o app no iPad para conferir o ícone e a tela cheia (o endereço precisa ser HTTPS público: porta 3000 do Codespace como Public, ou a Vercel). Eu: construir a T3 (`tasks/t3-spec.md`, aprovada em 2026-10-26).
+Pedro: revisar a PR da T3 (login) e conferir o login no app (`npm run dev`, abrir `/`, entrar com o seu usuário); instalar o app no iPad para conferir o ícone e a tela cheia (o endereço precisa ser HTTPS público: porta 3000 do Codespace como Public, ou a Vercel). Eu: T4 (projetos com dados reais) ou T5, conforme a prioridade do Pedro.
 
 ## Repositório e ambiente (2026-10-26)
 
@@ -27,7 +27,7 @@ Ver `docs/PRINCIPIOS-OBJETIVOS.md`, seção 5.
 
 ## Em uma frase
 
-TrilhaJp3 é o sistema de gestão da Moraes CodeVibe. A v1 é o módulo Projetos e demandas. A T0 (base, Prettier, CI, Playwright) e a T1-R (casca, Retomar, janela da demanda, interruptor Foco/Completo, revisão final do `impeccable`) estão prontas. A T6a (Demandas em Tabela, versão A, com dados de demonstração) está pronta. A T6b (Por projeto, cartões) também. A T6c (Quadro, menu Mover para) também. A T6d (captura rápida, janela) também. A T5b (demanda em página inteira, `/demandas/[id]`, proposta A em três colunas; a janela troca o endereço e as alterações ficam no navegador) está pronta, com revisão final do `impeccable`. A T2 (empresas, vínculos e RLS no Supabase de teste, `tasks/t2-spec.md`) está pronta. As próximas são a T3 (login) e a T5.
+TrilhaJp3 é o sistema de gestão da Moraes CodeVibe. A v1 é o módulo Projetos e demandas. A T0 (base, Prettier, CI, Playwright) e a T1-R (casca, Retomar, janela da demanda, interruptor Foco/Completo, revisão final do `impeccable`) estão prontas. A T6a (Demandas em Tabela, versão A, com dados de demonstração) está pronta. A T6b (Por projeto, cartões) também. A T6c (Quadro, menu Mover para) também. A T6d (captura rápida, janela) também. A T5b (demanda em página inteira, `/demandas/[id]`, proposta A em três colunas; a janela troca o endereço e as alterações ficam no navegador) está pronta, com revisão final do `impeccable`. A T2 (empresas, vínculos e RLS no Supabase de teste, `tasks/t2-spec.md`) está pronta. A T3 (login com e-mail e senha, Proxy, tela `/entrar` proposta B, botão Sair, `tasks/t3-spec.md`) também. As próximas são a T4 e a T5, que trocam os dados de demonstração por dados reais.
 
 ## Decisões fechadas (resumo)
 
@@ -50,7 +50,7 @@ TrilhaJp3 é o sistema de gestão da Moraes CodeVibe. A v1 é o módulo Projetos
 | CI no GitHub Actions (formatação, lint, tipos, teste, build, E2E) | Verde nas execuções #1 e #2 |
 | `.gitattributes` com `eol=lf` | Commit `60970dc`, a execução #3 do CI ainda não foi conferida |
 | Supabase: esquema e RLS (T2) | Pronto: `organizations`, `memberships`, `private.is_member`; 6 testes de integração (`npm run test:db`) |
-| Supabase: login (T3) | Em construção (`tasks/t3-spec.md`, aprovada). Cadastro público fechado e senha mínima de 12 em 2026-10-26 |
+| Supabase: login (T3) | Pronto: Proxy com `getClaims()`, `/entrar`, Sair, `getCurrentUser()`; E2E com usuário fictício por execução (o CI precisa dos 3 segredos no passo do E2E) |
 
 Comandos: `npm run db:migrate` (aplica `supabase/migrations/` pela Management API; `--rollback <versão>` reverte), `npm run test:db`, `npm test`, `npm run test:e2e`, `npm run lint`, `npm run typecheck`, `npm run format:check`, `npm run build`.
 

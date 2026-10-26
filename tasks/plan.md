@@ -96,14 +96,15 @@ Decisões aprovadas em 2026-10-22: proposta **B, mesa dividida**. Entrada padrã
 
 **T3. 🎨 Login e sessão** (M)
 
-- [ ] Telas de entrada e saída: 3 propostas via `impeccable`, aprovadas.
-- [ ] `@supabase/ssr` com cookies; rota protegida redireciona; usuário logado vê só a própria empresa.
-- [ ] Teste: não logado não acessa nada; mensagens de erro sem vazar dados.
+- [x] Telas de entrada e saída: 3 propostas via `impeccable`, aprovadas.
+- [x] `@supabase/ssr` com cookies; rota protegida redireciona; usuário logado vê só a própria empresa.
+- [x] Teste: não logado não acessa nada; mensagens de erro sem vazar dados.
 - Dependências: T1-R, T2.
+- Construída em 2026-10-26 (`tasks/t3-spec.md`): proposta B, auditoria e critique do `impeccable`, revisão de segurança sem achados.
 
 ### Checkpoint 2
 
-- [ ] Login ponta a ponta, isolamento provado, revisão de segurança parcial (OWASP: acesso e sessão).
+- [x] Login ponta a ponta, isolamento provado, revisão de segurança parcial (OWASP: acesso e sessão). Feito em 2026-10-26; falta a revisão com o Pedro.
 
 ### Fase 3: Módulo Projetos e demandas (fatias verticais)
 
