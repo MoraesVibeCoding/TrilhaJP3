@@ -1,6 +1,6 @@
 # T2: Esquema inicial e RLS (empresas e vínculos)
 
-Status: **rascunho, aguardando aprovação do Pedro.** Nenhum código nem SQL foi aplicado ao banco. Base: `docs/SPEC.md` (seções 4.2, 4.3 e 4.5), ADR 0003, `CONSTRAINTS.md`.
+Status: **aprovada pelo Pedro em 2026-10-26; construída.** Migração `20261026170000_organizations_memberships` aplicada no Supabase de teste. Base: `docs/SPEC.md` (seções 4.2, 4.3 e 4.5), ADR 0003, `CONSTRAINTS.md`.
 
 ## 1. Objetivo
 

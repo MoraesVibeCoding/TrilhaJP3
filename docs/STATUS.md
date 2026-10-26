@@ -1,10 +1,10 @@
 # STATUS — TrilhaJp3
 
-Atualizado em 2026-10-26 (variáveis do Supabase validadas; spec da T2 em `tasks/t2-spec.md`). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
+Atualizado em 2026-10-26 (T2 construída: empresas, vínculos e RLS no Supabase de teste). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
 
 ## Próxima ação
 
-Pedro: aprovar a spec da T2 (`tasks/t2-spec.md`) e responder às decisões abertas dela; instalar o app no iPad para conferir o ícone e a tela cheia (o endereço precisa ser HTTPS público: porta 3000 do Codespace como Public, ou a Vercel). Eu: construir a T2 depois da aprovação; depois, T3 e T5.
+Pedro: conferir o job `db` do CI no branch `claude/t2-spec` (usa os 3 segredos cadastrados) e instalar o app no iPad para conferir o ícone e a tela cheia (o endereço precisa ser HTTPS público: porta 3000 do Codespace como Public, ou a Vercel). Eu: T3 (login e sessão).
 
 ## Repositório e ambiente (2026-10-26)
 
@@ -27,7 +27,7 @@ Ver `docs/PRINCIPIOS-OBJETIVOS.md`, seção 5.
 
 ## Em uma frase
 
-TrilhaJp3 é o sistema de gestão da Moraes CodeVibe. A v1 é o módulo Projetos e demandas. A T0 (base, Prettier, CI, Playwright) e a T1-R (casca, Retomar, janela da demanda, interruptor Foco/Completo, revisão final do `impeccable`) estão prontas. A T6a (Demandas em Tabela, versão A, com dados de demonstração) está pronta. A T6b (Por projeto, cartões) também. A T6c (Quadro, menu Mover para) também. A T6d (captura rápida, janela) também. A T5b (demanda em página inteira, `/demandas/[id]`, proposta A em três colunas; a janela troca o endereço e as alterações ficam no navegador) está pronta, com revisão final do `impeccable`. As próximas são a T2 (regras de acesso por empresa no Supabase, spec em `tasks/t2-spec.md`, aguardando aprovação) e a T5.
+TrilhaJp3 é o sistema de gestão da Moraes CodeVibe. A v1 é o módulo Projetos e demandas. A T0 (base, Prettier, CI, Playwright) e a T1-R (casca, Retomar, janela da demanda, interruptor Foco/Completo, revisão final do `impeccable`) estão prontas. A T6a (Demandas em Tabela, versão A, com dados de demonstração) está pronta. A T6b (Por projeto, cartões) também. A T6c (Quadro, menu Mover para) também. A T6d (captura rápida, janela) também. A T5b (demanda em página inteira, `/demandas/[id]`, proposta A em três colunas; a janela troca o endereço e as alterações ficam no navegador) está pronta, com revisão final do `impeccable`. A T2 (empresas, vínculos e RLS no Supabase de teste, `tasks/t2-spec.md`) está pronta. As próximas são a T3 (login) e a T5.
 
 ## Decisões fechadas (resumo)
 
@@ -49,9 +49,10 @@ TrilhaJp3 é o sistema de gestão da Moraes CodeVibe. A v1 é o módulo Projetos
 | Playwright E2E (1 teste de fumaça) | Pronto, verde |
 | CI no GitHub Actions (formatação, lint, tipos, teste, build, E2E) | Verde nas execuções #1 e #2 |
 | `.gitattributes` com `eol=lf` | Commit `60970dc`, a execução #3 do CI ainda não foi conferida |
-| Supabase (esquema, RLS, login) | Variáveis validadas; spec da T2 aguardando aprovação |
+| Supabase: esquema e RLS (T2) | Pronto: `organizations`, `memberships`, `private.is_member`; 6 testes de integração (`npm run test:db`) |
+| Supabase: login (T3) | Não iniciado |
 
-Comandos: `npm test`, `npm run test:e2e`, `npm run lint`, `npm run typecheck`, `npm run format:check`, `npm run build`.
+Comandos: `npm run db:migrate` (aplica `supabase/migrations/` pela Management API; `--rollback <versão>` reverte), `npm run test:db`, `npm test`, `npm run test:e2e`, `npm run lint`, `npm run typecheck`, `npm run format:check`, `npm run build`.
 
 ## Pendências
 
@@ -71,7 +72,7 @@ Comandos: `npm test`, `npm run test:e2e`, `npm run lint`, `npm run typecheck`, `
 ## Próximos passos, nesta ordem
 
 1. T1: rodar `/impeccable init` para criar `PRODUCT.md` e `DESIGN.md` a partir do kit em `docs/brand/`, aplicar tokens `--mcv-*` e a tipografia (Geist, por decisão do Pedro em 2026-10-22), casca do app em claro e escuro. Concluído.
-2. T2: esquema inicial (empresas, vínculos, RLS) com teste de isolamento entre duas empresas contra o Supabase de teste.
+2. T2: esquema inicial (empresas, vínculos, RLS) com teste de isolamento entre duas empresas contra o Supabase de teste. Concluído em 2026-10-26.
 3. T3 em diante, conforme o plano da seção 6 da spec.
 
 Regra de trabalho: Red-Green-Refactor, commits pequenos, nenhuma tarefa concluída sem o log dos testes passando.
