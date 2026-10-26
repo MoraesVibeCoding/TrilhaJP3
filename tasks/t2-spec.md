@@ -66,7 +66,7 @@ Login e sessão no app (`@supabase/ssr`, T3), dados reais da empresa, tabelas de
 ## 8. Decisões abertas (uma de cada vez)
 
 1. **Como aplicar migrações. Decidido pelo Pedro em 2026-10-26: script pela Management API.** Um script curto (`scripts/db-migrate.mjs`, sem dependência nova) que envia cada arquivo de `supabase/migrations/` pela Management API e registra a versão na mesma tabela de histórico da CLI (`supabase_migrations.schema_migrations`). As colunas exatas dessa tabela serão conferidas no banco antes de escrever. Alternativa: instalar a CLI e rodar `supabase db push` do computador do Pedro, com a senha do banco. Essa alternativa não roda na nuvem.
-2. **Testes de integração no CI.** Para rodar no GitHub Actions, o Pedro cadastra 3 segredos no repositório: URL, chave pública e chave de serviço. O token de acesso não entra no CI. Sem eles, `npm run test:db` roda só na sessão de nuvem, e o registro fica no log da tarefa.
+2. **Testes de integração no CI. Decidido pelo Pedro em 2026-10-26: sim; ele cadastra os 3 segredos.** Para rodar no GitHub Actions, o Pedro cadastra 3 segredos no repositório: URL, chave pública e chave de serviço. O token de acesso não entra no CI. Sem eles, `npm run test:db` roda só na sessão de nuvem, e o registro fica no log da tarefa.
 3. **Cliente nos testes:** `fetch` puro (sem dependência nova na T2) ou já instalar `@supabase/supabase-js`, que a T3 vai precisar de qualquer forma. Recomendação: `fetch` puro agora; a T3 decide o cliente.
 
 ## 9. Tarefas depois da aprovação
