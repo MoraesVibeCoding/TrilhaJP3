@@ -4,7 +4,7 @@ Atualizado em 2026-10-26 (T2 construída: empresas, vínculos e RLS no Supabase 
 
 ## Próxima ação
 
-Pedro: conferir o job `db` do CI no branch `claude/t2-spec` (usa os 3 segredos cadastrados) e instalar o app no iPad para conferir o ícone e a tela cheia (o endereço precisa ser HTTPS público: porta 3000 do Codespace como Public, ou a Vercel). Eu: T3 (login e sessão).
+Pedro: aprovar a spec da T3 (`tasks/t3-spec.md`) e responder às decisões abertas dela; instalar o app no iPad para conferir o ícone e a tela cheia (o endereço precisa ser HTTPS público: porta 3000 do Codespace como Public, ou a Vercel). Eu: construir a T3 depois da aprovação.
 
 ## Repositório e ambiente (2026-10-26)
 
@@ -50,7 +50,7 @@ TrilhaJp3 é o sistema de gestão da Moraes CodeVibe. A v1 é o módulo Projetos
 | CI no GitHub Actions (formatação, lint, tipos, teste, build, E2E) | Verde nas execuções #1 e #2 |
 | `.gitattributes` com `eol=lf` | Commit `60970dc`, a execução #3 do CI ainda não foi conferida |
 | Supabase: esquema e RLS (T2) | Pronto: `organizations`, `memberships`, `private.is_member`; 6 testes de integração (`npm run test:db`) |
-| Supabase: login (T3) | Não iniciado |
+| Supabase: login (T3) | Spec em `tasks/t3-spec.md`, aguardando aprovação. Cadastro público ainda aberto no projeto de teste |
 
 Comandos: `npm run db:migrate` (aplica `supabase/migrations/` pela Management API; `--rollback <versão>` reverte), `npm run test:db`, `npm test`, `npm run test:e2e`, `npm run lint`, `npm run typecheck`, `npm run format:check`, `npm run build`.
 
