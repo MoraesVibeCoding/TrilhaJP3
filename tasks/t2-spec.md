@@ -36,7 +36,7 @@ Regras seguidas da documentação oficial: `(select auth.uid())` em vez de `auth
 
 ## 5. Testes e critérios de aceitação
 
-Testes de integração em Vitest, contra o Supabase de teste, pela API pública (PostgREST e Auth): o mesmo caminho que o navegador vai usar. Isso testa grants e políticas juntos, que é o que importa. Ficam em `supabase/tests/`, com configuração própria (`vitest.db.config.mts`) e o comando `npm run test:db`. O `npm test` não roda esses testes porque eles precisam de rede e de segredos.
+Testes de integração em Vitest, contra o Supabase de teste, pela API pública (PostgREST e Auth, com `@supabase/supabase-js`): o mesmo caminho que o navegador vai usar. Isso testa grants e políticas juntos, que é o que importa. Ficam em `supabase/tests/`, com configuração própria (`vitest.db.config.mts`) e o comando `npm run test:db`. O `npm test` não roda esses testes porque eles precisam de rede e de segredos.
 
 Preparação (chave de serviço, só no teste): 2 usuários fictícios (`t2-a@example.test`, `t2-b@example.test`), empresas A e B, cada usuário vinculado à sua. Login real por senha, para obter o token de cada usuário. No fim, os usuários e as empresas são apagados (os vínculos saem em cascata), mesmo se um teste falhar.
 
@@ -67,7 +67,7 @@ Login e sessão no app (`@supabase/ssr`, T3), dados reais da empresa, tabelas de
 
 1. **Como aplicar migrações. Decidido pelo Pedro em 2026-10-26: script pela Management API.** Um script curto (`scripts/db-migrate.mjs`, sem dependência nova) que envia cada arquivo de `supabase/migrations/` pela Management API e registra a versão na mesma tabela de histórico da CLI (`supabase_migrations.schema_migrations`). As colunas exatas dessa tabela serão conferidas no banco antes de escrever. Alternativa: instalar a CLI e rodar `supabase db push` do computador do Pedro, com a senha do banco. Essa alternativa não roda na nuvem.
 2. **Testes de integração no CI. Decidido pelo Pedro em 2026-10-26: sim; ele cadastra os 3 segredos.** Para rodar no GitHub Actions, o Pedro cadastra 3 segredos no repositório: URL, chave pública e chave de serviço. O token de acesso não entra no CI. Sem eles, `npm run test:db` roda só na sessão de nuvem, e o registro fica no log da tarefa.
-3. **Cliente nos testes:** `fetch` puro (sem dependência nova na T2) ou já instalar `@supabase/supabase-js`, que a T3 vai precisar de qualquer forma. Recomendação: `fetch` puro agora; a T3 decide o cliente.
+3. **Cliente nos testes. Decidido pelo Pedro em 2026-10-26: `@supabase/supabase-js`,** instalado na versão fixa 2.118.0 (licença MIT, `npm audit` sem achados). Os testes usam o mesmo cliente que a T3 vai usar no app.
 
 ## 9. Tarefas depois da aprovação
 
