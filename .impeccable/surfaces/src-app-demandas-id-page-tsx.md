@@ -1,7 +1,7 @@
 ---
 version: 1
 slug: "src-app-demandas-id-page-tsx"
-primary_target: "src/app/demandas/[id]/page.tsx"
+primary_target: "src/app/(app)/demandas/[id]/page.tsx"
 related_targets: ["src/components/demand-page.tsx"]
 ---
 

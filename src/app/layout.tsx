@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
-import { AppShell } from "@/components/app-shell";
 import { modeScript } from "@/lib/mode-script";
 import { themeScript } from "@/lib/theme-script";
 import "./globals.css";
@@ -33,9 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           dangerouslySetInnerHTML={{ __html: `${themeScript};${modeScript}` }}
         />
       </head>
-      <body>
-        <AppShell>{children}</AppShell>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
