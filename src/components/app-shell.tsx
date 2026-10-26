@@ -81,14 +81,13 @@ export function AppShell({ children }: { children: ReactNode }) {
             </li>
           </ul>
         </nav>
-        <div className="side-foot">
-          <p>Moraes CodeVibe</p>
-          <form action={signOut}>
-            <button type="submit" className="signout-button">
-              Sair
-            </button>
-          </form>
-        </div>
+        {/* Logo abaixo da navegação: no pé ficaria fora da tela e, no celular, sob o botão flutuante */}
+        <form action={signOut}>
+          <button type="submit" className="signout-button">
+            Sair
+          </button>
+        </form>
+        <p className="side-foot">Moraes CodeVibe</p>
       </aside>
       <main id="conteudo" className="shell-main">
         {children}

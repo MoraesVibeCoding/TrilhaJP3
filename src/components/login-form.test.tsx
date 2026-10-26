@@ -3,8 +3,9 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 
 const search = vi.hoisted(() => ({ current: "" }));
 const signIn = vi.hoisted(() =>
-  vi.fn(async () => ({
+  vi.fn(async (_state: unknown, form: FormData) => ({
     error: "E-mail ou senha incorretos. Confira e tente de novo.",
+    email: String(form.get("email")),
   })),
 );
 vi.mock("next/navigation", () => ({
@@ -62,4 +63,22 @@ test("o erro do servidor aparece no aviso e fica ligado aos campos", async () =>
   expect(screen.getByLabelText("Senha").getAttribute("aria-describedby")).toBe(
     "login-error",
   );
+});
+
+test("depois do erro o e-mail continua no campo; a senha, não", async () => {
+  render(<LoginForm />);
+  fireEvent.change(screen.getByLabelText("E-mail"), {
+    target: { value: "pedro@exemplo.com.br" },
+  });
+  fireEvent.change(screen.getByLabelText("Senha"), {
+    target: { value: "x" },
+  });
+  fireEvent.click(screen.getByRole("button", { name: "Entrar" }));
+  await screen.findByText(
+    "E-mail ou senha incorretos. Confira e tente de novo.",
+  );
+  expect((screen.getByLabelText("E-mail") as HTMLInputElement).value).toBe(
+    "pedro@exemplo.com.br",
+  );
+  expect((screen.getByLabelText("Senha") as HTMLInputElement).value).toBe("");
 });

@@ -44,15 +44,19 @@ beforeEach(() => {
 });
 
 test("entrada inválida volta o erro genérico sem chamar o Supabase", async () => {
-  await expect(signIn(undefined, form({ email: "x" }))).resolves.toEqual(
-    FAILED,
-  );
+  await expect(signIn(undefined, form({ email: "x" }))).resolves.toEqual({
+    ...FAILED,
+    email: "x",
+  });
   expect(state.calls).toEqual([]);
 });
 
 test("senha errada volta o mesmo erro genérico", async () => {
   state.signInError = { message: "Invalid login credentials" };
-  await expect(signIn(undefined, form(valid))).resolves.toEqual(FAILED);
+  await expect(signIn(undefined, form(valid))).resolves.toEqual({
+    ...FAILED,
+    email: valid.email,
+  });
 });
 
 test("login certo volta para o destino seguro", async () => {

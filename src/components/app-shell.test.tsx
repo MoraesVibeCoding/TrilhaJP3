@@ -96,3 +96,12 @@ test("offers Sair, which submits the sign-out action", () => {
   expect(button.getAttribute("type")).toBe("submit");
   expect(button.closest("form")).not.toBeNull();
 });
+
+test("Sair fica logo depois da navegação, não no pé da barra", () => {
+  render(<AppShell>x</AppShell>);
+  const next = screen.getByRole("navigation", {
+    name: "Principal",
+  }).nextElementSibling;
+  expect(next?.tagName).toBe("FORM");
+  expect(next?.textContent).toBe("Sair");
+});

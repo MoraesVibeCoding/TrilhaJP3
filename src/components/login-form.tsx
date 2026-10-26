@@ -27,6 +27,7 @@ export function LoginForm() {
           type="email"
           name="email"
           autoComplete="username"
+          defaultValue={state?.email}
           required
           aria-describedby={state?.error ? "login-error" : undefined}
         />
