@@ -78,6 +78,20 @@ for (const theme of themes) {
       expect(await scan(page)).toEqual([]);
     });
 
+    test.describe("sem login", () => {
+      test.use({ storageState: { cookies: [], origins: [] } });
+
+      test("tela de entrada, com o erro aberto", async ({ page }) => {
+        await page.goto("/entrar");
+        expect(await scan(page)).toEqual([]);
+        await page.getByLabel("E-mail").fill("ninguem@example.test");
+        await page.getByLabel("Senha").fill("senha-errada-123");
+        await page.getByRole("button", { name: "Entrar" }).click();
+        await expect(page.locator("#login-error")).not.toBeEmpty();
+        expect(await scan(page)).toEqual([]);
+      });
+    });
+
     test("janela da demanda aberta", async ({ page }) => {
       await page.goto("/");
       await page

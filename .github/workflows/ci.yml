@@ -54,8 +54,16 @@ jobs:
         continue-on-error: true # avisa até 2026-11-06, ainda não verificado no GitHub
         run: osv-scanner scan source -r .
       - run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
       - run: npx playwright install --with-deps chromium
+      # T3: o app exige login; o E2E cria e apaga um usuário fictício com a chave de serviço.
       - run: npm run test:e2e
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
 
   # T2: isolamento entre empresas contra o Supabase de teste. A migração é aplicada fora do CI
   # (npm run db:migrate, com o token de acesso, que não entra aqui); este job prova o estado do banco.

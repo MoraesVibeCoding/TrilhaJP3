@@ -174,6 +174,27 @@ a {
   font-size: 0.8125rem;
   color: var(--mcv-text-soft);
 }
+.side-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.signout-button {
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 0;
+  border-radius: var(--mcv-radius-sm);
+  background: transparent;
+  color: var(--mcv-ink);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.signout-button:hover {
+  background: var(--mcv-line);
+}
 
 .brand {
   display: inline-flex;
@@ -1406,5 +1427,124 @@ th[aria-sort] .sort-button {
   /* estreito, cada item quebra sozinho: o ponto ficaria solto no fim da linha */
   .meta-dot {
     display: none;
+  }
+}
+
+/* Tela de entrada (T3), proposta B: faixa Floresta com a marca, formulário no Papel */
+.login {
+  display: grid;
+  grid-template-columns: minmax(18rem, 2fr) 3fr;
+  min-height: 100dvh;
+}
+.login-band {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2.5rem;
+  background: var(--mcv-forest);
+  color: var(--mcv-mint);
+}
+/* No escuro o Floresta vira verde claro e a faixa ofuscaria: usa a superfície da barra lateral */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .login-band {
+    background: var(--mcv-mint);
+    color: var(--mcv-ink);
+    border-right: 1px solid var(--mcv-line);
+  }
+}
+:root[data-theme="dark"] .login-band {
+  background: var(--mcv-mint);
+  color: var(--mcv-ink);
+  border-right: 1px solid var(--mcv-line);
+}
+/* Sobre Floresta o traço é Neblina e o Pulso dispensa contorno (regra da marca) */
+.login-band .brand-icon {
+  color: inherit;
+  --mcv-icon-ground: transparent;
+  --mcv-icon-pulse-line: transparent;
+}
+.login-claim {
+  max-width: 16ch;
+  font-family: var(--mcv-font-display);
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.login-main {
+  display: grid;
+  place-items: center;
+  padding: 2.5rem 1.5rem;
+}
+.login-box {
+  display: grid;
+  gap: 1.5rem;
+  width: min(100%, 22rem);
+}
+.login-title {
+  font-size: 1.25rem;
+}
+.login-form {
+  display: grid;
+  gap: 1rem;
+}
+.login-field {
+  display: grid;
+  gap: 0.375rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.login-input {
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--mcv-control-line);
+  border-radius: var(--mcv-radius-sm);
+  background: var(--mcv-card);
+  color: var(--mcv-ink);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 400;
+}
+.login-form .primary-button {
+  margin-top: 0;
+}
+.login-form .primary-button:disabled {
+  background: var(--mcv-text-soft);
+  cursor: progress;
+}
+/* Erro no padrão da casa (como a captura): Tinta em negrito, sem vermelho fora da paleta */
+/* Vazio, o aviso continua no DOM (região viva) sem somar um espaço a mais no formulário */
+.login-error:empty {
+  margin-bottom: -1rem;
+}
+.login-error:not(:empty) {
+  padding: 0.625rem 0.75rem;
+  border: 1px solid var(--mcv-control-line);
+  border-radius: var(--mcv-radius-sm);
+  background: var(--mcv-mint);
+  color: var(--mcv-ink);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.login-note {
+  font-size: 0.875rem;
+  color: var(--mcv-text-soft);
+}
+@media (max-width: 45rem) {
+  .login {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+  .login-band {
+    padding: 1.25rem 1.5rem;
+  }
+  .login-claim {
+    display: none;
+  }
+  .login-main {
+    place-items: start center;
+    padding-top: 2rem;
   }
 }
