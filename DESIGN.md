@@ -265,6 +265,10 @@ Rota `/demandas/{id}`, link permanente, para sessões longas (proposta A, escolh
 
 O app se instala na tela inicial do iPad (Safari) e no computador (Chrome ou Edge) e abre em tela cheia (`display: standalone`), sem modo offline. Ícone: proposta A, escolhida pelo Pedro em 2026-10-26: o desenho da marca V2 (M em Neblina, pulso lime) sobre Floresta `#1B4D2E`, o mesmo do favicon. Os PNG saem de `docs/brand/evolucao/logo/icon-on-forest.svg`: 192, 512 e o `apple-icon` de 180 com o desenho a 72% da largura; o `maskable` de 512 a 58%, dentro dos 80% centrais. O fundo de abertura é Papel `#F8FAF5`. A barra do navegador segue o tema do sistema: Papel no claro, Tinta `#0F1F14` no escuro. A barra de status do iPad fica no padrão, e o conteúdo nunca passa por baixo dela.
 
+### Tela de entrada (T3)
+
+Rota `/entrar`, fora da casca (proposta B, mesa dividida, escolhida pelo Pedro em 2026-10-26). Faixa à esquerda (2fr, mínimo 18rem, padding 2,5rem) com o ícone e o nome no topo e a frase "Projetos e demandas da Moraes CodeVibe." embaixo, em Display 600, de 1,375 a 1,75rem conforme a largura; à direita, no Papel, o título "Entrar" (1,25rem) e o formulário até 22rem: rótulos de 0,8125rem peso 600, campos de 44px com borda de controle, botão primário de largura total. No claro a faixa é Floresta com texto e ícone em Neblina (o ícone "sobre floresta", Pulso sem contorno); no escuro usa a superfície da barra lateral (Neblina escura) com filete à direita, porque o Floresta do escuro é verde claro. Abaixo de 45rem a faixa vira uma barra com ícone e nome e a frase some. O aviso de erro é o mesmo da captura: Tinta peso 600 sobre Neblina com borda de controle, nunca vermelho; vazio, fica no DOM (região viva) sem ocupar espaço. Pendente: "Entrando…" com o botão em `text-soft`. O botão Sair fica na barra lateral do app, logo abaixo da navegação, no estilo dos itens dela.
+
 ### Tabelas
 
 Filetes de 1px, cabeçalho em `text-soft` 0.8125rem, primeira coluna como cabeçalho de linha, números tabulares.

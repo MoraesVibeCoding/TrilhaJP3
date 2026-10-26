@@ -1,10 +1,10 @@
 # STATUS — TrilhaJp3
 
-Atualizado em 2026-10-26 (T2 construída: empresas, vínculos e RLS no Supabase de teste). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
+Atualizado em 2026-10-26 (T3 construída: login, sessão e tela de entrada). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
 
 ## Próxima ação
 
-Pedro: conferir o job `db` do CI no branch `claude/t2-spec` (usa os 3 segredos cadastrados) e instalar o app no iPad para conferir o ícone e a tela cheia (o endereço precisa ser HTTPS público: porta 3000 do Codespace como Public, ou a Vercel). Eu: T3 (login e sessão).
+Pedro: revisar a PR da T3 (login) e conferir o login no app (`npm run dev`, abrir `/`, entrar com o seu usuário); instalar o app no iPad para conferir o ícone e a tela cheia (o endereço precisa ser HTTPS público: porta 3000 do Codespace como Public, ou a Vercel). Eu: T4 (projetos com dados reais) ou T5, conforme a prioridade do Pedro.
 
 ## Repositório e ambiente (2026-10-26)
 
@@ -27,7 +27,7 @@ Ver `docs/PRINCIPIOS-OBJETIVOS.md`, seção 5.
 
 ## Em uma frase
 
-TrilhaJp3 é o sistema de gestão da Moraes CodeVibe. A v1 é o módulo Projetos e demandas. A T0 (base, Prettier, CI, Playwright) e a T1-R (casca, Retomar, janela da demanda, interruptor Foco/Completo, revisão final do `impeccable`) estão prontas. A T6a (Demandas em Tabela, versão A, com dados de demonstração) está pronta. A T6b (Por projeto, cartões) também. A T6c (Quadro, menu Mover para) também. A T6d (captura rápida, janela) também. A T5b (demanda em página inteira, `/demandas/[id]`, proposta A em três colunas; a janela troca o endereço e as alterações ficam no navegador) está pronta, com revisão final do `impeccable`. A T2 (empresas, vínculos e RLS no Supabase de teste, `tasks/t2-spec.md`) está pronta. As próximas são a T3 (login) e a T5.
+TrilhaJp3 é o sistema de gestão da Moraes CodeVibe. A v1 é o módulo Projetos e demandas. A T0 (base, Prettier, CI, Playwright) e a T1-R (casca, Retomar, janela da demanda, interruptor Foco/Completo, revisão final do `impeccable`) estão prontas. A T6a (Demandas em Tabela, versão A, com dados de demonstração) está pronta. A T6b (Por projeto, cartões) também. A T6c (Quadro, menu Mover para) também. A T6d (captura rápida, janela) também. A T5b (demanda em página inteira, `/demandas/[id]`, proposta A em três colunas; a janela troca o endereço e as alterações ficam no navegador) está pronta, com revisão final do `impeccable`. A T2 (empresas, vínculos e RLS no Supabase de teste, `tasks/t2-spec.md`) está pronta. A T3 (login com e-mail e senha, Proxy, tela `/entrar` proposta B, botão Sair, `tasks/t3-spec.md`) também. As próximas são a T4 e a T5, que trocam os dados de demonstração por dados reais.
 
 ## Decisões fechadas (resumo)
 
@@ -50,7 +50,7 @@ TrilhaJp3 é o sistema de gestão da Moraes CodeVibe. A v1 é o módulo Projetos
 | CI no GitHub Actions (formatação, lint, tipos, teste, build, E2E) | Verde nas execuções #1 e #2 |
 | `.gitattributes` com `eol=lf` | Commit `60970dc`, a execução #3 do CI ainda não foi conferida |
 | Supabase: esquema e RLS (T2) | Pronto: `organizations`, `memberships`, `private.is_member`; 6 testes de integração (`npm run test:db`) |
-| Supabase: login (T3) | Não iniciado |
+| Supabase: login (T3) | Pronto: Proxy com `getClaims()`, `/entrar`, Sair, `getCurrentUser()`; E2E com usuário fictício por execução (o CI precisa dos 3 segredos no passo do E2E) |
 
 Comandos: `npm run db:migrate` (aplica `supabase/migrations/` pela Management API; `--rollback <versão>` reverte), `npm run test:db`, `npm test`, `npm run test:e2e`, `npm run lint`, `npm run typecheck`, `npm run format:check`, `npm run build`.
 
@@ -58,9 +58,11 @@ Comandos: `npm run db:migrate` (aplica `supabase/migrations/` pela Management AP
 
 1. **Supabase de teste: resolvido em 2026-10-26.** As 4 variáveis chegam ao ambiente de nuvem e respondem: `NEXT_PUBLIC_SUPABASE_URL` (`/auth/v1/health` 200), `NEXT_PUBLIC_SUPABASE_ANON_KEY` (chave `sb_publishable_`, `/auth/v1/settings` 200, rota admin 401 como esperado), `SUPABASE_SERVICE_ROLE_KEY` (chave `sb_secret_`, `/auth/v1/admin/users` 200), `SUPABASE_ACCESS_TOKEN` (`sbp_`, projeto `ACTIVE_HEALTHY`). As chaves são do formato novo, não JWT: a secreta vai no cabeçalho `apikey`. A chave de serviço nunca vai para o repositório nem para variável `NEXT_PUBLIC_`. Banco vazio nessa data (nenhuma tabela em `public`, nenhum usuário).
 2. **Migrações (T2): resolvido em 2026-10-26.** O token de acesso roda SQL como `postgres` pela Management API (`POST /v1/projects/{ref}/database/query`). A conexão direta ao Postgres (portas 5432 e 6543) não resolve no ambiente de nuvem, então `supabase db push` e `supabase test db` não rodam aqui. Ver `tasks/t2-spec.md`.
-3. **Docker:** o ambiente de nuvem não tem daemon do Docker, então o Supabase local não sobe lá. Os testes de RLS usam o projeto Supabase de teste.
-4. **Marca:** o pedido de registro no INPI ainda não foi feito. O Pedro disse que fará.
-5. `npm audit --audit-level=high`: 0 vulnerabilidades em 2026-10-26 (os 5 alertas antigos do ESLint sumiram).
+3. **Auth do projeto de teste (T3), 2026-10-26:** cadastro público fechado (`disable_signup = true`) e senha mínima de 12, pela Management API (`PATCH /v1/projects/{ref}/config/auth`); a rota pública `/auth/v1/settings` levou menos de 1 minuto para refletir. Reverter pelo mesmo caminho. Usuário do Pedro criado por ele no painel (1 usuário, confirmado).
+4. **Empresa e dono (T3), 2026-10-26:** a migração `20261026190000_moraes_codevibe` cria a empresa Moraes CodeVibe (id `5d35ad87-c91e-4d87-a95a-11d421149f19`). O vínculo `owner` do Pedro **não está no repositório** (o repositório é público e o e-mail não entra nele): foi criado por consulta avulsa pela Management API, achando o usuário pelo e-mail. **Repetir em produção (T14)** depois de o Pedro criar o usuário lá: `insert into public.memberships (organization_id, user_id, role) select '5d35ad87-c91e-4d87-a95a-11d421149f19', id, 'owner' from auth.users where lower(email) = '<e-mail do Pedro>' on conflict do nothing;`. O teste `supabase/tests/company.test.ts` confere que a empresa existe com exatamente um dono.
+5. **Docker:** o ambiente de nuvem não tem daemon do Docker, então o Supabase local não sobe lá. Os testes de RLS usam o projeto Supabase de teste.
+6. **Marca:** o pedido de registro no INPI ainda não foi feito. O Pedro disse que fará.
+7. `npm audit --audit-level=high`: 0 vulnerabilidades em 2026-10-26 (os 5 alertas antigos do ESLint sumiram).
 
 ## Notas de ambiente
 

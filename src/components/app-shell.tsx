@@ -1,5 +1,6 @@
 "use client";
 
+import { signOut } from "@/app/entrar/actions";
 import { BrandIcon } from "./brand-icon";
 import { CaptureButton } from "./capture-dialog";
 import Link from "next/link";
@@ -80,6 +81,12 @@ export function AppShell({ children }: { children: ReactNode }) {
             </li>
           </ul>
         </nav>
+        {/* Logo abaixo da navegação: no pé ficaria fora da tela e, no celular, sob o botão flutuante */}
+        <form action={signOut}>
+          <button type="submit" className="signout-button">
+            Sair
+          </button>
+        </form>
         <p className="side-foot">Moraes CodeVibe</p>
       </aside>
       <main id="conteudo" className="shell-main">

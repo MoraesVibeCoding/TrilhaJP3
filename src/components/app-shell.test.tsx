@@ -4,6 +4,8 @@ import { AppShell } from "./app-shell";
 
 const pathname = vi.hoisted(() => ({ current: "/" }));
 vi.mock("next/navigation", () => ({ usePathname: () => pathname.current }));
+const signOut = vi.hoisted(() => vi.fn());
+vi.mock("@/app/entrar/actions", () => ({ signOut }));
 
 afterEach(() => {
   cleanup();
@@ -86,4 +88,20 @@ test("includes the focus/complete mode toggle", () => {
 test("Projetos is marked as coming soon in words, not only by color", () => {
   render(<AppShell>x</AppShell>);
   expect(screen.getByText("em breve")).toBeDefined();
+});
+
+test("offers Sair, which submits the sign-out action", () => {
+  render(<AppShell>x</AppShell>);
+  const button = screen.getByRole("button", { name: "Sair" });
+  expect(button.getAttribute("type")).toBe("submit");
+  expect(button.closest("form")).not.toBeNull();
+});
+
+test("Sair fica logo depois da navegação, não no pé da barra", () => {
+  render(<AppShell>x</AppShell>);
+  const next = screen.getByRole("navigation", {
+    name: "Principal",
+  }).nextElementSibling;
+  expect(next?.tagName).toBe("FORM");
+  expect(next?.textContent).toBe("Sair");
 });

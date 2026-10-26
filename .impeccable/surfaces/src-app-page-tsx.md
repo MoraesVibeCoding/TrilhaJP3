@@ -1,8 +1,8 @@
 ---
 version: 1
 slug: "src-app-page-tsx"
-primary_target: "src/app/page.tsx"
-related_targets: ["src/app/demandas/page.tsx"]
+primary_target: "src/app/(app)/page.tsx"
+related_targets: ["src/app/(app)/demandas/page.tsx"]
 ---
 
 # Surface brief: Retomar e Demandas (casca do app)

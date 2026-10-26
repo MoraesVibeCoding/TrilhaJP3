@@ -51,3 +51,6 @@ next-env.d.ts
 .impeccable/review/
 .impeccable/mocks/
 !.env.example
+
+# sessão do usuário fictício do E2E (T3)
+/e2e/.auth/
