@@ -56,7 +56,7 @@ Tarefas rastreadas em GitHub Issues (`docs/agents/issue-tracker.md`). Os issues 
 
 - [x] Segredo corrigido no ambiente (Sites permitidos).
 - [x] `auth/v1/admin/users` responde `200` e `rest/v1/` responde o esquema (conferido em 2026-10-22).
-- [ ] Token de acesso do Supabase para migrações fornecido (sem ir ao repositório).
+- [x] Token de acesso do Supabase para migrações fornecido (sem ir ao repositório). As 4 variáveis validadas em 2026-10-26.
 - Dependências: nenhuma. **Bloqueia T2.**
 
 **R6. Glossário e ADRs** (S, skill `documentation-and-adrs`)

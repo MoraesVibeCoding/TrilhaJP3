@@ -23,4 +23,4 @@ O sistema será de uma empresa na v1 (Moraes CodeVibe), com possibilidade de ven
 ## Consequências
 - A T2 precisa de teste de integração que prove que um usuário de outra empresa não lê nem escreve nada.
 - RLS e gatilhos de histórico são tarefas de alto risco: o protocolo `doubt-driven-development` roda antes de fechar a T2 e a T10.
-- Bloqueio atual: falta o token de migração do Supabase (R5).
+- O token de migração do Supabase (R5) chegou em 2026-10-26; a T2 está especificada em `tasks/t2-spec.md`.
