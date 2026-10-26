@@ -1,6 +1,6 @@
 # T3: Login e sessão
 
-Status: **rascunho, aguardando aprovação do Pedro.** Nenhum código foi escrito e nenhuma configuração do Supabase foi alterada. Base: `docs/SPEC.md` (seções 4.1 e 4.3), ADR 0003, `tasks/t2-spec.md`, `CONSTRAINTS.md`.
+Status: **rascunho com as 3 decisões respondidas, aguardando aprovação do Pedro.** Nenhum código foi escrito e nenhuma configuração do Supabase foi alterada. Base: `docs/SPEC.md` (seções 4.1 e 4.3), ADR 0003, `tasks/t2-spec.md`, `CONSTRAINTS.md`.
 
 ## 1. Objetivo
 
@@ -69,7 +69,7 @@ Recuperar senha por e-mail (sem SMTP próprio; o Pedro redefine pelo painel), ca
 
 1. **Forma de entrar. Decidido pelo Pedro em 2026-10-26: e-mail e senha** (não depende de e-mail enviado; o limite de 2 e-mails por hora não atrapalha). Alternativa: link mágico por e-mail (sem senha, mas cada entrada gasta um e-mail do limite e exige configurar endereços de retorno).
 2. **Configuração do item 4** (cadastro fechado, senha de 12). **Decidido pelo Pedro em 2026-10-26: aplicar**, depois da aprovação da spec.
-3. **Criação do usuário do Pedro.** Recomendação: o Pedro cria pelo painel (Authentication, Add user, com "Auto Confirm User"), assim a senha nunca passa pelo chat nem pelo repositório; eu crio a empresa e o vínculo por migração, achando o usuário pelo e-mail. Alternativa: eu crio com a chave de serviço e uma senha temporária que o Pedro troca, mas a senha passaria pelo chat.
+3. **Criação do usuário do Pedro. Decidido pelo Pedro em 2026-10-26: pelo painel.** O Pedro cria pelo painel (Authentication, Add user, com "Auto Confirm User"), assim a senha nunca passa pelo chat nem pelo repositório; eu crio a empresa e o vínculo por migração, achando o usuário pelo e-mail. Alternativa: eu crio com a chave de serviço e uma senha temporária que o Pedro troca, mas a senha passaria pelo chat.
 
 ## 9. Tarefas depois da aprovação
 
