@@ -27,7 +27,7 @@ Só quem fez login entra no TrilhaJp3. O Pedro entra com a conta dele e cai no R
 4. **Sair:** ação no cabeçalho da casca (Server Action com `signOut()`), volta para `/entrar`.
 5. **Login e saída como Server Actions** com `useActionState`, validação de entrada no servidor com `zod` (e-mail válido, senha não vazia, tamanhos máximos).
 6. **Estrutura:** as páginas atuais vão para um grupo de rotas `src/app/(app)/` com o `AppShell` no layout do grupo; `/entrar` fica fora. Os endereços não mudam.
-7. **Usuário do Pedro e empresa:** a empresa Moraes CodeVibe e o vínculo `owner` do Pedro entram por migração depois que o usuário existir (ver decisão 3).
+7. **Usuário do Pedro e empresa** (ajuste aprovado pelo Pedro em 2026-10-26: a empresa entra por migração; o vínculo, por consulta avulsa fora do repositório, porque o repositório é público): a empresa Moraes CodeVibe e o vínculo `owner` do Pedro entram por migração depois que o usuário existir (ver decisão 3).
 
 ## 4. Configuração do Supabase (muda o projeto de teste, só depois da aprovação)
 
