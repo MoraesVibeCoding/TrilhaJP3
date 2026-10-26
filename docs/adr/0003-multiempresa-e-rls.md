@@ -1,7 +1,7 @@
 # ADR 0003: Multiempresa por `organization_id` com RLS em todas as tabelas
 
 ## Status
-Aceita. Ainda não implementada (T2).
+Aceita. Implementada na T2 (2026-10-26) para `organizations` e `memberships`; as próximas tabelas seguem o mesmo modelo.
 
 ## Data
 2026-10-21
@@ -12,7 +12,7 @@ O sistema será de uma empresa na v1 (Moraes CodeVibe), com possibilidade de ven
 ## Decisão
 - Toda tabela de negócio tem `organization_id`. IDs em UUID; datas em `timestamptz`.
 - **Row Level Security ligada em todas as tabelas e no Storage.** Acesso negado por padrão, com políticas explícitas por empresa.
-- Uma função `is_member(organization_id)` centraliza a regra.
+- Uma função `private.is_member(organization_id)` centraliza a regra. Fica no esquema `private`, fora da API, porque é `security definer`.
 - Só a chave pública do Supabase vai ao navegador; a chave de serviço fica no servidor. Segredos nunca vão ao repositório.
 - Anexos ficam em `{organization_id}/{task_id}/{uuid}-{nome}`.
 
@@ -23,4 +23,4 @@ O sistema será de uma empresa na v1 (Moraes CodeVibe), com possibilidade de ven
 ## Consequências
 - A T2 precisa de teste de integração que prove que um usuário de outra empresa não lê nem escreve nada.
 - RLS e gatilhos de histórico são tarefas de alto risco: o protocolo `doubt-driven-development` roda antes de fechar a T2 e a T10.
-- Bloqueio atual: falta o token de migração do Supabase (R5).
+- O token de migração do Supabase (R5) chegou em 2026-10-26; a T2 está especificada em `tasks/t2-spec.md`.

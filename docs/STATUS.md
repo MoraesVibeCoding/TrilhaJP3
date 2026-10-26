@@ -1,10 +1,10 @@
 # STATUS — TrilhaJp3
 
-Atualizado em 2026-10-26 (T12). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
+Atualizado em 2026-10-26 (T2 construída: empresas, vínculos e RLS no Supabase de teste). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
 
 ## Próxima ação
 
-Pedro: instalar o app no iPad para conferir o ícone e a tela cheia (o endereço precisa ser HTTPS público: porta 3000 do Codespace como Public, ou a Vercel) e cadastrar as variáveis do Supabase no ambiente de nuvem. Eu: T2 e T5 assim que uma sessão nova tiver as variáveis; até lá, barra lateral recolhível ou T7.
+Pedro: conferir o job `db` do CI no branch `claude/t2-spec` (usa os 3 segredos cadastrados) e instalar o app no iPad para conferir o ícone e a tela cheia (o endereço precisa ser HTTPS público: porta 3000 do Codespace como Public, ou a Vercel). Eu: T3 (login e sessão).
 
 ## Repositório e ambiente (2026-10-26)
 
@@ -15,7 +15,7 @@ O trabalho continua no repositório público `MoraesVibeCoding/TrilhaJP3`, criad
 1. Layout: proposta B (mesa dividida), entrada **Retomar**, página **Demandas** com visões (Tabela, Por projeto, Quadro), demanda em janela com fundo fosco.
 2. 5 releases (`docs/PROPOSTA-SISTEMA.md`) e 3 acréscimos na R1: página inteira com link, captura rápida, barra lateral recolhível.
 3. Propostas 1 a 5 de `docs/PRINCIPIOS-OBJETIVOS.md` (Agora, estimativa, Feito hoje, Foco/Completo, aviso de excesso). Interruptor Foco/Completo na R1 (`docs/PRINCIPIOS-OBJETIVOS.md` 5b).
-4. Supabase: a chave funcionava na sessão de 2026-10-22; no ambiente atual as variáveis não chegam (ver Pendências).
+4. Supabase: as 4 variáveis chegam ao ambiente de nuvem e foram validadas em 2026-10-26 (ver Pendências, item 1).
 
 ## Adiado
 
@@ -27,7 +27,7 @@ Ver `docs/PRINCIPIOS-OBJETIVOS.md`, seção 5.
 
 ## Em uma frase
 
-TrilhaJp3 é o sistema de gestão da Moraes CodeVibe. A v1 é o módulo Projetos e demandas. A T0 (base, Prettier, CI, Playwright) e a T1-R (casca, Retomar, janela da demanda, interruptor Foco/Completo, revisão final do `impeccable`) estão prontas. A T6a (Demandas em Tabela, versão A, com dados de demonstração) está pronta. A T6b (Por projeto, cartões) também. A T6c (Quadro, menu Mover para) também. A T6d (captura rápida, janela) também. A T5b (demanda em página inteira, `/demandas/[id]`, proposta A em três colunas; a janela troca o endereço e as alterações ficam no navegador) está pronta, com revisão final do `impeccable`. As próximas são a T5 e a T2 (regras de acesso por empresa no Supabase), que esperam as variáveis do Supabase.
+TrilhaJp3 é o sistema de gestão da Moraes CodeVibe. A v1 é o módulo Projetos e demandas. A T0 (base, Prettier, CI, Playwright) e a T1-R (casca, Retomar, janela da demanda, interruptor Foco/Completo, revisão final do `impeccable`) estão prontas. A T6a (Demandas em Tabela, versão A, com dados de demonstração) está pronta. A T6b (Por projeto, cartões) também. A T6c (Quadro, menu Mover para) também. A T6d (captura rápida, janela) também. A T5b (demanda em página inteira, `/demandas/[id]`, proposta A em três colunas; a janela troca o endereço e as alterações ficam no navegador) está pronta, com revisão final do `impeccable`. A T2 (empresas, vínculos e RLS no Supabase de teste, `tasks/t2-spec.md`) está pronta. As próximas são a T3 (login) e a T5.
 
 ## Decisões fechadas (resumo)
 
@@ -49,14 +49,15 @@ TrilhaJp3 é o sistema de gestão da Moraes CodeVibe. A v1 é o módulo Projetos
 | Playwright E2E (1 teste de fumaça) | Pronto, verde |
 | CI no GitHub Actions (formatação, lint, tipos, teste, build, E2E) | Verde nas execuções #1 e #2 |
 | `.gitattributes` com `eol=lf` | Commit `60970dc`, a execução #3 do CI ainda não foi conferida |
-| Supabase (esquema, RLS, login) | Não iniciado |
+| Supabase: esquema e RLS (T2) | Pronto: `organizations`, `memberships`, `private.is_member`; 6 testes de integração (`npm run test:db`) |
+| Supabase: login (T3) | Não iniciado |
 
-Comandos: `npm test`, `npm run test:e2e`, `npm run lint`, `npm run typecheck`, `npm run format:check`, `npm run build`.
+Comandos: `npm run db:migrate` (aplica `supabase/migrations/` pela Management API; `--rollback <versão>` reverte), `npm run test:db`, `npm test`, `npm run test:e2e`, `npm run lint`, `npm run typecheck`, `npm run format:check`, `npm run build`.
 
 ## Pendências
 
-1. **Supabase de teste:** projeto `https://exemplo.supabase.co`. As variáveis não chegam ao ambiente de nuvem atual (nenhuma `SUPABASE_*`). Cadastrar de novo nas configurações do ambiente; só uma sessão nova as lê. A chave de serviço nunca vai para o repositório nem para variável `NEXT_PUBLIC_`.
-2. **Migrações (T2):** alterar o banco exige uma credencial extra (token de acesso do Supabase), a cadastrar junto com as variáveis acima.
+1. **Supabase de teste: resolvido em 2026-10-26.** As 4 variáveis chegam ao ambiente de nuvem e respondem: `NEXT_PUBLIC_SUPABASE_URL` (`/auth/v1/health` 200), `NEXT_PUBLIC_SUPABASE_ANON_KEY` (chave `sb_publishable_`, `/auth/v1/settings` 200, rota admin 401 como esperado), `SUPABASE_SERVICE_ROLE_KEY` (chave `sb_secret_`, `/auth/v1/admin/users` 200), `SUPABASE_ACCESS_TOKEN` (`sbp_`, projeto `ACTIVE_HEALTHY`). As chaves são do formato novo, não JWT: a secreta vai no cabeçalho `apikey`. A chave de serviço nunca vai para o repositório nem para variável `NEXT_PUBLIC_`. Banco vazio nessa data (nenhuma tabela em `public`, nenhum usuário).
+2. **Migrações (T2): resolvido em 2026-10-26.** O token de acesso roda SQL como `postgres` pela Management API (`POST /v1/projects/{ref}/database/query`). A conexão direta ao Postgres (portas 5432 e 6543) não resolve no ambiente de nuvem, então `supabase db push` e `supabase test db` não rodam aqui. Ver `tasks/t2-spec.md`.
 3. **Docker:** o ambiente de nuvem não tem daemon do Docker, então o Supabase local não sobe lá. Os testes de RLS usam o projeto Supabase de teste.
 4. **Marca:** o pedido de registro no INPI ainda não foi feito. O Pedro disse que fará.
 5. `npm audit --audit-level=high`: 0 vulnerabilidades em 2026-10-26 (os 5 alertas antigos do ESLint sumiram).
@@ -71,7 +72,7 @@ Comandos: `npm test`, `npm run test:e2e`, `npm run lint`, `npm run typecheck`, `
 ## Próximos passos, nesta ordem
 
 1. T1: rodar `/impeccable init` para criar `PRODUCT.md` e `DESIGN.md` a partir do kit em `docs/brand/`, aplicar tokens `--mcv-*` e a tipografia (Geist, por decisão do Pedro em 2026-10-22), casca do app em claro e escuro. Concluído.
-2. T2: esquema inicial (empresas, vínculos, RLS) com teste de isolamento entre duas empresas contra o Supabase de teste.
+2. T2: esquema inicial (empresas, vínculos, RLS) com teste de isolamento entre duas empresas contra o Supabase de teste. Concluído em 2026-10-26.
 3. T3 em diante, conforme o plano da seção 6 da spec.
 
 Regra de trabalho: Red-Green-Refactor, commits pequenos, nenhuma tarefa concluída sem o log dos testes passando.

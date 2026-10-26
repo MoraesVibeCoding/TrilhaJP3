@@ -13,6 +13,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test:e2e": "playwright test",
+    "test:db": "vitest run --config vitest.db.config.mts",
+    "db:migrate": "node scripts/db-migrate.mjs",
     "check:floor": "node scripts/floor-guard.mjs --base origin/main",
     "check:secrets": "gitleaks detect --baseline-path gitleaks-baseline.json --redact --no-banner",
     "check:fast": "npm run typecheck && npm run lint && npm run check:floor && npm run check:secrets",
@@ -20,6 +22,7 @@
     "check:full": "npm run check:task && npm run format:check && playwright test e2e/accessibility.spec.ts && npm audit --audit-level=high"
   },
   "dependencies": {
+    "@supabase/supabase-js": "2.118.0",
     "next": "16.4.2",
     "react": "19.3.0",
     "react-dom": "19.3.0"

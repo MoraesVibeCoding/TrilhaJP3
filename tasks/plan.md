@@ -56,7 +56,7 @@ Tarefas rastreadas em GitHub Issues (`docs/agents/issue-tracker.md`). Os issues 
 
 - [x] Segredo corrigido no ambiente (Sites permitidos).
 - [x] `auth/v1/admin/users` responde `200` e `rest/v1/` responde o esquema (conferido em 2026-10-22).
-- [ ] Token de acesso do Supabase para migrações fornecido (sem ir ao repositório).
+- [x] Token de acesso do Supabase para migrações fornecido (sem ir ao repositório). As 4 variáveis validadas em 2026-10-26.
 - Dependências: nenhuma. **Bloqueia T2.**
 
 **R6. Glossário e ADRs** (S, skill `documentation-and-adrs`)
@@ -89,9 +89,9 @@ Decisões aprovadas em 2026-10-22: proposta **B, mesa dividida**. Entrada padrã
 
 **T2. Esquema inicial e RLS** (M)
 
-- [ ] `organizations`, `memberships`, função `is_member(organization_id)`, RLS ligada em tudo.
-- [ ] Teste de integração prova isolamento entre duas empresas (leitura e escrita negadas).
-- [ ] Protocolo `doubt-driven-development` aplicado antes de fechar.
+- [x] `organizations`, `memberships`, função `private.is_member(organization_id)`, RLS ligada em tudo (2026-10-26, `tasks/t2-spec.md`).
+- [x] Teste de integração prova isolamento entre duas empresas (leitura e escrita negadas): `npm run test:db`, 6 testes.
+- [x] Protocolo `doubt-driven-development` aplicado antes de fechar.
 - Dependências: R5, R6.
 
 **T3. 🎨 Login e sessão** (M)

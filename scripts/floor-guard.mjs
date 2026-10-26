@@ -88,9 +88,9 @@ const flag = (rule, f, text) =>
   findings.push({ rule, file: f, text: text.trim().slice(0, 120) });
 const isTest = (f) => /\.(test|spec)\.|_test\.|test_|^e2e\//.test(f);
 const isConstraints = (f) => /CONSTRAINTS\.md$/.test(f);
-// Só o nosso código (src, e2e, scripts): o plugin do impeccable em .claude/ é de terceiros e não entra.
+// Só o nosso código (src, e2e, scripts, supabase): o plugin do impeccable em .claude/ é de terceiros e não entra.
 const isCode = (f) =>
-  /^(src|e2e|scripts)\/.*\.(m?[jt]sx?)$/.test(f) &&
+  /^(src|e2e|scripts|supabase)\/.*\.(m?[jt]sx?)$/.test(f) &&
   !/^scripts\/floor-guard\./.test(f);
 
 // 1. Silenced checker — extend this list for your ecosystem.
