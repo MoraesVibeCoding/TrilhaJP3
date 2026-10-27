@@ -1354,7 +1354,7 @@ th[aria-sort] .sort-button {
 .import-note {
   display: grid;
   gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  margin: 1rem 0 1.5rem;
   padding: 1rem;
   border: 1px solid var(--mcv-control-line);
   border-radius: var(--mcv-radius-sm);
@@ -1389,6 +1389,10 @@ th[aria-sort] .sort-button {
   flex-wrap: wrap;
   align-items: end;
   gap: 0.5rem;
+}
+/* o espaçamento vem do gap: a margem própria do botão secundário recuava a linha quebrada */
+.import-actions .secondary-button {
+  margin-left: 0;
 }
 /* T5.3: descrição sob os metadados, em medida de leitura; a edição abre no lugar do cabeçalho */
 .demand-page-description {
