@@ -65,9 +65,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Títulos em Floresta (kit V2: heading = floresta); no escuro o token vira verde claro */
 h1,
 h2,
 h3 {
+  color: var(--mcv-forest);
   font-family: var(--mcv-font-display);
   font-weight: 600;
   letter-spacing: -0.02em;

@@ -13,7 +13,7 @@ export function BrandIcon({ size = 32 }: { size?: number }) {
       aria-hidden="true"
     >
       <path
-        d={small ? "M12 50V14L32 38L52 14V50" : "M12 47V16L32 38L52 16V47"}
+        d={small ? "M12 50V14L32 38L52 14V50" : "M12 46V16L32 38L52 16V46"}
         stroke="currentColor"
         strokeWidth={small ? 9 : 5}
         strokeLinecap="round"

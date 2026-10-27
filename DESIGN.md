@@ -62,9 +62,9 @@ typography:
     lineHeight: 1.5
 rounded:
   xs: "4px"
-  sm: "8px"
-  md: "12px"
-  lg: "20px"
+  sm: "10px"
+  md: "14px"
+  lg: "16px"
   pill: "999px"
 spacing:
   unit: "8px"
@@ -136,11 +136,11 @@ A informação é escrita por extenso. Estado e prioridade nunca dependem só de
 
 ## Colors
 
-Marca V2 (evolução decidida por Pedro em 2026-10-23, valores em `docs/brand/evolucao/tokens-v2.json`): neutros da marca, um verde de ação e dois acentos com regra de uso. Os valores do modo escuro estão em `src/styles/tokens.css` e trocam por `data-theme` ou pela preferência do sistema.
+Marca V2 (evolução decidida por Pedro em 2026-10-23; kit oficial recebido em 2026-10-27, com SVGs e tokens em `docs/brand/v2-kit/`, as mesmas cores de `docs/brand/evolucao/tokens-v2.json`): neutros da marca, um verde de ação e dois acentos com regra de uso. Os valores do modo escuro estão em `src/styles/tokens.css` e trocam por `data-theme` ou pela preferência do sistema.
 
 ### Primary
 
-- **Floresta** (#1b4d2e): item de navegação atual, estado "Fazendo", foco, item atual (passo e botão "Marcar como Agora" ativo), botão primário e marcador do `summary`. No escuro vira #a8c69a.
+- **Floresta** (#1b4d2e): títulos h1 a h3 (kit V2, `heading = floresta`, 2026-10-27), item de navegação atual, estado "Fazendo", foco, item atual (passo e botão "Marcar como Agora" ativo), botão primário e marcador do `summary`. No escuro vira #a8c69a.
 - **Folha** (#2f7d4b, 4,81:1 no papel): borda do estado "Fazendo", borda de botões ao passar o mouse e sublinhados. Pode ser texto sobre papel e cartão, mas não sobre a Neblina (4,497:1); hoje não é usada como cor de texto.
 
 ### Secondary
@@ -162,7 +162,7 @@ Marca V2 (evolução decidida por Pedro em 2026-10-23, valores em `docs/brand/ev
 
 **The Rare Green Rule.** O verde de ação cobre menos de 10% da tela. Se tudo é verde, nada é destaque.
 
-**The Green-Means-Now Rule.** Verde-floresta só aparece em: estado Fazendo, foco, item atual, botão primário e marcador do `summary`. Nunca em decoração, fundo de bloco ou texto corrido.
+**The Green-Means-Now Rule.** Verde-floresta só aparece em: títulos h1 a h3 (regra do kit V2), estado Fazendo, foco, item atual, botão primário e marcador do `summary`. Nunca em decoração, fundo de bloco ou texto corrido.
 
 ## Typography
 
@@ -200,7 +200,7 @@ Plano por padrão. A profundidade vem de camadas tonais (papel, menta, cartão) 
 
 ## Shapes
 
-Cantos suaves: 8px em botões e itens, 12px na janela da demanda, 20px (`--mcv-radius-lg`) no botão flutuante de captura do celular e em painéis futuros, 999px em emblemas e nos segmentos de progresso. Bordas de 1px: Linha em divisores e na borda de contêineres e emblemas (janela, cartões, insígnias de estado), que se reconhecem pelo fundo e pelo texto; controles usam `--mcv-control-line`. No celular a janela ocupa a tela inteira, sem borda nem raio.
+Cantos suaves, raios do kit V2 (2026-10-27): 10px em botões e itens, 14px na janela da demanda, 16px (`--mcv-radius-lg`) no botão flutuante de captura do celular e em painéis futuros, 999px em emblemas e nos segmentos de progresso. Bordas de 1px: Linha em divisores e na borda de contêineres e emblemas (janela, cartões, insígnias de estado), que se reconhecem pelo fundo e pelo texto; controles usam `--mcv-control-line`. No celular a janela ocupa a tela inteira, sem borda nem raio.
 
 ## Components
 
