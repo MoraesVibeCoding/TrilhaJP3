@@ -1,64 +1,21 @@
 // T2: isolamento entre empresas, pela API pública (o mesmo caminho do navegador).
 // Roda contra o Supabase de teste: npm run test:db (precisa das variáveis do Supabase).
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
+import {
+  admin,
+  fixture,
+  options,
+  publishableKey,
+  url,
+  type TestUser,
+} from "./fixture";
 
-function env(name: string) {
-  const value = process.env[name];
-  if (!value) throw new Error(`Falta a variável ${name}.`);
-  return value;
-}
+const { run, orgIds, createUser, createOrg, cleanup } = fixture("t2");
 
-const url = env("NEXT_PUBLIC_SUPABASE_URL");
-const publishableKey = env("NEXT_PUBLIC_SUPABASE_ANON_KEY");
-const options = { auth: { persistSession: false, autoRefreshToken: false } };
-const admin = createClient(url, env("SUPABASE_SERVICE_ROLE_KEY"), options);
-
-// Sufixo por execução: o banco de teste é compartilhado entre a sessão e o CI.
-const run = crypto.randomUUID().slice(0, 8);
-const password = crypto.randomUUID();
-const userIds: string[] = [];
-const orgIds: string[] = [];
-
-async function createUser(name: string) {
-  const { data, error } = await admin.auth.admin.createUser({
-    email: `t2-${name}-${run}@example.test`,
-    password,
-    email_confirm: true,
-  });
-  if (error) {
-    throw new Error(
-      `Não criou o usuário de teste (o projeto gratuito pode estar pausado): ${error.message}`,
-    );
-  }
-  userIds.push(data.user.id);
-  const client = createClient(url, publishableKey, options);
-  const signIn = await client.auth.signInWithPassword({
-    email: data.user.email!,
-    password,
-  });
-  if (signIn.error) throw signIn.error;
-  return { id: data.user.id, client };
-}
-
-async function createOrg(name: string, ownerId: string) {
-  const { data, error } = await admin
-    .from("organizations")
-    .insert({ name: `${name} ${run}` })
-    .select("id")
-    .single();
-  if (error) throw error;
-  orgIds.push(data.id);
-  const link = await admin
-    .from("memberships")
-    .insert({ organization_id: data.id, user_id: ownerId, role: "owner" });
-  if (link.error) throw link.error;
-  return data.id as string;
-}
-
-let a: { id: string; client: SupabaseClient };
-let b: { id: string; client: SupabaseClient };
-let loner: { id: string; client: SupabaseClient };
+let a: TestUser;
+let b: TestUser;
+let loner: TestUser;
 let orgA: string;
 let orgB: string;
 
@@ -70,12 +27,7 @@ beforeAll(async () => {
   orgB = await createOrg("Empresa B", b.id);
 }, 60_000);
 
-afterAll(async () => {
-  // Apaga mesmo se um teste falhar; os vínculos saem em cascata.
-  if (orgIds.length)
-    await admin.from("organizations").delete().in("id", orgIds);
-  for (const id of userIds) await admin.auth.admin.deleteUser(id);
-}, 60_000);
+afterAll(cleanup, 60_000);
 
 async function snapshot() {
   const orgs = await admin

@@ -4,7 +4,7 @@ Atualizado em 2026-10-26 (T3 construída: login, sessão e tela de entrada). Lei
 
 ## Próxima ação
 
-Pedro: revisar a PR da T3 (login) e conferir o login no app (`npm run dev`, abrir `/`, entrar com o seu usuário); instalar o app no iPad para conferir o ícone e a tela cheia (o endereço precisa ser HTTPS público: porta 3000 do Codespace como Public, ou a Vercel). Eu: T4 (projetos com dados reais) ou T5, conforme a prioridade do Pedro.
+Pedro: decidir o ajuste do guarda do piso (bloqueia asserção trocada; ver PR da T4) e revisar a PR da T4; instalar o app no iPad para conferir o ícone e a tela cheia. Eu: T5 (demandas reais) depois da T4.
 
 ## Repositório e ambiente (2026-10-26)
 
@@ -27,7 +27,7 @@ Ver `docs/PRINCIPIOS-OBJETIVOS.md`, seção 5.
 
 ## Em uma frase
 
-TrilhaJp3 é o sistema de gestão da Moraes CodeVibe. A v1 é o módulo Projetos e demandas. A T0 (base, Prettier, CI, Playwright) e a T1-R (casca, Retomar, janela da demanda, interruptor Foco/Completo, revisão final do `impeccable`) estão prontas. A T6a (Demandas em Tabela, versão A, com dados de demonstração) está pronta. A T6b (Por projeto, cartões) também. A T6c (Quadro, menu Mover para) também. A T6d (captura rápida, janela) também. A T5b (demanda em página inteira, `/demandas/[id]`, proposta A em três colunas; a janela troca o endereço e as alterações ficam no navegador) está pronta, com revisão final do `impeccable`. A T2 (empresas, vínculos e RLS no Supabase de teste, `tasks/t2-spec.md`) está pronta. A T3 (login com e-mail e senha, Proxy, tela `/entrar` proposta B, botão Sair, `tasks/t3-spec.md`) também. As próximas são a T4 e a T5, que trocam os dados de demonstração por dados reais.
+TrilhaJp3 é o sistema de gestão da Moraes CodeVibe. A v1 é o módulo Projetos e demandas. A T0 (base, Prettier, CI, Playwright) e a T1-R (casca, Retomar, janela da demanda, interruptor Foco/Completo, revisão final do `impeccable`) estão prontas. A T6a (Demandas em Tabela, versão A, com dados de demonstração) está pronta. A T6b (Por projeto, cartões) também. A T6c (Quadro, menu Mover para) também. A T6d (captura rápida, janela) também. A T5b (demanda em página inteira, `/demandas/[id]`, proposta A em três colunas; a janela troca o endereço e as alterações ficam no navegador) está pronta, com revisão final do `impeccable`. A T2 (empresas, vínculos e RLS no Supabase de teste, `tasks/t2-spec.md`) está pronta. A T3 (login com e-mail e senha, Proxy, tela `/entrar` proposta B, botão Sair, `tasks/t3-spec.md`) também. A T4 (projetos reais em `/projetos`, `tasks/t4-spec.md`) também, com o kit de marca V2 oficial adotado (raios, títulos em Floresta, SVGs em `docs/brand/v2-kit/`). A próxima é a T5, que troca as demandas de demonstração por reais.
 
 ## Decisões fechadas (resumo)
 
@@ -66,7 +66,7 @@ Comandos: `npm run db:migrate` (aplica `supabase/migrations/` pela Management AP
 
 ## Notas de ambiente
 
-1. Computador do Pedro (Windows): Node 24.20, npm 11. O CI e a nuvem usam Node 22. Tudo passa nos dois. Ideia pendente: fixar `engines` no `package.json`.
+1. Computador do Pedro (Windows): Node 24.22, npm 11, Git 2.56. O CI e a nuvem usam Node 22. Tudo passa nos dois. Ideia pendente: fixar `engines` no `package.json`. Projeto em `C:\Users\pedro\Documents\TrilhaJP3` (clonado em 2026-10-27). No PowerShell: usar `npm.cmd` (a política de scripts bloqueia o `npm.ps1`); o Git foi posto no PATH do usuário à mão (`C:\Program Files\Git\cmd`). O `.env.local` sai do `.env.example`; criar com `Set-Content -Encoding ascii` (o `utf8` do Windows PowerShell põe um BOM que esconde a primeira variável). Sem o arquivo, o Proxy falha com "Your project's URL and Key are required".
 2. Identidade do Git configurada só no repositório local: Pedro Moraes, `contato@exemplo.com.br`.
 3. A skill `impeccable` está em `.claude/skills/impeccable/`. O launcher `scripts/impeccable` baixa um binário na primeira execução e precisa de aprovação do Pedro.
 4. **Decisão do Pedro em 2026-10-23 (R4): manter os hooks do `impeccable`** em `.claude/settings.local.json` (local, ignorado pelo Git). Eles rodam o detector depois de editar arquivos de interface. A decisão antiga de não instalá-los fica revogada.

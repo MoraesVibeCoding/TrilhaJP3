@@ -1,0 +1,37 @@
+/* Moraes CodeVibe — tokens de marca v2 */
+:root {
+  /* Cores globais */
+  --mc-tinta:    #0F1F14;
+  --mc-floresta: #1B4D2E;
+  --mc-folha:    #2F7D4B;
+  --mc-pulso:    #A6F26B; /* reservado: IA ou número principal, 1x por peça fora do logo */
+  --mc-neblina:  #EDF4E7;
+  --mc-papel:    #F8FAF5;
+  --mc-ambar:    #D4892A; /* botão secundário e alertas; texto sempre em Tinta */
+  --mc-salvia:   #B4C5AF; /* texto secundário sobre Tinta */
+  --mc-salvia-clara: #C9DBC3; /* texto secundário sobre Floresta */
+  --mc-cinza:    #526350; /* texto secundário sobre fundos claros */
+  --mc-borda:    #D5DFCC;
+
+  /* Aliases semânticos */
+  --mc-bg:            var(--mc-papel);
+  --mc-surface:       var(--mc-neblina);
+  --mc-text:          var(--mc-tinta);
+  --mc-text-muted:    var(--mc-cinza);
+  --mc-heading:       var(--mc-floresta);
+  --mc-link:          var(--mc-folha);
+  --mc-action:        var(--mc-floresta);
+  --mc-action-text:   var(--mc-neblina);
+  --mc-action-secondary: var(--mc-ambar);
+  --mc-ai-active:     var(--mc-pulso);
+
+  /* Tipografia */
+  --mc-font-display: "Fraunces", Georgia, serif;
+  --mc-font-body:    "Inter", system-ui, sans-serif;
+  --mc-font-mono:    "JetBrains Mono", ui-monospace, monospace;
+
+  /* Raios */
+  --mc-radius-sm: 10px;
+  --mc-radius-md: 14px;
+  --mc-radius-lg: 16px;
+}

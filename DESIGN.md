@@ -62,9 +62,9 @@ typography:
     lineHeight: 1.5
 rounded:
   xs: "4px"
-  sm: "8px"
-  md: "12px"
-  lg: "20px"
+  sm: "10px"
+  md: "14px"
+  lg: "16px"
   pill: "999px"
 spacing:
   unit: "8px"
@@ -136,11 +136,11 @@ A informação é escrita por extenso. Estado e prioridade nunca dependem só de
 
 ## Colors
 
-Marca V2 (evolução decidida por Pedro em 2026-10-23, valores em `docs/brand/evolucao/tokens-v2.json`): neutros da marca, um verde de ação e dois acentos com regra de uso. Os valores do modo escuro estão em `src/styles/tokens.css` e trocam por `data-theme` ou pela preferência do sistema.
+Marca V2 (evolução decidida por Pedro em 2026-10-23; kit oficial recebido em 2026-10-27, com SVGs e tokens em `docs/brand/v2-kit/`, as mesmas cores de `docs/brand/evolucao/tokens-v2.json`): neutros da marca, um verde de ação e dois acentos com regra de uso. Os valores do modo escuro estão em `src/styles/tokens.css` e trocam por `data-theme` ou pela preferência do sistema.
 
 ### Primary
 
-- **Floresta** (#1b4d2e): item de navegação atual, estado "Fazendo", foco, item atual (passo e botão "Marcar como Agora" ativo), botão primário e marcador do `summary`. No escuro vira #a8c69a.
+- **Floresta** (#1b4d2e): títulos h1 a h3 (kit V2, `heading = floresta`, 2026-10-27), item de navegação atual, estado "Fazendo", foco, item atual (passo e botão "Marcar como Agora" ativo), botão primário e marcador do `summary`. No escuro vira #a8c69a.
 - **Folha** (#2f7d4b, 4,81:1 no papel): borda do estado "Fazendo", borda de botões ao passar o mouse e sublinhados. Pode ser texto sobre papel e cartão, mas não sobre a Neblina (4,497:1); hoje não é usada como cor de texto.
 
 ### Secondary
@@ -162,7 +162,7 @@ Marca V2 (evolução decidida por Pedro em 2026-10-23, valores em `docs/brand/ev
 
 **The Rare Green Rule.** O verde de ação cobre menos de 10% da tela. Se tudo é verde, nada é destaque.
 
-**The Green-Means-Now Rule.** Verde-floresta só aparece em: estado Fazendo, foco, item atual, botão primário e marcador do `summary`. Nunca em decoração, fundo de bloco ou texto corrido.
+**The Green-Means-Now Rule.** Verde-floresta só aparece em: títulos h1 a h3 (regra do kit V2), estado Fazendo, foco, item atual, botão primário e marcador do `summary`. Nunca em decoração, fundo de bloco ou texto corrido.
 
 ## Typography
 
@@ -200,7 +200,7 @@ Plano por padrão. A profundidade vem de camadas tonais (papel, menta, cartão) 
 
 ## Shapes
 
-Cantos suaves: 8px em botões e itens, 12px na janela da demanda, 20px (`--mcv-radius-lg`) no botão flutuante de captura do celular e em painéis futuros, 999px em emblemas e nos segmentos de progresso. Bordas de 1px: Linha em divisores e na borda de contêineres e emblemas (janela, cartões, insígnias de estado), que se reconhecem pelo fundo e pelo texto; controles usam `--mcv-control-line`. No celular a janela ocupa a tela inteira, sem borda nem raio.
+Cantos suaves, raios do kit V2 (2026-10-27): 10px em botões e itens, 14px na janela da demanda, 16px (`--mcv-radius-lg`) no botão flutuante de captura do celular e em painéis futuros, 999px em emblemas e nos segmentos de progresso. Bordas de 1px: Linha em divisores e na borda de contêineres e emblemas (janela, cartões, insígnias de estado), que se reconhecem pelo fundo e pelo texto; controles usam `--mcv-control-line`. No celular a janela ocupa a tela inteira, sem borda nem raio.
 
 ## Components
 
@@ -268,6 +268,10 @@ O app se instala na tela inicial do iPad (Safari) e no computador (Chrome ou Edg
 ### Tela de entrada (T3)
 
 Rota `/entrar`, fora da casca (proposta B, mesa dividida, escolhida pelo Pedro em 2026-10-26). Faixa à esquerda (2fr, mínimo 18rem, padding 2,5rem) com o ícone e o nome no topo e a frase "Projetos e demandas da Moraes CodeVibe." embaixo, em Display 600, de 1,375 a 1,75rem conforme a largura; à direita, no Papel, o título "Entrar" (1,25rem) e o formulário até 22rem: rótulos de 0,8125rem peso 600, campos de 44px com borda de controle, botão primário de largura total. No claro a faixa é Floresta com texto e ícone em Neblina (o ícone "sobre floresta", Pulso sem contorno); no escuro usa a superfície da barra lateral (Neblina escura) com filete à direita, porque o Floresta do escuro é verde claro. Abaixo de 45rem a faixa vira uma barra com ícone e nome e a frase some. O aviso de erro é o mesmo da captura: Tinta peso 600 sobre Neblina com borda de controle, nunca vermelho; vazio, fica no DOM (região viva) sem ocupar espaço. Pendente: "Entrando…" com o botão em `text-soft`. O botão Sair fica na barra lateral do app, logo abaixo da navegação, no estilo dos itens dela.
+
+### Projetos (T4)
+
+Rota `/projetos` (proposta A, grupos por estado, escolhida pelo Pedro em 2026-10-27). Cabeçalho da página com "Novo projeto" (botão primário). Abas "Ativos (N)" e "Arquivados (N)": links em pílula, a atual com fundo Cartão, borda Linha e texto Floresta. Grupos por estado com título h2 de 1,125rem e a contagem em `text-soft`, filete embaixo; linhas em grade (nome peso 600, prioridade e link em 0,875rem; link em Floresta com sublinhado, só o endereço sem `https://`; "Editar" em botão secundário), filete de 1px entre elas. Editar abre o formulário no lugar da linha: Cartão com borda Linha e raio md, grade de 3 colunas (nome 2fr, estado e prioridade), descrição e link na largura toda; erro por campo em Tinta peso 600, campo inválido com borda Tinta de 2px. "Arquivar" à esquerda, "Cancelar" e "Salvar" à direita. No celular, cada linha empilha nome, prioridade e link com "Editar" à direita, e o formulário vira uma coluna. A casca reserva 6rem no fim da página no celular para o botão flutuante de captura não cobrir o último item.
 
 ### Tabelas
 
