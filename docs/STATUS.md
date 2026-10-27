@@ -4,7 +4,7 @@ Atualizado em 2026-10-26 (T3 construída: login, sessão e tela de entrada). Lei
 
 ## Próxima ação
 
-Pedro: revisar a PR da T3 (login) e conferir o login no app (`npm run dev`, abrir `/`, entrar com o seu usuário); instalar o app no iPad para conferir o ícone e a tela cheia (o endereço precisa ser HTTPS público: porta 3000 do Codespace como Public, ou a Vercel). Eu: T4 (projetos com dados reais) ou T5, conforme a prioridade do Pedro.
+Pedro: aprovar a spec da T4 (`tasks/t4-spec.md`) e responder às 3 decisões abertas; instalar o app no iPad para conferir o ícone e a tela cheia. Eu: construir a T4 depois da aprovação.
 
 ## Repositório e ambiente (2026-10-26)
 
