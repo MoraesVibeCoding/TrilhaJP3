@@ -1,44 +1,41 @@
 import type { Metadata } from "next";
+import { connection } from "next/server";
 import { Suspense } from "react";
 import { DemandPage } from "@/components/demand-page";
-import { demoDemands, demoNow, demoProjects } from "@/lib/demo-data";
-
-// As de demonstração saem prontas no build; as da captura rápida (só no navegador) renderizam no primeiro pedido.
-export function generateStaticParams() {
-  return demoDemands.map((d) => ({ id: d.id }));
-}
+import { listDemands } from "@/lib/demands";
+import { listProjects } from "@/lib/projects";
 
 export async function generateMetadata({
   params,
 }: PageProps<"/demandas/[id]">): Promise<Metadata> {
+  await connection();
   const { id } = await params;
-  const title = demoDemands.find((d) => d.id === id)?.title ?? "Demanda";
-  return { title: `${title} · TrilhaJp3` };
+  const title = (await listDemands()).find((d) => d.id === id)?.title;
+  return { title: `${title ?? "Demanda"} · TrilhaJp3` };
 }
 
 export default function Page({ params }: PageProps<"/demandas/[id]">) {
+  // ler params fora de Suspense impede a navegação instantânea (cacheComponents)
   return (
-    <>
-      {/* ler params fora de Suspense impede a navegação instantânea (cacheComponents) */}
-      <Suspense fallback={<p>Carregando a demanda…</p>}>
-        <Demand params={params} />
-      </Suspense>
-      <p role="note" className="demo-note">
-        Dados de demonstração: projetos e demandas fictícios, só para avaliar o
-        visual.
-      </p>
-    </>
+    <Suspense fallback={<p>Carregando a demanda…</p>}>
+      <Demand params={params} />
+    </Suspense>
   );
 }
 
 async function Demand({ params }: Pick<PageProps<"/demandas/[id]">, "params">) {
+  await connection();
   const { id } = await params;
+  const [demands, projects] = await Promise.all([
+    listDemands(),
+    listProjects(),
+  ]);
   return (
     <DemandPage
       id={id}
-      demands={demoDemands}
-      projects={demoProjects}
-      now={demoNow}
+      demands={demands}
+      projects={projects}
+      now={new Date()}
     />
   );
 }
