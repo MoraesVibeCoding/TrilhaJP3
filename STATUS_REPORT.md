@@ -15,6 +15,7 @@ O TrilhaJp3 é o sistema de gestão da Moraes CodeVibe; a v1 é o módulo Projet
 A estimativa conta tarefas do plano com peso pelo tamanho (S, M); não é medida de linhas de código.
 
 **Saúde técnica (medida nesta auditoria):**
+
 - `npm run typecheck`: sem erros.
 - `npm run lint`: sem erros.
 - `vitest`: 300 de 300 testes passando, em 50 arquivos.
@@ -41,35 +42,35 @@ A estimativa conta tarefas do plano com peso pelo tamanho (S, M); não é medida
 
 ### 🟢 Concluído (interface, lógica, banco e erros)
 
-| Módulo | Evidência |
-|---|---|
-| Fundação | Next 16, TS estrito, ESLint, Prettier, Vitest, Playwright, CI com 2 jobs (`check`, `db`), `CONSTRAINTS.md` e guarda do piso |
-| Empresas e isolamento (T2) | `organizations`, `memberships`, `private.is_member`; RLS em todas as tabelas; testes de isolamento entre duas empresas (`supabase/tests/rls.test.ts`) |
-| Login e sessão (T3) | `/entrar`, Proxy com `getClaims()`, `getCurrentUser()`, Sair, cadastro público fechado, senha mínima de 12; redirecionamento seguro (`safeNext`) |
-| PWA (T12) | `manifest.ts`, ícones, instalável |
-| Projetos (T4) | `/projetos`: criar, editar, arquivar e restaurar com `zod` e Server Actions; RLS e grants por coluna. **Pronto na branch, mas não está em `main`** (PR #4 aberta) |
-| Leitura das demandas (T5.2) | Retomar, Demandas (Tabela, Por projeto, Quadro), janela e `/demandas/[id]` leem `tasks` do Supabase; subtarefas reais (demandas filhas) |
+| Módulo                         | Evidência                                                                                                                                                            |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Fundação                       | Next 16, TS estrito, ESLint, Prettier, Vitest, Playwright, CI com 2 jobs (`check`, `db`), `CONSTRAINTS.md` e guarda do piso                                          |
+| Empresas e isolamento (T2)     | `organizations`, `memberships`, `private.is_member`; RLS em todas as tabelas; testes de isolamento entre duas empresas (`supabase/tests/rls.test.ts`)                |
+| Login e sessão (T3)            | `/entrar`, Proxy com `getClaims()`, `getCurrentUser()`, Sair, cadastro público fechado, senha mínima de 12; redirecionamento seguro (`safeNext`)                     |
+| PWA (T12)                      | `manifest.ts`, ícones, instalável                                                                                                                                    |
+| Projetos (T4)                  | `/projetos`: criar, editar, arquivar e restaurar com `zod` e Server Actions; RLS e grants por coluna. **Pronto na branch, mas não está em `main`** (PR #4 aberta)    |
+| Leitura das demandas (T5.2)    | Retomar, Demandas (Tabela, Por projeto, Quadro), janela e `/demandas/[id]` leem `tasks` do Supabase; subtarefas reais (demandas filhas)                              |
 | Ações de demanda (T5.3, parte) | Mover de estado, marcar e tirar de Agora (uma por empresa, índice único), Concluir passo e captura rápida gravam no banco; tela otimista que volta e avisa se falhar |
 
 ### 🟡 Parcial ou com resto de demonstração
 
-| Módulo | O que falta |
-|---|---|
-| Demandas (T5) | Editar título, descrição, prioridade e prazo (nenhuma tela mostra descrição nem prazo); importar as demandas capturadas no navegador; apagar `demo-data.ts`, `use-captured.ts` e o resto do atalho do navegador; revisões e PR |
-| Demandas capturadas antes da T5 | `useWithCaptured` ainda mistura as demandas do `localStorage` (ids `c-…`) com as do banco. Mover, marcar Agora ou concluir uma delas **falha e mostra "Não foi possível salvar"**, porque o id não é uuid. Some com a importação (T5.3) |
-| Subtarefas (T7) | Leitura e Concluir passo funcionam; criar, renomear e reordenar não existem; o banco ainda não impede filha de outra empresa (sem grant de `parent_task_id` para o cliente, então hoje não é explorável) |
-| Comentários, anexos e histórico na tela | Grupos aparecem vazios ("Nenhum comentário.") por decisão da spec; sem dados nem tabelas |
+| Módulo                                  | O que falta                                                                                                                                                                                                                             |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Demandas (T5)                           | Editar título, descrição, prioridade e prazo (nenhuma tela mostra descrição nem prazo); importar as demandas capturadas no navegador; apagar `demo-data.ts`, `use-captured.ts` e o resto do atalho do navegador; revisões e PR          |
+| Demandas capturadas antes da T5         | `useWithCaptured` ainda mistura as demandas do `localStorage` (ids `c-…`) com as do banco. Mover, marcar Agora ou concluir uma delas **falha e mostra "Não foi possível salvar"**, porque o id não é uuid. Some com a importação (T5.3) |
+| Subtarefas (T7)                         | Leitura e Concluir passo funcionam; criar, renomear e reordenar não existem; o banco ainda não impede filha de outra empresa (sem grant de `parent_task_id` para o cliente, então hoje não é explorável)                                |
+| Comentários, anexos e histórico na tela | Grupos aparecem vazios ("Nenhum comentário.") por decisão da spec; sem dados nem tabelas                                                                                                                                                |
 
 ### 🔴 Faltando
 
-| Módulo | Situação |
-|---|---|
-| Etiquetas (T8) | Nada no código nem no banco |
-| Comentários (T9) | Sem tabela, sem escrita, sem escape contra XSS testado |
-| Histórico por gatilhos (T10) | Sem gatilhos nem tabela de eventos |
-| Anexos (T11) | Sem Storage, sem validação de tipo e 10 MB |
-| Endurecimento e observabilidade (T13) | `next.config.ts` sem cabeçalhos de segurança (CSP, HSTS, `X-Frame-Options`); sem logs estruturados nem métricas |
-| Produção (T14) | Vercel Pro e Supabase Pro (D1, D2), deploy, rollback, vínculo do dono em produção (passo manual em `docs/STATUS.md`, pendência 4) |
+| Módulo                                | Situação                                                                                                                          |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Etiquetas (T8)                        | Nada no código nem no banco                                                                                                       |
+| Comentários (T9)                      | Sem tabela, sem escrita, sem escape contra XSS testado                                                                            |
+| Histórico por gatilhos (T10)          | Sem gatilhos nem tabela de eventos                                                                                                |
+| Anexos (T11)                          | Sem Storage, sem validação de tipo e 10 MB                                                                                        |
+| Endurecimento e observabilidade (T13) | `next.config.ts` sem cabeçalhos de segurança (CSP, HSTS, `X-Frame-Options`); sem logs estruturados nem métricas                   |
+| Produção (T14)                        | Vercel Pro e Supabase Pro (D1, D2), deploy, rollback, vínculo do dono em produção (passo manual em `docs/STATUS.md`, pendência 4) |
 
 ## 4. Gargalos e dívidas técnicas
 
