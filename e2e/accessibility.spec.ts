@@ -70,6 +70,39 @@ for (const theme of themes) {
       expect(await scan(page)).toEqual([]);
     });
 
+    test("demanda em página inteira, editando com erro", async ({ page }) => {
+      await page.goto(`/demandas/${seed().demands.d1}`);
+      await page.getByRole("button", { name: "Editar" }).click();
+      const form = page.getByRole("form", { name: "Editar demanda" });
+      await form.getByLabel("Título").fill("   ");
+      await form.getByRole("button", { name: "Salvar" }).click();
+      await expect(form.getByText("Dê um título à demanda.")).toBeVisible();
+      expect(await scan(page)).toEqual([]);
+    });
+
+    test("Demandas com o aviso de importar", async ({ page }) => {
+      await page.addInitScript(() =>
+        localStorage.setItem(
+          "trilhajp3-capturadas",
+          JSON.stringify([
+            {
+              id: "c-1",
+              title: "Trocar a foto do rodapé",
+              projectId: "p1",
+              priority: "Alta",
+              state: "A fazer",
+              lastActivityAt: "2026-10-23T12:00:00.000Z",
+            },
+          ]),
+        ),
+      );
+      await page.goto("/demandas");
+      await expect(
+        page.getByRole("region", { name: /só neste navegador/ }),
+      ).toBeVisible();
+      expect(await scan(page)).toEqual([]);
+    });
+
     test("janela de captura aberta", async ({ page }) => {
       await page.goto("/demandas");
       await page.getByRole("button", { name: "Nova demanda" }).click();

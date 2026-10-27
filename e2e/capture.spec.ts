@@ -159,3 +159,55 @@ test(
     ).toBeVisible();
   },
 );
+
+test(
+  "demands captured only in the browser before T5 are imported into a project",
+  { tag: "@grava" },
+  async ({ page }) => {
+    await page.addInitScript(() => {
+      // só na primeira carga: depois de importar, o navegador já não as tem
+      if (sessionStorage.getItem("semeado")) return;
+      sessionStorage.setItem("semeado", "1");
+      const made = (id: string, title: string) => ({
+        id,
+        title,
+        projectId: "p1",
+        priority: "Alta",
+        state: "A fazer",
+        lastActivityAt: "2026-10-23T12:00:00.000Z",
+      });
+      localStorage.setItem(
+        "trilhajp3-capturadas",
+        JSON.stringify([
+          made("c-1", "Trocar a foto do rodapé"),
+          made("c-2", "teste"),
+        ]),
+      );
+    });
+    await page.goto("/demandas");
+    const note = page.getByRole("region", {
+      name: /só neste navegador/,
+    });
+    await note.getByRole("checkbox", { name: "teste" }).uncheck();
+    await note
+      .getByLabel("Projeto")
+      .selectOption({ label: "Painel financeiro" });
+    await note.getByRole("button", { name: "Importar 1 demanda" }).click();
+    await expect(
+      page
+        .getByRole("status")
+        .filter({ hasText: "1 demanda importada para Painel financeiro." }),
+    ).toBeVisible();
+    await note
+      .getByRole("button", { name: "Descartar as desmarcadas" })
+      .click();
+    await expect(note).toBeHidden();
+    await page.reload();
+    await expect(note).toBeHidden();
+    await expect(
+      page
+        .getByRole("table")
+        .getByRole("button", { name: "Trocar a foto do rodapé" }),
+    ).toBeVisible();
+  },
+);

@@ -1,6 +1,7 @@
 "use client";
 
 import { useDemandState } from "@/lib/use-demand-state";
+import { ImportCaptured } from "./import-captured";
 import { useStoredState } from "@/lib/use-stored-state";
 import {
   buildRows,
@@ -12,7 +13,6 @@ import {
 import { formatActivity } from "@/lib/resume";
 import { groupByProject } from "@/lib/project-groups";
 import { ProjectCards } from "./project-cards";
-import { useWithCaptured } from "@/lib/use-captured";
 import { BoardColumns } from "./board-columns";
 import { DemandDetail } from "./demand-detail";
 import { DemandDialog } from "./demand-dialog";
@@ -106,9 +106,8 @@ export function DemandsBoard({
   now: Date;
   storageName?: string;
 }) {
-  const { current, conclude, moveTo, toggleNow, failure } = useDemandState(
-    useWithCaptured(demands),
-  );
+  const { current, conclude, moveTo, toggleNow, failure } =
+    useDemandState(demands);
   const [stored, setStored] = useStoredState<Partial<ViewState>>(
     storageName,
     DEFAULT_VIEW,
@@ -156,6 +155,7 @@ export function DemandsBoard({
   if (rows.length === 0) {
     return (
       <>
+        <ImportCaptured projects={projects} />
         <nav aria-label="Visões" className="view-tabs">
           <span aria-current="page">Tabela</span>
         </nav>
@@ -166,6 +166,7 @@ export function DemandsBoard({
 
   return (
     <>
+      <ImportCaptured projects={projects} />
       <div role="group" aria-label="Visões" className="view-tabs">
         {LAYOUTS.map((l) => (
           <button

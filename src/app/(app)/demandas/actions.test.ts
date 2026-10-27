@@ -35,8 +35,15 @@ vi.mock("@/lib/supabase/server", () => ({
   }),
 }));
 
-const { moveDemand, concludeStep, setNow, createDemand, captureOptions } =
-  await import("./actions");
+const {
+  moveDemand,
+  concludeStep,
+  setNow,
+  createDemand,
+  captureOptions,
+  updateDemand,
+  importDemands,
+} = await import("./actions");
 const { revalidatePath } = await import("next/cache");
 
 const ID = "7d3c6a8e-1f2b-4c5d-9e0f-112233445566";
@@ -222,5 +229,111 @@ describe("captureOptions", () => {
   test("erro do banco = nenhuma opção, e a janela diz que não carregou", async () => {
     db.results = [{ error: { message: "x" } }, {}];
     await expect(captureOptions()).resolves.toBeNull();
+  });
+});
+
+describe("updateDemand", () => {
+  const form = (fields: Record<string, string>) => {
+    const data = new FormData();
+    for (const [key, value] of Object.entries(fields)) data.set(key, value);
+    return data;
+  };
+  const valid = {
+    id: ID,
+    title: "Revisar",
+    priority: "low",
+    due_date: "2026-10-30",
+  };
+
+  test("grava título, descrição, prioridade e prazo, e atualiza as telas", async () => {
+    db.results = [{ data: [{ id: ID }] }];
+    await expect(updateDemand(undefined, form(valid))).resolves.toEqual({
+      saved: true,
+    });
+    expect(db.queries).toEqual([
+      [
+        "from(tasks)",
+        `update({"title":"Revisar","description":null,"priority":"low","due_date":"2026-10-30"})`,
+        `eq("id","${ID}")`,
+        `select("id")`,
+      ],
+    ]);
+    expect(revalidatePath).toHaveBeenCalledWith("/", "layout");
+  });
+
+  test("entrada inválida volta os erros e os valores digitados, sem gravar", async () => {
+    const state = await updateDemand(undefined, form({ ...valid, title: "" }));
+    expect(state).toEqual({
+      errors: { title: "Dê um título à demanda." },
+      values: {
+        title: "",
+        description: "",
+        priority: "low",
+        due_date: "2026-10-30",
+      },
+    });
+    expect(db.queries).toEqual([]);
+  });
+
+  test("id inválido ou nenhuma linha (outra empresa) = não encontrada", async () => {
+    await expect(
+      updateDemand(undefined, form({ ...valid, id: "d1" })),
+    ).resolves.toEqual({ errors: { form: "Demanda não encontrada." } });
+    db.results = [{ data: [] }];
+    await expect(updateDemand(undefined, form(valid))).resolves.toEqual({
+      errors: { form: "Demanda não encontrada." },
+    });
+  });
+
+  test("erro do banco mantém os valores e avisa", async () => {
+    db.results = [{ error: { message: "x" } }];
+    await expect(updateDemand(undefined, form(valid))).resolves.toMatchObject({
+      errors: { form: "Não foi possível salvar. Tente de novo." },
+      values: { title: "Revisar" },
+    });
+  });
+});
+
+describe("importDemands", () => {
+  const items = [
+    { title: " Ajustar menu ", priority: "Alta" },
+    { title: "Revisar contrato", priority: "Média" },
+  ];
+
+  test("grava as marcadas no projeto escolhido, em A fazer, na empresa do usuário", async () => {
+    await expect(importDemands({ projectId: ID, items })).resolves.toEqual({
+      ok: true,
+      count: 2,
+    });
+    expect(db.queries).toEqual([
+      [
+        "from(tasks)",
+        `insert([{"organization_id":"org-1","project_id":"${ID}","title":"Ajustar menu","priority":"high","state":"todo"},{"organization_id":"org-1","project_id":"${ID}","title":"Revisar contrato","priority":"medium","state":"todo"}])`,
+      ],
+    ]);
+    expect(revalidatePath).toHaveBeenCalledWith("/", "layout");
+  });
+
+  test("lista vazia, projeto inválido ou item inválido não chegam ao banco", async () => {
+    for (const input of [
+      { projectId: ID, items: [] },
+      { projectId: "p1", items },
+      { projectId: ID, items: [{ title: " ", priority: "Alta" }] },
+      { projectId: ID, items: [{ title: "Ok", priority: "Urgente" }] },
+      { projectId: ID, items: Array(501).fill(items[0]) },
+    ])
+      await expect(importDemands(input)).resolves.toEqual({
+        ok: false,
+        error: "Não foi possível importar. Tente de novo.",
+      });
+    expect(db.queries).toEqual([]);
+  });
+
+  test("erro do banco não vira sucesso", async () => {
+    db.results = [{ error: { code: "23503" } }];
+    await expect(importDemands({ projectId: ID, items })).resolves.toEqual({
+      ok: false,
+      error: "Não foi possível importar. Tente de novo.",
+    });
   });
 });

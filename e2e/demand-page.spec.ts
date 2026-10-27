@@ -162,3 +162,51 @@ test.describe("atalhos da página inteira", () => {
     ).toBeVisible();
   });
 });
+
+test.describe("editar na página inteira", () => {
+  test(
+    "title, description, priority and due date are saved and survive a reload",
+    { tag: "@grava" },
+    async ({ page }) => {
+      await page.goto(`/demandas/${seed().demands.d1}`);
+      await page.getByRole("button", { name: "Editar" }).click();
+      const form = page.getByRole("form", { name: "Editar demanda" });
+      await form.getByLabel("Título").fill("Revisar textos da home");
+      await form.getByLabel("Descrição").fill("Combinar com o cliente.");
+      await form.getByLabel("Prioridade").selectOption("low");
+      await form.getByLabel("Prazo").fill("2026-12-15");
+      const saved = actionSaved(page);
+      await form.getByRole("button", { name: "Salvar" }).click();
+      await saved;
+      await expect(form).toBeHidden();
+      await expect(page.getByRole("button", { name: "Editar" })).toBeFocused();
+      await page.reload();
+      await expect(
+        page.getByRole("heading", { level: 1, name: "Revisar textos da home" }),
+      ).toBeVisible();
+      await expect(page.getByText("Combinar com o cliente.")).toBeVisible();
+      await expect(page.getByText("Prioridade Baixa")).toBeVisible();
+      await expect(page.getByText(/Prazo 15 de dez\./)).toBeVisible();
+    },
+  );
+
+  test("an empty title says so next to the field and saves nothing", async ({
+    page,
+  }) => {
+    await page.goto(`/demandas/${seed().demands.d1}`);
+    await page.getByRole("button", { name: "Editar" }).click();
+    const form = page.getByRole("form", { name: "Editar demanda" });
+    const title = form.getByLabel("Título");
+    await title.fill("   ");
+    await form.getByRole("button", { name: "Salvar" }).click();
+    await expect(form.getByText("Dê um título à demanda.")).toBeVisible();
+    await expect(title).toBeFocused();
+    await form.getByRole("button", { name: "Cancelar" }).click();
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Revisar textos da página inicial",
+      }),
+    ).toBeVisible();
+  });
+});

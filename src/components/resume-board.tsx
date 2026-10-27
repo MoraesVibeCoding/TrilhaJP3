@@ -1,7 +1,6 @@
 "use client";
 
 import { useDemandState } from "@/lib/use-demand-state";
-import { useWithCaptured } from "@/lib/use-captured";
 import { DemandDetail } from "./demand-detail";
 import { DemandDialog } from "./demand-dialog";
 import { demandPath, useOpenDemand } from "@/lib/demand-url";
@@ -30,9 +29,7 @@ export function ResumeBoard({
   projects: readonly { id: string; name: string }[];
   now: Date;
 }) {
-  const { current, conclude, toggleNow, failure } = useDemandState(
-    useWithCaptured(demands),
-  );
+  const { current, conclude, toggleNow, failure } = useDemandState(demands);
   const [openId, openDemand, closeDemand] = useOpenDemand();
 
   const nowPick = selectNow(current, projects);

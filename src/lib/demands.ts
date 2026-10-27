@@ -15,6 +15,8 @@ type TaskRow = {
   updated_at: string;
   parent_task_id: string | null;
   created_at: string;
+  description: string | null;
+  due_date: string | null;
 };
 
 // Comentários, anexos e histórico chegam na T9, T11 e T10: por ora, listas vazias.
@@ -31,6 +33,8 @@ export function toDemand(
     isNow: row.is_now,
     lastActivityAt: row.updated_at,
     ...(row.done_at ? { doneAt: row.done_at } : {}),
+    ...(row.description ? { description: row.description } : {}),
+    ...(row.due_date ? { dueDate: row.due_date } : {}),
     subtasks,
     comments: [],
     attachments: [],
@@ -44,7 +48,7 @@ export async function listDemands(): Promise<DemoDemand[]> {
   const { data, error } = await supabase
     .from("tasks")
     .select(
-      "id, project_id, title, state, priority, is_now, done_at, updated_at, parent_task_id, created_at",
+      "id, project_id, title, state, priority, is_now, done_at, updated_at, parent_task_id, created_at, description, due_date",
     )
     .is("archived_at", null)
     .order("updated_at", { ascending: false });

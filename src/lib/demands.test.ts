@@ -36,6 +36,8 @@ const row = {
   updated_at: "2026-10-27T10:00:00Z",
   parent_task_id: null,
   created_at: "2026-10-20T10:00:00Z",
+  description: null,
+  due_date: null,
 };
 
 const { listDemands, toDemand } = await import("./demands");
@@ -84,6 +86,14 @@ const step = (title: string, state: string, created_at: string) => ({
   is_now: false,
   parent_task_id: "t1",
   created_at,
+});
+
+test("descrição e prazo só entram quando existem", () => {
+  expect(toDemand(row)).not.toHaveProperty("description");
+  expect(toDemand(row)).not.toHaveProperty("dueDate");
+  expect(
+    toDemand({ ...row, description: "Com o cliente.", due_date: "2026-10-30" }),
+  ).toMatchObject({ description: "Com o cliente.", dueDate: "2026-10-30" });
 });
 
 test("lê só demandas ativas; as filhas viram subtarefas, na ordem de criação", async () => {

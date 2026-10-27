@@ -3,7 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getCurrentUser } from "@/lib/auth";
-import { validateTitle } from "@/lib/capture";
+import { MAX_CAPTURED, validateTitle } from "@/lib/capture";
+import { parseDemand, type DemandField } from "@/lib/demand-input";
 import { priorityValue } from "@/lib/demand-labels";
 import { createClient } from "@/lib/supabase/server";
 
@@ -119,4 +120,78 @@ export async function captureOptions() {
     projects: projects.data as { id: string; name: string }[],
     demands: demands.data as { id: string; title: string }[],
   };
+}
+
+export type DemandFormState =
+  | { saved: true }
+  | {
+      errors: Partial<Record<DemandField | "form", string>>;
+      // O React limpa o formulário depois da ação: os valores voltam para os campos.
+      values?: Record<string, string>;
+    }
+  | undefined;
+
+function typed(form: FormData) {
+  const values: Record<string, string> = {};
+  for (const field of ["title", "description", "priority", "due_date"])
+    values[field] = String(form.get(field) ?? "");
+  return values;
+}
+
+// Página inteira: título, descrição, prioridade e prazo. Empresa e projeto não mudam (grants da tabela).
+export async function updateDemand(
+  _previous: DemandFormState,
+  form: FormData,
+): Promise<DemandFormState> {
+  await getCurrentUser();
+  const taskId = id.safeParse(form.get("id"));
+  if (!taskId.success) return { errors: { form: "Demanda não encontrada." } };
+  const input = parseDemand(form);
+  if (!input.ok) return { errors: input.errors, values: typed(form) };
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("tasks")
+    .update(input.data)
+    .eq("id", taskId.data)
+    .select("id");
+  if (error)
+    return {
+      errors: { form: "Não foi possível salvar. Tente de novo." },
+      values: typed(form),
+    };
+  if (!data?.length) return { errors: { form: "Demanda não encontrada." } };
+  revalidatePath("/", "layout");
+  return { saved: true };
+}
+
+const NOT_IMPORTED = "Não foi possível importar. Tente de novo.";
+
+// Decisão 3 da T5: as demandas capturadas só no navegador entram no banco, num projeto escolhido.
+export async function importDemands(input: {
+  projectId: string;
+  items: { title: string; priority: string }[];
+}): Promise<{ ok: true; count: number } | { ok: false; error: string }> {
+  const user = await getCurrentUser();
+  const projectId = id.safeParse(input.projectId);
+  const items = Array.isArray(input.items) ? input.items : [];
+  if (!projectId.success || items.length === 0 || items.length > MAX_CAPTURED)
+    return { ok: false, error: NOT_IMPORTED };
+  const rows = [];
+  for (const item of items) {
+    const title = validateTitle(String(item?.title));
+    const priority = priorityValue(String(item?.priority));
+    if (!title.ok || !priority) return { ok: false, error: NOT_IMPORTED };
+    rows.push({
+      organization_id: user.organizationId,
+      project_id: projectId.data,
+      title: title.title,
+      priority,
+      state: "todo",
+    });
+  }
+  const supabase = await createClient();
+  const { error } = await supabase.from("tasks").insert(rows);
+  if (error) return { ok: false, error: NOT_IMPORTED };
+  revalidatePath("/", "layout");
+  return { ok: true, count: rows.length };
 }

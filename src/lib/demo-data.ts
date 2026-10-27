@@ -32,6 +32,9 @@ export type DemoDemand = {
   history: readonly { at: string; text: string }[];
   isNow?: boolean;
   doneAt?: string;
+  description?: string;
+  // data sem hora, como o banco guarda (AAAA-MM-DD)
+  dueDate?: string;
 };
 
 type Lists = "comments" | "attachments" | "history";
