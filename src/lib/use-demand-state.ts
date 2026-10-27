@@ -1,53 +1,49 @@
-import { useStoredState } from "./use-stored-state";
+import { startTransition, useOptimistic } from "react";
+import { concludeStep, moveDemand, setNow } from "@/app/(app)/demandas/actions";
+import { stateValue } from "./demand-labels";
+import { useFlashMessage } from "./use-flash-message";
 
 type Subtask = { title: string; done: boolean };
-type Move = { state: string; lastActivityAt: string; doneAt?: string };
-type Changes = {
-  subtasks: Record<string, readonly Subtask[]>;
-  // undefined = usa as marcas dos dados; null = nenhuma marcada
-  nowId?: string | null;
-  moves: Record<string, Move>;
-};
+type Change =
+  | { id: string; state: string; at: string }
+  | { id: string; step: true }
+  | { id: string; now: boolean };
 
-export const CHANGES_STORAGE = "trilhajp3-alteracoes";
-const NONE: Changes = { subtasks: {}, moves: {} };
+const FAILED = "Não foi possível salvar. Tente de novo.";
 
-const isRecord = (v: unknown): v is Record<string, unknown> =>
-  typeof v === "object" && v !== null && !Array.isArray(v);
-
-function pick<T>(v: unknown, ok: (x: unknown) => x is T): Record<string, T> {
-  if (!isRecord(v)) return {};
-  return Object.fromEntries(
-    Object.entries(v).filter(([, x]) => ok(x)),
-  ) as Record<string, T>;
+function applyChange<
+  T extends {
+    id: string;
+    subtasks: readonly Subtask[];
+    isNow?: boolean;
+  },
+>(list: readonly T[], change: Change): readonly T[] {
+  return list.map((d) => {
+    if ("now" in change)
+      return d.id === change.id
+        ? { ...d, isNow: change.now }
+        : change.now
+          ? { ...d, isNow: false }
+          : d;
+    if (d.id !== change.id) return d;
+    if ("state" in change)
+      return {
+        ...d,
+        state: change.state,
+        lastActivityAt: change.at,
+        doneAt: change.state === "Feito" ? change.at : undefined,
+      };
+    const next = d.subtasks.findIndex((s) => !s.done);
+    return {
+      ...d,
+      subtasks: d.subtasks.map((s, i) =>
+        i === next ? { ...s, done: true } : s,
+      ),
+    };
+  });
 }
 
-const isSubtasks = (v: unknown): v is readonly Subtask[] =>
-  Array.isArray(v) &&
-  v.every(
-    (s) =>
-      isRecord(s) && typeof s.title === "string" && typeof s.done === "boolean",
-  );
-
-const isMove = (v: unknown): v is Move =>
-  isRecord(v) &&
-  typeof v.state === "string" &&
-  typeof v.lastActivityAt === "string" &&
-  (v.doneAt === undefined || typeof v.doneAt === "string");
-
-// O navegador guarda o que o Pedro mudou; um valor com outro formato vira "nada mudou".
-function sanitize(v: unknown): Changes {
-  if (!isRecord(v)) return NONE;
-  const nowId =
-    typeof v.nowId === "string" || v.nowId === null ? v.nowId : undefined;
-  return {
-    subtasks: pick(v.subtasks, isSubtasks),
-    nowId,
-    moves: pick(v.moves, isMove),
-  };
-}
-
-// shortcut: as alterações ficam só no navegador, por cima dos dados de demonstração; somem com a T5/T7.
+// A tela muda na hora; a Server Action grava, e as telas recarregam do banco. Se não gravar, volta e avisa.
 export function useDemandState<
   T extends {
     id: string;
@@ -57,54 +53,36 @@ export function useDemandState<
     subtasks: readonly Subtask[];
     isNow?: boolean;
   },
->(demands: readonly T[], key = CHANGES_STORAGE) {
-  const [stored, setStored] = useStoredState<unknown>(key, NONE);
-  const changes = sanitize(stored);
-  const { nowId } = changes;
+>(demands: readonly T[]) {
+  const [current, apply] = useOptimistic(demands, applyChange<T>);
+  const [failure, setFailure] = useFlashMessage();
 
-  const current = demands.map((d) => ({
-    ...d,
-    ...changes.moves[d.id],
-    // o JSON descarta doneAt indefinido: sem isso, sair de Feito manteria a data
-    ...(changes.moves[d.id] && { doneAt: changes.moves[d.id].doneAt }),
-    subtasks: changes.subtasks[d.id] ?? d.subtasks,
-    isNow: nowId === undefined ? d.isNow : d.id === nowId,
-  }));
+  function run(change: Change, save: () => Promise<boolean>) {
+    startTransition(async () => {
+      apply(change);
+      if (!(await save())) setFailure(FAILED);
+    });
+  }
 
   function conclude(id: string) {
-    const list = current.find((d) => d.id === id)?.subtasks ?? [];
-    const index = list.findIndex((s) => !s.done);
-    if (index < 0) return;
-    setStored({
-      ...changes,
-      subtasks: {
-        ...changes.subtasks,
-        [id]: list.map((s, i) => (i === index ? { ...s, done: true } : s)),
-      },
-    });
+    const d = current.find((x) => x.id === id);
+    if (!d?.subtasks.some((s) => !s.done)) return;
+    run({ id, step: true }, () => concludeStep(id));
   }
 
   function moveTo(id: string, state: string) {
-    const now = current.find((d) => d.id === id);
-    if (!now || now.state === state) return;
-    const at = new Date().toISOString();
-    setStored({
-      ...changes,
-      moves: {
-        ...changes.moves,
-        [id]: {
-          state,
-          lastActivityAt: at,
-          doneAt: state === "Feito" ? at : undefined,
-        },
-      },
-    });
+    const d = current.find((x) => x.id === id);
+    const value = stateValue(state);
+    if (!d || !value || d.state === state) return;
+    run({ id, state, at: new Date().toISOString() }, () =>
+      moveDemand(id, value),
+    );
   }
 
   function toggleNow(id: string) {
-    const marked = current.find((d) => d.id === id)?.isNow;
-    setStored({ ...changes, nowId: marked ? null : id });
+    const now = !current.find((x) => x.id === id)?.isNow;
+    run({ id, now }, () => setNow(id, now));
   }
 
-  return { current, conclude, moveTo, toggleNow };
+  return { current, conclude, moveTo, toggleNow, failure };
 }

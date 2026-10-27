@@ -109,13 +109,13 @@ Decisões aprovadas em 2026-10-22: proposta **B, mesa dividida**. Entrada padrã
 ### Fase 3: Módulo Projetos e demandas (fatias verticais)
 
 **T4. 🎨 Projetos** (M): criar, editar, listar, arquivar. Validação com `zod`; testes de borda.
-**T5. 🎨 Demandas e três estados** (M): criar num projeto, mover entre estados, histórico começa a existir na T10.
-**T6a. 🎨 Retomar e Demandas em Tabela** (M) — ✅ tabela pronta com dados de demonstração (2026-10-23); falta trocar por dados reais na T5: troca os dados de demonstração por dados reais; filtros por status e prioridade; seletor de visão com lembrança da escolha.
+**T5. 🎨 Demandas e três estados** (M) — ✅ construída (2026-10-27), `tasks/t5-spec.md`: tabela `tasks` com RLS, todas as telas com dados reais, mover, Agora, Concluir passo, captura, editar na página inteira, importar as capturadas no navegador; histórico começa a existir na T10.
+**T6a. 🎨 Retomar e Demandas em Tabela** (M) — ✅ tabela pronta (2026-10-23), com dados reais desde a T5: troca os dados de demonstração por dados reais; filtros por status e prioridade; seletor de visão com lembrança da escolha.
 **T6b. 🎨 Visão Por projeto** (S) — ✅ construída (2026-10-23), proposta B, cartões de projeto com "Ver mais N" (no lugar dos blocos recolhíveis).
 **T6c. 🎨 Visão Quadro por estado** (S) — ✅ construída (2026-10-23), proposta A: colunas A fazer, Fazendo, Feito e menu "Mover para…" (arrastar fica como melhoria futura).
 Depois da v1, sem depender de refazer nada: Por prioridade, Por prazo (precisa de data na demanda), Por etiqueta (precisa da T8).
 **T5b. 🎨 Demanda em página inteira** (S) — ✅ construída (2026-10-26), proposta A (três colunas), revisão final do `impeccable` aplicada: rota `/demandas/[id]` com link permanente; a janela tem o atalho "Abrir em página inteira" (aprovado, R1).
-**T6d. 🎨 Captura rápida** (S) — ✅ construída (2026-10-23), proposta B: botão "Nova demanda" e tecla `C` abrem uma janela de um campo, `Enter` cria, aviso de título parecido. Fica salva no navegador até a T5.
+**T6d. 🎨 Captura rápida** (S) — ✅ construída (2026-10-23), proposta B: botão "Nova demanda" e tecla `C` abrem uma janela de um campo, `Enter` cria, aviso de título parecido. Grava no banco desde a T5.
 **T7. Subtarefas, um nível** (S): segundo nível rejeitado por regra e por teste.
 **T8. 🎨 Etiquetas** (S): criar, aplicar, filtrar.
 **T9. 🎨 Comentários** (S): escapados contra XSS; só membros da empresa leem.

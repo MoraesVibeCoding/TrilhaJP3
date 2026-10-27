@@ -1,4 +1,10 @@
+import { actionSaved, resetDemo } from "./seed";
 import { expect, test } from "@playwright/test";
+
+// Testes marcados com @grava mudam o banco: no fim, as demandas voltam ao estado inicial.
+test.afterEach(async ({}, testInfo) => {
+  if (testInfo.tags.includes("@grava")) await resetDemo();
+});
 
 test("home page loads with the app name and pt-BR language", async ({
   page,
@@ -106,15 +112,19 @@ test.describe("janela da demanda", () => {
     }
   });
 
-  test("Concluir passo advances to the next step", async ({ page }) => {
-    await page.goto("/");
-    await opener(page).click();
-    const dialog = page.getByRole("dialog");
-    await dialog.getByRole("button", { name: "Concluir passo" }).click();
-    await expect(dialog.getByRole("region", { name: "Agora" })).toContainText(
-      "Rodapé",
-    );
-  });
+  test(
+    "Concluir passo advances to the next step",
+    { tag: "@grava" },
+    async ({ page }) => {
+      await page.goto("/");
+      await opener(page).click();
+      const dialog = page.getByRole("dialog");
+      await dialog.getByRole("button", { name: "Concluir passo" }).click();
+      await expect(dialog.getByRole("region", { name: "Agora" })).toContainText(
+        "Rodapé",
+      );
+    },
+  );
 
   test("fills the phone screen without horizontal scroll", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 800 });
@@ -249,20 +259,22 @@ test.describe("Retomar: Agora e Feito hoje", () => {
     ).toBeVisible();
   });
 
-  test("Concluir passo on the block advances it and the window agrees", async ({
-    page,
-  }) => {
-    await page.goto("/");
-    const agora = page.getByRole("region", { name: "Agora", exact: true });
-    await agora.getByRole("button", { name: "Concluir passo" }).click();
-    await expect(agora).toContainText("Rodapé");
-    await agora
-      .getByRole("button", { name: "Revisar textos da página inicial" })
-      .click();
-    await expect(
-      page.getByRole("dialog").getByRole("region", { name: "Agora" }),
-    ).toContainText("Rodapé");
-  });
+  test(
+    "Concluir passo on the block advances it and the window agrees",
+    { tag: "@grava" },
+    async ({ page }) => {
+      await page.goto("/");
+      const agora = page.getByRole("region", { name: "Agora", exact: true });
+      await agora.getByRole("button", { name: "Concluir passo" }).click();
+      await expect(agora).toContainText("Rodapé");
+      await agora
+        .getByRole("button", { name: "Revisar textos da página inicial" })
+        .click();
+      await expect(
+        page.getByRole("dialog").getByRole("region", { name: "Agora" }),
+      ).toContainText("Rodapé");
+    },
+  );
 
   test("Feito hoje is collapsed and lists today's finished demands", async ({
     page,
@@ -275,20 +287,24 @@ test.describe("Retomar: Agora e Feito hoje", () => {
     await expect(page.getByText("Enviar proposta ao cliente")).toBeVisible();
   });
 
-  test("marking another demand as Agora swaps the blocks", async ({ page }) => {
-    await page.goto("/");
-    await page
-      .getByRole("button", { name: "Definir fluxo de checkout" })
-      .click();
-    await page
-      .getByRole("dialog")
-      .getByRole("button", { name: "Marcar como Agora" })
-      .click();
-    await page.keyboard.press("Escape");
-    await expect(
-      page.getByRole("region", { name: "Agora", exact: true }),
-    ).toContainText("Definir fluxo de checkout");
-  });
+  test(
+    "marking another demand as Agora swaps the blocks",
+    { tag: "@grava" },
+    async ({ page }) => {
+      await page.goto("/");
+      await page
+        .getByRole("button", { name: "Definir fluxo de checkout" })
+        .click();
+      await page
+        .getByRole("dialog")
+        .getByRole("button", { name: "Marcar como Agora" })
+        .click();
+      await page.keyboard.press("Escape");
+      await expect(
+        page.getByRole("region", { name: "Agora", exact: true }),
+      ).toContainText("Definir fluxo de checkout");
+    },
+  );
 
   test("Foco shows only the Agora block", async ({ page }) => {
     await page.goto("/");
@@ -651,28 +667,36 @@ test.describe("visão Por projeto", () => {
 });
 
 test.describe("visão Quadro", () => {
-  test("moves a card to another column and survives reload", async ({
-    page,
-  }) => {
-    await page.goto("/demandas");
-    await expect(async () => {
-      await page.getByRole("button", { name: "Quadro" }).click();
-      await expect(page.getByRole("heading", { name: /Fazendo/ })).toBeVisible({
-        timeout: 500,
-      });
-    }).toPass();
-    const fazendo = page.getByRole("heading", { name: /Fazendo/ });
-    const before = Number(await fazendo.locator("b").innerText());
-    await page
-      .getByRole("combobox", { name: "Mover Fotos da equipe para" })
-      .selectOption("Feito");
-    await expect(fazendo.locator("b")).toHaveText(String(before - 1));
-    await expect(
-      page.getByRole("status").filter({ hasText: "movida para Feito" }),
-    ).toContainText("Fotos da equipe movida para Feito");
-    await page.reload();
-    await expect(page.getByRole("heading", { name: /Fazendo/ })).toBeVisible();
-  });
+  test(
+    "moves a card to another column and survives reload",
+    { tag: "@grava" },
+    async ({ page }) => {
+      await page.goto("/demandas");
+      await expect(async () => {
+        await page.getByRole("button", { name: "Quadro" }).click();
+        await expect(
+          page.getByRole("heading", { name: /Fazendo/ }),
+        ).toBeVisible({
+          timeout: 500,
+        });
+      }).toPass();
+      const fazendo = page.getByRole("heading", { name: /Fazendo/ });
+      const before = Number(await fazendo.locator("b").innerText());
+      const saved = actionSaved(page);
+      await page
+        .getByRole("combobox", { name: "Mover Fotos da equipe para" })
+        .selectOption("Feito");
+      await saved;
+      await expect(fazendo.locator("b")).toHaveText(String(before - 1));
+      await expect(
+        page.getByRole("status").filter({ hasText: "movida para Feito" }),
+      ).toContainText("Fotos da equipe movida para Feito");
+      await page.reload();
+      await expect(
+        page.getByRole("heading", { name: /Fazendo/ }),
+      ).toBeVisible();
+    },
+  );
 
   test("columns stack inside a phone screen", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });

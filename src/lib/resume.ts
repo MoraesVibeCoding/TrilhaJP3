@@ -1,4 +1,4 @@
-import type { DemandState } from "./demo-data";
+import type { DemandState } from "./demand-labels";
 
 type Subtask = { title: string; done: boolean };
 

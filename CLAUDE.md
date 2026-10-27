@@ -12,6 +12,10 @@ Labels padrão: needs-triage, needs-info, ready-for-agent, ready-for-human, wont
 
 Single-context. Ver `docs/agents/domain.md`.
 
+## Design
+
+Toda decisão de design do `impeccable` (propostas, escolha entre opções, mudança visual numa tela) vem com um arquivo HTML do visual para o Pedro aprovar antes de seguir. Imagem sozinha não basta. Decisão do Pedro em 2026-10-27.
+
 ## Qualidade
 
 Leia `CONSTRAINTS.md` antes de escrever código. Se uma checagem falhar, corrija o código; não afrouxe o limite, não pule o teste e não adicione supressão para fazer a mudança passar.

@@ -1,4 +1,5 @@
 // T3: login e sessão (tasks/t3-spec.md, item 5.3), contra o Supabase de teste.
+import { seed } from "./seed";
 import { expect, test } from "@playwright/test";
 
 const email = () => process.env.E2E_EMAIL!;
@@ -7,7 +8,7 @@ const password = () => process.env.E2E_PASSWORD!;
 test.describe("sem login", () => {
   test.use({ storageState: { cookies: [], origins: [] } });
 
-  for (const path of ["/", "/demandas", "/demandas/d1"]) {
+  for (const path of ["/", "/demandas", `/demandas/${seed().demands.d1}`]) {
     test(`${path} leva para /entrar`, async ({ page }) => {
       await page.goto(path);
       await expect(page).toHaveURL(/\/entrar/);

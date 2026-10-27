@@ -1,4 +1,4 @@
-import type { DemandState } from "@/lib/demo-data";
+import type { DemandState } from "@/lib/demand-labels";
 import { StepProgress } from "./step-progress";
 
 export type DetailData = {

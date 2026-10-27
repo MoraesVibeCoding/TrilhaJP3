@@ -1,4 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
+import { seed } from "./seed";
 import { expect, test, type Page } from "@playwright/test";
 
 // CONSTRAINTS.md: zero violações críticas ou sérias, regras WCAG 2.0/2.1 A e AA.
@@ -59,12 +60,45 @@ for (const theme of themes) {
     }
 
     test("demanda em página inteira", async ({ page }) => {
-      await page.goto("/demandas/d1");
+      await page.goto(`/demandas/${seed().demands.d1}`);
       await expect(
         page.getByRole("heading", {
           level: 1,
           name: "Revisar textos da página inicial",
         }),
+      ).toBeVisible();
+      expect(await scan(page)).toEqual([]);
+    });
+
+    test("demanda em página inteira, editando com erro", async ({ page }) => {
+      await page.goto(`/demandas/${seed().demands.d1}`);
+      await page.getByRole("button", { name: "Editar" }).click();
+      const form = page.getByRole("form", { name: "Editar demanda" });
+      await form.getByLabel("Título").fill("   ");
+      await form.getByRole("button", { name: "Salvar" }).click();
+      await expect(form.getByText("Dê um título à demanda.")).toBeVisible();
+      expect(await scan(page)).toEqual([]);
+    });
+
+    test("Demandas com o aviso de importar", async ({ page }) => {
+      await page.addInitScript(() =>
+        localStorage.setItem(
+          "trilhajp3-capturadas",
+          JSON.stringify([
+            {
+              id: "c-1",
+              title: "Trocar a foto do rodapé",
+              projectId: "p1",
+              priority: "Alta",
+              state: "A fazer",
+              lastActivityAt: "2026-10-23T12:00:00.000Z",
+            },
+          ]),
+        ),
+      );
+      await page.goto("/demandas");
+      await expect(
+        page.getByRole("region", { name: /só neste navegador/ }),
       ).toBeVisible();
       expect(await scan(page)).toEqual([]);
     });

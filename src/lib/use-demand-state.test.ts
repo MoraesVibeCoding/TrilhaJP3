@@ -1,13 +1,39 @@
-import { expect, test } from "vitest";
+import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { act, renderHook } from "@testing-library/react";
-import { CHANGES_STORAGE, useDemandState } from "./use-demand-state";
 
-const demands = [
+// Cada ação fica pendente até o teste decidir se gravou: dá para ver a mudança otimista no meio.
+// O React junta as transições: uma que ficou pendente segura as dos testes seguintes.
+const pending: ((ok: boolean) => void)[] = [];
+const wait = () => new Promise<boolean>((resolve) => pending.push(resolve));
+const actions = vi.hoisted(() => ({
+  moveDemand: vi.fn(),
+  concludeStep: vi.fn(),
+  setNow: vi.fn(),
+}));
+vi.mock("@/app/(app)/demandas/actions", () => actions);
+
+afterEach(() => settle(true));
+
+const { useDemandState } = await import("./use-demand-state");
+
+type Demand = {
+  id: string;
+  state: string;
+  lastActivityAt: string;
+  doneAt?: string;
+  subtasks: readonly { title: string; done: boolean }[];
+  isNow: boolean;
+};
+const demands: readonly Demand[] = [
   {
     id: "a",
     state: "Fazendo",
     lastActivityAt: "2026-10-20T10:00:00",
-    subtasks: [],
+    subtasks: [
+      { title: "Um", done: true },
+      { title: "Dois", done: false },
+    ],
+    isNow: true,
   },
   {
     id: "b",
@@ -15,109 +41,84 @@ const demands = [
     lastActivityAt: "2026-10-19T10:00:00",
     doneAt: "2026-10-19T10:00:00",
     subtasks: [],
+    isNow: false,
   },
-] as const;
+];
 
 const setup = () => renderHook(() => useDemandState(demands));
 const get = (r: ReturnType<typeof setup>, id: string) =>
   r.result.current.current.find((d) => d.id === id)!;
+const settle = (ok: boolean) =>
+  act(async () => {
+    pending.splice(0).forEach((resolve) => resolve(ok));
+    await new Promise((r) => setTimeout(r, 0));
+  });
 
-test("moveTo changes the state and refreshes the activity", () => {
-  const r = setup();
-  act(() => r.result.current.moveTo("a", "A fazer"));
-  expect(get(r, "a").state).toBe("A fazer");
-  expect(get(r, "a").lastActivityAt).not.toBe("2026-10-20T10:00:00");
+beforeEach(() => {
+  for (const action of Object.values(actions))
+    action.mockReset().mockImplementation(wait);
 });
 
-test("moving to Feito stamps doneAt; leaving Feito clears it", () => {
+test("moveTo shows the new state at once and saves it with the database value", async () => {
   const r = setup();
   act(() => r.result.current.moveTo("a", "Feito"));
+  expect(get(r, "a").state).toBe("Feito");
   expect(get(r, "a").doneAt).toBeDefined();
-  act(() => r.result.current.moveTo("b", "Fazendo"));
-  expect(get(r, "b").doneAt).toBeUndefined();
+  expect(get(r, "a").lastActivityAt).not.toBe("2026-10-20T10:00:00");
+  expect(actions.moveDemand).toHaveBeenCalledWith("a", "done");
+  await settle(true);
+  expect(r.result.current.failure).toBe("");
 });
 
-test("moving to the state it already has changes nothing", () => {
+test("leaving Feito clears doneAt", () => {
+  const r = setup();
+  act(() => r.result.current.moveTo("b", "A fazer"));
+  expect(get(r, "b").doneAt).toBeUndefined();
+  expect(actions.moveDemand).toHaveBeenCalledWith("b", "todo");
+});
+
+test("moving to the same state, or an unknown id, saves nothing", () => {
   const r = setup();
   act(() => r.result.current.moveTo("a", "Fazendo"));
-  expect(get(r, "a").lastActivityAt).toBe("2026-10-20T10:00:00");
-});
-
-test("an unknown id is ignored", () => {
-  const r = setup();
   act(() => r.result.current.moveTo("zzz", "Feito"));
-  expect(r.result.current.current).toHaveLength(2);
+  expect(actions.moveDemand).not.toHaveBeenCalled();
 });
 
-const withSteps = [
-  {
-    id: "c",
-    state: "Fazendo",
-    lastActivityAt: "2026-10-20T10:00:00",
-    subtasks: [
-      { title: "Um", done: false },
-      { title: "Dois", done: false },
-    ],
-  },
-] as const;
-
-test("changes survive a remount (another page, a reload)", () => {
-  const first = renderHook(() => useDemandState(withSteps));
-  act(() => first.result.current.conclude("c"));
-  act(() => first.result.current.toggleNow("c"));
-  act(() => first.result.current.moveTo("c", "Feito"));
-  first.unmount();
-
-  const again = renderHook(() => useDemandState(withSteps));
-  const c = again.result.current.current[0];
-  expect(c.subtasks.map((s) => s.done)).toEqual([true, false]);
-  expect(c.isNow).toBe(true);
-  expect(c.state).toBe("Feito");
-});
-
-test("a stored value with the wrong shape falls back to the data", () => {
-  localStorage.setItem(
-    CHANGES_STORAGE,
-    JSON.stringify({ subtasks: { c: "x" }, moves: { c: 3 }, nowId: 7 }),
+test("a failed save goes back to the data and says so", async () => {
+  const r = setup();
+  act(() => r.result.current.moveTo("a", "A fazer"));
+  await settle(false);
+  expect(get(r, "a").state).toBe("Fazendo");
+  expect(r.result.current.failure).toBe(
+    "Não foi possível salvar. Tente de novo.",
   );
-  const r = renderHook(() => useDemandState(withSteps));
-  const c = r.result.current.current[0];
-  expect(c.subtasks.map((s) => s.done)).toEqual([false, false]);
-  expect(c.state).toBe("Fazendo");
-  expect(c.isNow).toBeUndefined();
 });
 
-test("concluding a demand added after the first render works", () => {
-  const { result, rerender } = renderHook(({ list }) => useDemandState(list), {
-    initialProps: { list: [] as (typeof withSteps)[number][] },
-  });
-  rerender({ list: [...withSteps] });
-  act(() => result.current.conclude("c"));
-  expect(result.current.current[0].subtasks[0].done).toBe(true);
+test("conclude marks the first open step and saves it", () => {
+  const r = setup();
+  act(() => r.result.current.conclude("a"));
+  expect(get(r, "a").subtasks.map((s) => s.done)).toEqual([true, true]);
+  expect(actions.concludeStep).toHaveBeenCalledWith("a");
 });
 
-test("a stored value that is not an object falls back to the data", () => {
-  localStorage.setItem(CHANGES_STORAGE, JSON.stringify("x"));
-  const r = renderHook(() => useDemandState(withSteps));
-  expect(r.result.current.current[0].state).toBe("Fazendo");
-});
-
-test("concluding with no pending step, or an unknown id, changes nothing", () => {
-  const r = renderHook(() => useDemandState(withSteps));
-  act(() => r.result.current.conclude("c"));
-  act(() => r.result.current.conclude("c"));
-  act(() => r.result.current.conclude("c"));
+test("conclude with no open step saves nothing", () => {
+  const r = setup();
+  act(() => r.result.current.conclude("b"));
   act(() => r.result.current.conclude("zzz"));
-  expect(r.result.current.current[0].subtasks.map((s) => s.done)).toEqual([
-    true,
-    true,
-  ]);
-  expect(localStorage.getItem(CHANGES_STORAGE)).not.toContain("zzz");
+  expect(actions.concludeStep).not.toHaveBeenCalled();
 });
 
-test("toggling Agora twice leaves no demand marked", () => {
-  const r = renderHook(() => useDemandState(withSteps));
-  act(() => r.result.current.toggleNow("c"));
-  act(() => r.result.current.toggleNow("c"));
-  expect(r.result.current.current[0].isNow).toBe(false);
+test("marking another demand as Agora unmarks the previous one", () => {
+  const r = setup();
+  act(() => r.result.current.toggleNow("b"));
+  expect(get(r, "b").isNow).toBe(true);
+  expect(get(r, "a").isNow).toBe(false);
+  expect(actions.setNow).toHaveBeenCalledWith("b", true);
+});
+
+test("toggling the marked demand takes it out of Agora", () => {
+  const r = setup();
+  act(() => r.result.current.toggleNow("a"));
+  expect(get(r, "a").isNow).toBe(false);
+  expect(actions.setNow).toHaveBeenCalledWith("a", false);
 });

@@ -269,16 +269,6 @@ a {
   font-size: 1.25rem;
   margin: 2rem 0 0.75rem;
 }
-.demo-note {
-  margin-top: 0.75rem;
-  padding: 0.5rem 0.75rem;
-  max-width: 65ch;
-  font-size: 0.875rem;
-  color: var(--mcv-ink);
-  background: var(--mcv-mint);
-  border: 1px dashed var(--mcv-text-soft);
-  border-radius: var(--mcv-radius-sm);
-}
 
 .page-head {
   display: flex;
@@ -1204,6 +1194,11 @@ th[aria-sort] .sort-button {
   color: var(--mcv-ink);
   font-weight: 600;
 }
+/* Carregando, erro ou nenhum projeto: uma frase no lugar do formulário */
+.capture-note {
+  margin: 0;
+  color: var(--mcv-ink);
+}
 .capture-fields {
   display: flex;
   flex-wrap: wrap;
@@ -1345,6 +1340,64 @@ th[aria-sort] .sort-button {
   color: var(--mcv-forest);
   font-weight: 600;
 }
+/* T5.3, proposta C: aviso de demandas capturadas só no navegador, em Neblina como as notas */
+.import-note {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1rem 0 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--mcv-control-line);
+  border-radius: var(--mcv-radius-sm);
+  background: var(--mcv-mint);
+}
+.import-note p {
+  margin: 0;
+  max-width: 65ch;
+}
+.import-note b {
+  font-weight: 600;
+}
+.import-list {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.import-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 44px;
+  border-bottom: 1px solid var(--mcv-line);
+}
+.import-item input {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--mcv-forest);
+}
+.import-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.5rem;
+}
+/* o espaçamento vem do gap: a margem própria do botão secundário recuava a linha quebrada */
+.import-actions .secondary-button {
+  margin-left: 0;
+}
+/* T5.3: descrição sob os metadados, em medida de leitura; a edição abre no lugar do cabeçalho */
+.demand-page-description {
+  max-width: 65ch;
+  margin: 0.75rem 0 0;
+  white-space: pre-line;
+}
+.demand-page .demand-edit {
+  margin: 0.25rem 0 0;
+}
+.demand-edit-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
 .demand-page-missing {
   margin-top: 1rem;
 }
@@ -1359,9 +1412,6 @@ th[aria-sort] .sort-button {
 .demand-page .detail-list li {
   padding: 0.5rem 0;
   border-top: 1px solid var(--mcv-line);
-}
-.demand-page + .demo-note {
-  margin-top: 2.5rem;
 }
 @container (min-width: 32rem) {
   .demand-page-cols {
