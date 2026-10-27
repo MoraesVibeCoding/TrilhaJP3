@@ -1,4 +1,4 @@
-import { afterEach, expect, test } from "vitest";
+import { afterEach, expect, test, vi } from "vitest";
 import {
   cleanup,
   fireEvent,
@@ -8,6 +8,12 @@ import {
   within,
 } from "@testing-library/react";
 import { ResumeBoard, type BoardDemand } from "./resume-board";
+
+// A gravação fica pendente: a tela mostra a mudança otimista, como enquanto o servidor responde.
+vi.mock("@/app/(app)/demandas/actions", () => {
+  const saving = () => new Promise<boolean>(() => {});
+  return { moveDemand: saving, concludeStep: saving, setNow: saving };
+});
 
 afterEach(cleanup);
 

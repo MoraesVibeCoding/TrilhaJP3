@@ -30,7 +30,7 @@ export function ResumeBoard({
   projects: readonly { id: string; name: string }[];
   now: Date;
 }) {
-  const { current, conclude, toggleNow } = useDemandState(
+  const { current, conclude, toggleNow, failure } = useDemandState(
     useWithCaptured(demands),
   );
   const [openId, openDemand, closeDemand] = useOpenDemand();
@@ -75,6 +75,9 @@ export function ResumeBoard({
           />
         )}
       </DemandDialog>
+      <p role="alert" className="board-message">
+        {failure}
+      </p>
     </>
   );
 }

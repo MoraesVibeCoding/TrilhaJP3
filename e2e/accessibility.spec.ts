@@ -1,4 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
+import { seed } from "./seed";
 import { expect, test, type Page } from "@playwright/test";
 
 // CONSTRAINTS.md: zero violações críticas ou sérias, regras WCAG 2.0/2.1 A e AA.
@@ -59,7 +60,7 @@ for (const theme of themes) {
     }
 
     test("demanda em página inteira", async ({ page }) => {
-      await page.goto(`/demandas/${process.env.E2E_D1}`);
+      await page.goto(`/demandas/${seed().demands.d1}`);
       await expect(
         page.getByRole("heading", {
           level: 1,
