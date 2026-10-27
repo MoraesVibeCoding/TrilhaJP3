@@ -5,7 +5,7 @@ import { BrandIcon } from "./brand-icon";
 import { CaptureButton } from "./capture-dialog";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, type ReactNode } from "react";
+import { Suspense, useState, type ReactNode } from "react";
 import { ModeToggle } from "./mode-toggle";
 import { ThemeToggle } from "./theme-toggle";
 
@@ -19,9 +19,29 @@ function isCurrent(pathname: string, href: string) {
   return href === "/" ? pathname === "/" : pathname.startsWith(href);
 }
 
+function NavList({ pathname }: { pathname: string }) {
+  return (
+    <ul>
+      {NAV.map(({ href, label }) => (
+        <li key={href}>
+          <Link
+            href={href}
+            aria-current={isCurrent(pathname, href) ? "page" : undefined}
+          >
+            {label}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function CurrentNavList() {
+  return <NavList pathname={usePathname()} />;
+}
+
 export function AppShell({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
-  const pathname = usePathname();
 
   return (
     <div className="shell" data-nav-open={open}>
@@ -64,18 +84,10 @@ export function AppShell({ children }: { children: ReactNode }) {
           <span className="brand-name">TrilhaJp3</span>
         </span>
         <nav aria-label="Principal">
-          <ul>
-            {NAV.map(({ href, label }) => (
-              <li key={href}>
-                <Link
-                  href={href}
-                  aria-current={isCurrent(pathname, href) ? "page" : undefined}
-                >
-                  {label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {/* Em /demandas/[id] o caminho só existe na requisição: sem Suspense o build falha. */}
+          <Suspense fallback={<NavList pathname="" />}>
+            <CurrentNavList />
+          </Suspense>
         </nav>
         {/* Logo abaixo da navegação: no pé ficaria fora da tela e, no celular, sob o botão flutuante */}
         <form action={signOut}>

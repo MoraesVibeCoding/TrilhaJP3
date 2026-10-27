@@ -2,6 +2,7 @@
 // Precisa de NEXT_PUBLIC_SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY; usuário e empresa são apagados no fim.
 import { chromium, type FullConfig } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
+import { seedDemo } from "./seed";
 
 export const STORAGE_STATE = "e2e/.auth/user.json";
 
@@ -36,6 +37,9 @@ export default async function globalSetup(config: FullConfig) {
     role: "owner",
   });
   if (link.error) throw link.error;
+  // T5: as telas leem do banco; a demanda d1 da demonstração vira E2E_D1 (uuid real).
+  const ids = await seedDemo(admin, org.data.id);
+  process.env.E2E_D1 = ids.d1;
   process.env.E2E_EMAIL = email;
   process.env.E2E_PASSWORD = password;
 

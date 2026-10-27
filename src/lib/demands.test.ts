@@ -3,6 +3,7 @@ import { expect, test, vi } from "vitest";
 const db = vi.hoisted(() => ({
   error: null as object | null,
   calls: [] as string[],
+  rows: [] as object[],
 }));
 vi.mock("@/lib/auth", () => ({ getCurrentUser: async () => ({}) }));
 vi.mock("@/lib/supabase/server", () => ({
@@ -15,7 +16,7 @@ vi.mock("@/lib/supabase/server", () => ({
           return chain;
         },
         order: async () => ({
-          data: db.error ? null : [row],
+          data: db.error ? null : db.rows,
           error: db.error,
         }),
       };
@@ -33,6 +34,8 @@ const row = {
   is_now: true,
   done_at: null,
   updated_at: "2026-10-27T10:00:00Z",
+  parent_task_id: null,
+  created_at: "2026-10-20T10:00:00Z",
 };
 
 const { listDemands, toDemand } = await import("./demands");
@@ -73,11 +76,30 @@ test("converte a linha do banco para o formato das telas", () => {
   );
 });
 
-test("lê só demandas ativas e de primeiro nível", async () => {
-  await expect(listDemands()).resolves.toHaveLength(1);
-  expect(db.calls).toEqual([
-    "tasks.is(archived_at)",
-    "tasks.is(parent_task_id)",
+const step = (title: string, state: string, created_at: string) => ({
+  ...row,
+  id: title,
+  title,
+  state,
+  is_now: false,
+  parent_task_id: "t1",
+  created_at,
+});
+
+test("lê só demandas ativas; as filhas viram subtarefas, na ordem de criação", async () => {
+  db.rows = [
+    step("Rodapé", "todo", "2026-10-22T10:00:00Z"),
+    row,
+    step("Home", "done", "2026-10-20T10:00:00Z"),
+    step("Contato", "doing", "2026-10-21T10:00:00Z"),
+  ];
+  const demands = await listDemands();
+  expect(db.calls).toEqual(["tasks.is(archived_at)"]);
+  expect(demands.map((d) => d.id)).toEqual(["t1"]);
+  expect(demands[0].subtasks).toEqual([
+    { title: "Home", done: true },
+    { title: "Contato", done: false },
+    { title: "Rodapé", done: false },
   ]);
 });
 

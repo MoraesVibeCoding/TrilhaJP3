@@ -1,6 +1,6 @@
 # T5: Demandas reais e três estados
 
-Status: **aprovada pelo Pedro em 2026-10-27; em construção.** Nenhum código nem SQL foi escrito. Depende da T4 (PR #4, tabela `projects`). Base: `docs/SPEC.md` (4.2 e 6), ADR 0003, `tasks/t4-spec.md`, `CONSTRAINTS.md`.
+Status: **aprovada pelo Pedro em 2026-10-27; em construção** (fatias 1 e 2 prontas). Depende da T4 (PR #4, tabela `projects`). Base: `docs/SPEC.md` (4.2 e 6), ADR 0003, `tasks/t4-spec.md`, `CONSTRAINTS.md`.
 
 ## 1. Objetivo
 
@@ -15,7 +15,7 @@ As demandas deixam de ser dados de demonstração. O Pedro cria uma demanda num 
 
 ## 3. Requisitos funcionais
 
-1. **Tabela `public.tasks`** (`docs/SPEC.md` 4.2): `id`, `organization_id`, `project_id`, `parent_task_id` (nulo; subtarefas na T7), `title` (1 a 200), `description` (até 5.000), `state` (`todo` | `doing` | `done`, padrão `todo`), `priority` (`high` | `medium` | `low`, padrão `medium`), `due_date` (opcional), `is_now` (ver decisão 1), `done_at` (preenchido por gatilho quando o estado vira `done`, limpo quando sai), `created_by`, `created_at`, `updated_at`, `archived_at`.
+1. **Tabela `public.tasks`** (`docs/SPEC.md` 4.2): `id`, `organization_id`, `project_id`, `parent_task_id` (subtarefa é demanda filha; ver decisão 4), `title` (1 a 200), `description` (até 5.000), `state` (`todo` | `doing` | `done`, padrão `todo`), `priority` (`high` | `medium` | `low`, padrão `medium`), `due_date` (opcional), `is_now` (ver decisão 1), `done_at` (preenchido por gatilho quando o estado vira `done`, limpo quando sai), `created_by`, `created_at`, `updated_at`, `archived_at`.
 2. **Projeto da mesma empresa:** chave estrangeira composta `(organization_id, project_id)` para `projects (organization_id, id)`. Uma demanda nunca aponta para projeto de outra empresa, mesmo que a RLS falhe.
 3. **RLS** igual à de projetos: membros leem, criam e alteram as demandas da própria empresa; ninguém apaga (arquivar); empresa, projeto de origem e autor não mudam pelo cliente (grants por coluna).
 4. **Telas com dados reais:** Retomar (Agora, Em andamento, Feito hoje), Demandas nas três visões com filtros, janela da demanda e `/demandas/[id]` (dinâmica). A atividade mais recente vem de `updated_at`.
@@ -39,12 +39,12 @@ As demandas deixam de ser dados de demonstração. O Pedro cria uma demanda num 
 
 ## 6. Fora do escopo
 
-Subtarefas (T7), etiquetas (T8), comentários (T9), histórico (T10), anexos (T11), apagar de vez, ordenar por arrastar.
+Criar, renomear e reordenar subtarefas (T7), etiquetas (T8), comentários (T9), histórico (T10), anexos (T11), apagar de vez, ordenar por arrastar.
 
 ## 7. Riscos
 
 1. **Tamanho:** mexe em todas as telas. Mitigação: 4 fatias, cada uma verde antes da próxima.
-2. **Telas que hoje mostram subtarefas, comentários e anexos** ficam vazias até as tarefas deles (decisão 2).
+2. **Telas que hoje mostram comentários, anexos e histórico** ficam vazias até as tarefas deles (decisão 2).
 3. **Demandas capturadas no navegador** se perdem se não forem importadas (decisão 3).
 
 ## 8. Decisões
@@ -52,3 +52,4 @@ Subtarefas (T7), etiquetas (T8), comentários (T9), histórico (T10), anexos (T1
 1. **"Agora". Decidido pelo Pedro em 2026-10-27: a recomendação.** um campo `is_now` na demanda, com no máximo uma "Agora" por empresa (índice único parcial); na v1 só o Pedro usa. Alternativa: uma "Agora" por pessoa, numa tabela própria (mais certo para vários usuários, mais código agora).
 2. **Subtarefas, comentários, anexos e histórico até as tarefas deles. Decidido pelo Pedro em 2026-10-27: visíveis.** os grupos continuam visíveis, vazios, com uma frase curta ("Nenhuma subtarefa ainda."). Alternativa: esconder os grupos até existirem.
 3. **Demandas que o Pedro capturou no navegador. Decidido pelo Pedro em 2026-10-27: importar.** na primeira abertura depois da T5, se houver alguma, oferecer "Importar N demandas" para um projeto escolhido; depois o atalho sai. Alternativa: descartar (eram de teste).
+4. **Subtarefas. Decidido pelo Pedro em 2026-10-27: na T5 (a recomendação).** as telas leem as demandas filhas (`parent_task_id`) como passos, na ordem de criação, e "Concluir passo" conclui a filha. Criar e editar subtarefas continua na T7. Alternativa: subtarefas vazias até a T7, com ~20 testes E2E a menos.

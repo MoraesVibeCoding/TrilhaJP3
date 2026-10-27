@@ -10,7 +10,7 @@ test.describe("endereço da janela", () => {
     await page.goto("/");
     await page.getByRole("button", { name: title }).click();
     await expect(dialog(page)).toBeVisible();
-    await expect(page).toHaveURL("/demandas/d1");
+    await expect(page).toHaveURL(`/demandas/${process.env.E2E_D1}`);
 
     await page.goBack();
     await expect(dialog(page)).toBeHidden();
@@ -26,7 +26,7 @@ test.describe("endereço da janela", () => {
     await page.goto("/demandas");
     const row = page.getByRole("button", { name: title }).first();
     await row.click();
-    await expect(page).toHaveURL("/demandas/d1");
+    await expect(page).toHaveURL(`/demandas/${process.env.E2E_D1}`);
     await page.keyboard.press("Escape");
     await expect(dialog(page)).toBeHidden();
     await expect(page).toHaveURL("/demandas");
@@ -47,7 +47,7 @@ test.describe("página inteira", () => {
       page,
     }) => {
       await page.setViewportSize({ width, height: 900 });
-      await page.goto("/demandas/d1");
+      await page.goto(`/demandas/${process.env.E2E_D1}`);
       await expect(
         page.getByRole("heading", { level: 1, name: title }),
       ).toBeVisible();
@@ -78,7 +78,7 @@ test.describe("página inteira", () => {
   });
 
   test("Foco shows only Subtarefas and Agora", async ({ page }) => {
-    await page.goto("/demandas/d1");
+    await page.goto(`/demandas/${process.env.E2E_D1}`);
     // o atalho só vale depois da hidratação: repete até o modo trocar, como em home.spec.ts
     await expect(async () => {
       if ((await page.locator("html").getAttribute("data-mode")) !== "focus")
@@ -118,7 +118,7 @@ test.describe("atalhos da página inteira", () => {
       page.getByRole("heading", { level: 1, name: title }),
     ).toBeVisible();
     await expect(page.getByRole("dialog")).toBeHidden();
-    await expect(page).toHaveURL("/demandas/d1");
+    await expect(page).toHaveURL(`/demandas/${process.env.E2E_D1}`);
     // a página substitui a janela no histórico: Voltar leva direto à lista
     await page.goBack();
     await expect(page).toHaveURL("/demandas");
@@ -133,13 +133,13 @@ test.describe("atalhos da página inteira", () => {
     context,
   }) => {
     await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-    await page.goto("/demandas/d1");
+    await page.goto(`/demandas/${process.env.E2E_D1}`);
     await page.getByRole("button", { name: "Copiar link" }).click();
     await expect(
       page.getByRole("status").filter({ hasText: "Link copiado." }),
     ).toBeVisible();
     expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
-      new URL("/demandas/d1", page.url()).href,
+      new URL(`/demandas/${process.env.E2E_D1}`, page.url()).href,
     );
   });
 

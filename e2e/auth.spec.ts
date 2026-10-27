@@ -7,7 +7,7 @@ const password = () => process.env.E2E_PASSWORD!;
 test.describe("sem login", () => {
   test.use({ storageState: { cookies: [], origins: [] } });
 
-  for (const path of ["/", "/demandas", "/demandas/d1"]) {
+  for (const path of ["/", "/demandas", `/demandas/${process.env.E2E_D1}`]) {
     test(`${path} leva para /entrar`, async ({ page }) => {
       await page.goto(path);
       await expect(page).toHaveURL(/\/entrar/);
