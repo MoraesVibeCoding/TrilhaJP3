@@ -35,7 +35,8 @@ vi.mock("@/lib/supabase/server", () => ({
   }),
 }));
 
-const { moveDemand, concludeStep, setNow } = await import("./actions");
+const { moveDemand, concludeStep, setNow, createDemand, captureOptions } =
+  await import("./actions");
 const { revalidatePath } = await import("next/cache");
 
 const ID = "7d3c6a8e-1f2b-4c5d-9e0f-112233445566";
@@ -145,5 +146,81 @@ describe("setNow", () => {
     db.results = [{ error: { message: "x" } }];
     await expect(setNow(ID, true)).resolves.toBe(false);
     expect(db.queries).toHaveLength(1);
+  });
+});
+
+describe("createDemand", () => {
+  const input = {
+    title: "  Revisar   rodapé ",
+    projectId: ID,
+    priority: "Alta",
+  };
+
+  test("grava em A fazer, na empresa do usuário logado, com o título limpo", async () => {
+    await expect(createDemand(input)).resolves.toEqual({ ok: true });
+    expect(db.queries).toEqual([
+      [
+        "from(tasks)",
+        `insert({"organization_id":"org-1","project_id":"${ID}","title":"Revisar rodapé","priority":"high","state":"todo"})`,
+      ],
+    ]);
+    expect(revalidatePath).toHaveBeenCalledWith("/", "layout");
+  });
+
+  test("título vazio, projeto ou prioridade inválidos não chegam ao banco", async () => {
+    await expect(createDemand({ ...input, title: " " })).resolves.toEqual({
+      ok: false,
+      error: "Escreva o título da demanda.",
+    });
+    for (const bad of [
+      { ...input, projectId: "p1" },
+      { ...input, priority: "Urgente" },
+    ])
+      await expect(createDemand(bad)).resolves.toEqual({
+        ok: false,
+        error: "Não foi possível criar. Tente de novo.",
+      });
+    expect(db.queries).toEqual([]);
+  });
+
+  test("erro do banco (projeto de outra empresa, por exemplo) não vira sucesso", async () => {
+    db.results = [{ error: { code: "23503" } }];
+    await expect(createDemand(input)).resolves.toEqual({
+      ok: false,
+      error: "Não foi possível criar. Tente de novo.",
+    });
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+});
+
+describe("captureOptions", () => {
+  test("devolve os projetos ativos e os títulos das demandas ativas", async () => {
+    db.results = [
+      { data: [{ id: ID, name: "Site" }] },
+      { data: [{ id: STEP, title: "Revisar textos" }] },
+    ];
+    await expect(captureOptions()).resolves.toEqual({
+      projects: [{ id: ID, name: "Site" }],
+      demands: [{ id: STEP, title: "Revisar textos" }],
+    });
+    expect(db.queries).toEqual([
+      [
+        "from(projects)",
+        `select("id, name")`,
+        `is("archived_at",null)`,
+        `order("name")`,
+      ],
+      [
+        "from(tasks)",
+        `select("id, title")`,
+        `is("archived_at",null)`,
+        `is("parent_task_id",null)`,
+      ],
+    ]);
+  });
+
+  test("erro do banco = nenhuma opção, e a janela diz que não carregou", async () => {
+    db.results = [{ error: { message: "x" } }, {}];
+    await expect(captureOptions()).resolves.toBeNull();
   });
 });

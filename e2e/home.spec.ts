@@ -1,4 +1,4 @@
-import { resetDemo } from "./seed";
+import { actionSaved, resetDemo } from "./seed";
 import { expect, test } from "@playwright/test";
 
 // Testes marcados com @grava mudam o banco: no fim, as demandas voltam ao estado inicial.
@@ -682,9 +682,11 @@ test.describe("visão Quadro", () => {
       }).toPass();
       const fazendo = page.getByRole("heading", { name: /Fazendo/ });
       const before = Number(await fazendo.locator("b").innerText());
+      const saved = actionSaved(page);
       await page
         .getByRole("combobox", { name: "Mover Fotos da equipe para" })
         .selectOption("Feito");
+      await saved;
       await expect(fazendo.locator("b")).toHaveText(String(before - 1));
       await expect(
         page.getByRole("status").filter({ hasText: "movida para Feito" }),

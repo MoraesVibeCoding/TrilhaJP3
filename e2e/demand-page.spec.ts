@@ -1,4 +1,4 @@
-import { resetDemo, seed } from "./seed";
+import { actionSaved, resetDemo, seed } from "./seed";
 import { expect, test, type Page } from "@playwright/test";
 
 // Testes marcados com @grava mudam o banco: no fim, as demandas voltam ao estado inicial.
@@ -77,9 +77,11 @@ test.describe("página inteira", () => {
     async ({ page }) => {
       await page.goto("/demandas");
       await page.getByRole("button", { name: title }).first().click();
+      const saved = actionSaved(page);
       await dialog(page)
         .getByRole("button", { name: "Concluir passo" })
         .click();
+      await saved;
       await page.reload();
       const agora = page.getByRole("region", { name: "Agora" });
       await expect(agora).toContainText("Rodapé");

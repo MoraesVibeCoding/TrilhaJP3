@@ -3,6 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getCurrentUser } from "@/lib/auth";
+import { validateTitle } from "@/lib/capture";
+import { priorityValue } from "@/lib/demand-labels";
 import { createClient } from "@/lib/supabase/server";
 
 const id = z.uuid();
@@ -67,4 +69,54 @@ export async function setNow(taskId: string, now: boolean) {
     if (error) return false;
   }
   return done(await update(target.data, { is_now: now }));
+}
+
+const NOT_CREATED = "Não foi possível criar. Tente de novo.";
+
+// Captura rápida: a empresa vem da sessão; o projeto precisa ser dela (chave composta e RLS).
+export async function createDemand(input: {
+  title: string;
+  projectId: string;
+  priority: string;
+}): Promise<{ ok: true } | { ok: false; error: string }> {
+  const user = await getCurrentUser();
+  const title = validateTitle(String(input.title));
+  if (!title.ok) return title;
+  const projectId = id.safeParse(input.projectId);
+  const priority = priorityValue(String(input.priority));
+  if (!projectId.success || !priority) return { ok: false, error: NOT_CREATED };
+  const supabase = await createClient();
+  const { error } = await supabase.from("tasks").insert({
+    organization_id: user.organizationId,
+    project_id: projectId.data,
+    title: title.title,
+    priority,
+    state: "todo",
+  });
+  if (error) return { ok: false, error: NOT_CREATED };
+  revalidatePath("/", "layout");
+  return { ok: true };
+}
+
+// A janela de captura vive na casca (estática): busca projetos e títulos ao abrir.
+export async function captureOptions() {
+  await getCurrentUser();
+  const supabase = await createClient();
+  const [projects, demands] = await Promise.all([
+    supabase
+      .from("projects")
+      .select("id, name")
+      .is("archived_at", null)
+      .order("name"),
+    supabase
+      .from("tasks")
+      .select("id, title")
+      .is("archived_at", null)
+      .is("parent_task_id", null),
+  ]);
+  if (projects.error || demands.error) return null;
+  return {
+    projects: projects.data as { id: string; name: string }[],
+    demands: demands.data as { id: string; title: string }[],
+  };
 }

@@ -12,5 +12,7 @@ export const PRIORITY_LABELS: Record<string, Priority> = {
   low: "Baixa",
 };
 
-export const stateValue = (label: string) =>
-  Object.keys(STATE_LABELS).find((key) => STATE_LABELS[key] === label);
+const valueOf = (labels: Record<string, string>) => (label: string) =>
+  Object.keys(labels).find((key) => labels[key] === label);
+export const stateValue = valueOf(STATE_LABELS);
+export const priorityValue = valueOf(PRIORITY_LABELS);
