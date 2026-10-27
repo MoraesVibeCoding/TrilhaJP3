@@ -4,6 +4,7 @@ import {
   fireEvent,
   render,
   screen,
+  waitFor,
   within,
 } from "@testing-library/react";
 import type { Project } from "@/lib/projects";
@@ -113,6 +114,8 @@ describe("ativos", () => {
     expect(name.getAttribute("aria-invalid")).toBe("true");
     expect(name.getAttribute("aria-describedby")).toBe(error.id);
     expect(actions.updateProject).toHaveBeenCalledOnce();
+    // o foco muda num efeito depois de o erro aparecer: espera, senão o teste corre contra ele
+    await waitFor(() => expect(document.activeElement).toBe(name));
     expect(document.activeElement).toBe(name);
   });
 
