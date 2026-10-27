@@ -1,20 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import {
-  buildDemand,
-  findSimilar,
-  MAX_CAPTURED,
-  validateTitle,
-  type CapturedDemand,
-} from "@/lib/capture";
-import {
-  demoDemands,
-  demoProjects,
-  PRIORITIES,
-  type Priority,
-} from "@/lib/demo-data";
-import { CAPTURED_STORAGE, useCapturedDemands } from "@/lib/use-captured";
+import { captureOptions, createDemand } from "@/app/(app)/demandas/actions";
+import { findSimilar, validateTitle } from "@/lib/capture";
+import { PRIORITIES, type Priority } from "@/lib/demo-data";
 import { useStoredState } from "@/lib/use-stored-state";
 import { DemandDialog } from "./demand-dialog";
 import { useFlashMessage } from "@/lib/use-flash-message";
@@ -22,20 +12,28 @@ import { useFlashMessage } from "@/lib/use-flash-message";
 const PREFS_KEY = "trilhajp3-captura";
 
 type SimilarItem = { id: string; title: string };
+type Options = {
+  projects: { id: string; name: string }[];
+  demands: SimilarItem[];
+};
 
 function CaptureForm({
   defaultProjectId,
+  projects,
   existing,
   onCreate,
 }: {
   defaultProjectId: string;
+  projects: Options["projects"];
   existing: readonly SimilarItem[];
+  // devolve a mensagem de erro, ou null se criou
   onCreate: (input: {
     title: string;
     projectId: string;
     priority: Priority;
-  }) => void;
+  }) => Promise<string | null>;
 }) {
+  const [pending, setPending] = useState(false);
   const [title, setTitle] = useState("");
   const [projectId, setProjectId] = useState(defaultProjectId);
   const [priority, setPriority] = useState<Priority>("Média");
@@ -51,14 +49,25 @@ function CaptureForm({
   return (
     <form
       className="capture-form"
-      onSubmit={(event) => {
+      onSubmit={async (event) => {
         event.preventDefault();
+        if (pending) return;
         const checked = validateTitle(title);
         if (!checked.ok) return setError(checked.error);
         const found =
           similar === null ? findSimilar(checked.title, existing) : [];
         if (found.length > 0) return setSimilar(found);
-        onCreate({ title: checked.title, projectId, priority });
+        setPending(true);
+        const failed = await onCreate({
+          title: checked.title,
+          projectId,
+          priority,
+        });
+        // criou: a janela fecha e este formulário sai da tela
+        if (failed) {
+          setError(failed);
+          setPending(false);
+        }
       }}
     >
       <input
@@ -70,7 +79,8 @@ function CaptureForm({
         placeholder="Escreva a demanda e aperte Enter"
         maxLength={200}
         autoComplete="off"
-        data-autofocus
+        // o campo monta depois que os projetos carregam, já com a janela aberta
+        autoFocus
         value={title}
         onChange={(e) => edit(e.target.value)}
       />
@@ -86,7 +96,7 @@ function CaptureForm({
             value={projectId}
             onChange={(e) => setProjectId(e.target.value)}
           >
-            {demoProjects.map((p) => (
+            {projects.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.name}
               </option>
@@ -119,24 +129,23 @@ function CaptureForm({
         <span className="capture-hint">
           <kbd>Enter</kbd> cria · <kbd>Esc</kbd> cancela
         </span>
-        <button type="submit" className="primary-button">
-          {similar ? "Criar mesmo assim" : "Criar demanda"}
+        <button type="submit" className="primary-button" disabled={pending}>
+          {pending
+            ? "Criando…"
+            : similar
+              ? "Criar mesmo assim"
+              : "Criar demanda"}
         </button>
       </div>
     </form>
   );
 }
 
-export function CaptureButton({
-  capturedKey = CAPTURED_STORAGE,
-  prefsKey = PREFS_KEY,
-}: {
-  capturedKey?: string;
-  prefsKey?: string;
-}) {
+export function CaptureButton({ prefsKey = PREFS_KEY }: { prefsKey?: string }) {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useFlashMessage();
-  const [captured, add] = useCapturedDemands(capturedKey);
+  // null = carregando; "erro" = não carregou
+  const [options, setOptions] = useState<Options | null | "erro">(null);
   const [prefs, setPrefs] = useStoredState<{ projectId?: string }>(
     prefsKey,
     {},
@@ -160,33 +169,63 @@ export function CaptureButton({
     return () => document.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  const remembered = demoProjects.find((p) => p.id === prefs.projectId);
-  const existing: SimilarItem[] = [...demoDemands, ...captured];
+  // A casca é estática: projetos e títulos (para o aviso de parecida) vêm do banco a cada abertura.
+  useEffect(() => {
+    if (!open) return;
+    let current = true;
+    captureOptions().then(
+      (loaded) => current && setOptions(loaded ?? "erro"),
+      () => current && setOptions("erro"),
+    );
+    return () => {
+      current = false;
+    };
+  }, [open]);
 
-  function create(input: {
+  async function create(input: {
     title: string;
     projectId: string;
     priority: Priority;
   }) {
-    // a leitura descarta o que passa do limite: gravar a 501ª a perderia em silêncio
-    if (captured.length >= MAX_CAPTURED) {
-      setOpen(false);
-      setMessage(
-        `Não deu para criar: este navegador já guarda ${MAX_CAPTURED} demandas, o limite até os dados irem para o banco.`,
-      );
-      return;
-    }
-    const demand: CapturedDemand = buildDemand({
-      id: `c-${crypto.randomUUID()}`,
-      ...input,
-      now: new Date(),
-    });
-    add(demand);
+    const result = await createDemand(input);
+    if (!result.ok) return result.error;
     setPrefs({ projectId: input.projectId });
     setOpen(false);
-    const project = demoProjects.find((p) => p.id === input.projectId);
+    const project =
+      options !== "erro" &&
+      options?.projects.find((p) => p.id === input.projectId);
     setMessage(
-      `Demanda criada: ${input.title}, em ${project?.name ?? "projeto"}.`,
+      `Demanda criada: ${input.title}, em ${project ? project.name : "projeto"}.`,
+    );
+    return null;
+  }
+
+  function form() {
+    if (options === null) return <p className="capture-note">Carregando…</p>;
+    if (options === "erro")
+      return (
+        <p className="capture-note" role="alert">
+          Não foi possível carregar os projetos. Feche e tente de novo.
+        </p>
+      );
+    if (options.projects.length === 0)
+      return (
+        <p className="capture-note">
+          Toda demanda fica num projeto.{" "}
+          <Link href="/projetos" onClick={() => setOpen(false)}>
+            Crie o primeiro em Projetos
+          </Link>
+          .
+        </p>
+      );
+    const remembered = options.projects.find((p) => p.id === prefs.projectId);
+    return (
+      <CaptureForm
+        defaultProjectId={remembered?.id ?? options.projects[0].id}
+        projects={options.projects}
+        existing={options.demands}
+        onCreate={create}
+      />
     );
   }
 
@@ -218,13 +257,7 @@ export function CaptureButton({
         onClose={() => setOpen(false)}
         title="Nova demanda"
       >
-        {open && (
-          <CaptureForm
-            defaultProjectId={remembered?.id ?? demoProjects[0].id}
-            existing={existing}
-            onCreate={create}
-          />
-        )}
+        {open && form()}
       </DemandDialog>
       <p role="status" className="capture-toast">
         {message}

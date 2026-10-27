@@ -1,4 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
+import { resetDemo } from "./seed";
+
+// Testes marcados com @grava mudam o banco: no fim, as demandas voltam ao estado inicial.
+test.afterEach(async ({}, testInfo) => {
+  if (testInfo.tags.includes("@grava")) await resetDemo();
+});
 
 const dialog = (page: Page) =>
   page.getByRole("dialog", { name: "Nova demanda" });
@@ -13,41 +19,49 @@ async function openWithC(page: Page) {
   }).toPass();
 }
 
-test("C opens the window, Enter creates the demand and it shows in the Tabela after reload", async ({
-  page,
-}) => {
-  await page.goto("/demandas");
-  const aFazer = page.getByRole("button", { name: /A fazer/ });
-  const before = Number((await aFazer.innerText()).trim().split(/\s/)[0]);
-  await openWithC(page);
-  await expect(field(page)).toBeFocused();
-  await field(page).fill("Ajustar menu do celular");
-  await field(page).press("Enter");
-  await expect(dialog(page)).toBeHidden();
-  await expect(
-    page.getByRole("status").filter({ hasText: "Demanda criada" }),
-  ).toContainText("Ajustar menu do celular");
-  await expect(aFazer).toContainText(String(before + 1));
-  await page.reload();
-  await expect(
-    page
-      .getByRole("table")
-      .getByRole("button", { name: "Ajustar menu do celular" }),
-  ).toBeVisible();
-});
+test(
+  "C opens the window, Enter creates the demand and it shows in the Tabela after reload",
+  { tag: "@grava" },
+  async ({ page }) => {
+    await page.goto("/demandas");
+    const aFazer = page.getByRole("button", { name: /A fazer/ });
+    const before = Number((await aFazer.innerText()).trim().split(/\s/)[0]);
+    await openWithC(page);
+    await expect(field(page)).toBeFocused();
+    await field(page).fill("Ajustar menu do celular");
+    await field(page).press("Enter");
+    await expect(dialog(page)).toBeHidden();
+    await expect(
+      page.getByRole("status").filter({ hasText: "Demanda criada" }),
+    ).toContainText("Ajustar menu do celular");
+    await expect(aFazer).toContainText(String(before + 1));
+    await page.reload();
+    await expect(
+      page
+        .getByRole("table")
+        .getByRole("button", { name: "Ajustar menu do celular" }),
+    ).toBeVisible();
+  },
+);
 
-test("a similar title warns before creating", async ({ page }) => {
-  await page.goto("/demandas");
-  await openWithC(page);
-  await field(page).fill("fotos da equipe");
-  await field(page).press("Enter");
-  await expect(dialog(page).getByText("Parecida com:")).toBeVisible();
-  await expect(
-    dialog(page).getByRole("button", { name: "Criar mesmo assim" }),
-  ).toBeVisible();
-  await dialog(page).getByRole("button", { name: "Criar mesmo assim" }).click();
-  await expect(dialog(page)).toBeHidden();
-});
+test(
+  "a similar title warns before creating",
+  { tag: "@grava" },
+  async ({ page }) => {
+    await page.goto("/demandas");
+    await openWithC(page);
+    await field(page).fill("fotos da equipe");
+    await field(page).press("Enter");
+    await expect(dialog(page).getByText("Parecida com:")).toBeVisible();
+    await expect(
+      dialog(page).getByRole("button", { name: "Criar mesmo assim" }),
+    ).toBeVisible();
+    await dialog(page)
+      .getByRole("button", { name: "Criar mesmo assim" })
+      .click();
+    await expect(dialog(page)).toBeHidden();
+  },
+);
 
 test("Esc cancels without creating anything", async ({ page }) => {
   await page.goto("/demandas");
@@ -121,25 +135,27 @@ test("the floating button leaves room: the last card can scroll clear of it", as
   expect(last.y + last.height).toBeLessThan(button.y);
 });
 
-test("a captured demand opens as a full page from its own address", async ({
-  page,
-}) => {
-  await page.goto("/demandas");
-  await openWithC(page);
-  await field(page).fill("Revisar contrato de hospedagem");
-  await field(page).press("Enter");
-  await expect(dialog(page)).toBeHidden();
-  await page
-    .getByRole("table")
-    .getByRole("button", { name: "Revisar contrato de hospedagem" })
-    .click();
-  const address = new URL(page.url()).pathname;
-  expect(address).toMatch(/^\/demandas\/[^/]+$/);
-  await page.goto(address);
-  await expect(
-    page.getByRole("heading", {
-      level: 1,
-      name: "Revisar contrato de hospedagem",
-    }),
-  ).toBeVisible();
-});
+test(
+  "a captured demand opens as a full page from its own address",
+  { tag: "@grava" },
+  async ({ page }) => {
+    await page.goto("/demandas");
+    await openWithC(page);
+    await field(page).fill("Revisar contrato de hospedagem");
+    await field(page).press("Enter");
+    await expect(dialog(page)).toBeHidden();
+    await page
+      .getByRole("table")
+      .getByRole("button", { name: "Revisar contrato de hospedagem" })
+      .click();
+    const address = new URL(page.url()).pathname;
+    expect(address).toMatch(/^\/demandas\/[^/]+$/);
+    await page.goto(address);
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Revisar contrato de hospedagem",
+      }),
+    ).toBeVisible();
+  },
+);

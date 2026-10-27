@@ -1,5 +1,6 @@
 // T5: a empresa do E2E recebe os projetos e demandas de demonstração, agora no Supabase.
 // shortcut: lê demo-data.ts; quando a T5.4 apagar esse arquivo, os dados passam para cá.
+import type { Page } from "@playwright/test";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { demoDemands, demoNow, demoProjects } from "../src/lib/demo-data";
 
@@ -45,6 +46,14 @@ export async function seedDemo(admin: SupabaseClient, organizationId: string) {
   await seedTasks(admin, result);
   return result;
 }
+
+// A tela muda antes de o servidor gravar: quem recarrega espera a resposta da Server Action.
+export const actionSaved = (page: Page) =>
+  page.waitForResponse(
+    (r) =>
+      r.request().method() === "POST" &&
+      r.request().headers()["next-action"] !== undefined,
+  );
 
 // Teste que grava no banco chama no fim: as demandas voltam ao estado inicial, com os mesmos ids.
 export async function resetDemo() {
