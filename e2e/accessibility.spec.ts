@@ -59,7 +59,7 @@ for (const theme of themes) {
     }
 
     test("demanda em página inteira", async ({ page }) => {
-      await page.goto("/demandas/d1");
+      await page.goto(`/demandas/${process.env.E2E_D1}`);
       await expect(
         page.getByRole("heading", {
           level: 1,

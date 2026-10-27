@@ -23,10 +23,15 @@ type TaskRow = {
   is_now: boolean;
   done_at: string | null;
   updated_at: string;
+  parent_task_id: string | null;
+  created_at: string;
 };
 
-// Subtarefas, comentários, anexos e histórico chegam na T7, T9, T11 e T10: por ora, listas vazias.
-export function toDemand(row: TaskRow): DemoDemand {
+// Comentários, anexos e histórico chegam na T9, T11 e T10: por ora, listas vazias.
+export function toDemand(
+  row: TaskRow,
+  subtasks: DemoDemand["subtasks"] = [],
+): DemoDemand {
   return {
     id: row.id,
     projectId: row.project_id,
@@ -36,7 +41,7 @@ export function toDemand(row: TaskRow): DemoDemand {
     isNow: row.is_now,
     lastActivityAt: row.updated_at,
     ...(row.done_at ? { doneAt: row.done_at } : {}),
-    subtasks: [],
+    subtasks,
     comments: [],
     attachments: [],
     history: [],
@@ -49,11 +54,24 @@ export async function listDemands(): Promise<DemoDemand[]> {
   const { data, error } = await supabase
     .from("tasks")
     .select(
-      "id, project_id, title, state, priority, is_now, done_at, updated_at",
+      "id, project_id, title, state, priority, is_now, done_at, updated_at, parent_task_id, created_at",
     )
     .is("archived_at", null)
-    .is("parent_task_id", null)
     .order("updated_at", { ascending: false });
   if (error) throw error;
-  return (data as TaskRow[]).map(toDemand);
+  const rows = data as TaskRow[];
+  // Subtarefa é a demanda filha (parent_task_id); os passos seguem a ordem de criação.
+  const steps = rows
+    .filter((r) => r.parent_task_id)
+    .sort((a, b) => a.created_at.localeCompare(b.created_at));
+  return rows
+    .filter((r) => !r.parent_task_id)
+    .map((r) =>
+      toDemand(
+        r,
+        steps
+          .filter((s) => s.parent_task_id === r.id)
+          .map((s) => ({ title: s.title, done: s.state === "done" })),
+      ),
+    );
 }
