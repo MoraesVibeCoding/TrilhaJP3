@@ -1,6 +1,6 @@
 # T5: Demandas reais e três estados
 
-Status: **rascunho com as 3 decisões respondidas, aguardando aprovação do Pedro.** Nenhum código nem SQL foi escrito. Depende da T4 (PR #4, tabela `projects`). Base: `docs/SPEC.md` (4.2 e 6), ADR 0003, `tasks/t4-spec.md`, `CONSTRAINTS.md`.
+Status: **aprovada pelo Pedro em 2026-10-27; em construção.** Nenhum código nem SQL foi escrito. Depende da T4 (PR #4, tabela `projects`). Base: `docs/SPEC.md` (4.2 e 6), ADR 0003, `tasks/t4-spec.md`, `CONSTRAINTS.md`.
 
 ## 1. Objetivo
 
