@@ -1,6 +1,6 @@
 # T5: Demandas reais e três estados
 
-Status: **rascunho, aguardando aprovação do Pedro.** Nenhum código nem SQL foi escrito. Depende da T4 (PR #4, tabela `projects`). Base: `docs/SPEC.md` (4.2 e 6), ADR 0003, `tasks/t4-spec.md`, `CONSTRAINTS.md`.
+Status: **rascunho com as 3 decisões respondidas, aguardando aprovação do Pedro.** Nenhum código nem SQL foi escrito. Depende da T4 (PR #4, tabela `projects`). Base: `docs/SPEC.md` (4.2 e 6), ADR 0003, `tasks/t4-spec.md`, `CONSTRAINTS.md`.
 
 ## 1. Objetivo
 
@@ -47,8 +47,8 @@ Subtarefas (T7), etiquetas (T8), comentários (T9), histórico (T10), anexos (T1
 2. **Telas que hoje mostram subtarefas, comentários e anexos** ficam vazias até as tarefas deles (decisão 2).
 3. **Demandas capturadas no navegador** se perdem se não forem importadas (decisão 3).
 
-## 8. Decisões abertas (uma de cada vez)
+## 8. Decisões
 
 1. **"Agora". Decidido pelo Pedro em 2026-10-27: a recomendação.** um campo `is_now` na demanda, com no máximo uma "Agora" por empresa (índice único parcial); na v1 só o Pedro usa. Alternativa: uma "Agora" por pessoa, numa tabela própria (mais certo para vários usuários, mais código agora).
 2. **Subtarefas, comentários, anexos e histórico até as tarefas deles. Decidido pelo Pedro em 2026-10-27: visíveis.** os grupos continuam visíveis, vazios, com uma frase curta ("Nenhuma subtarefa ainda."). Alternativa: esconder os grupos até existirem.
-3. **Demandas que o Pedro capturou no navegador.** Recomendação: na primeira abertura depois da T5, se houver alguma, oferecer "Importar N demandas" para um projeto escolhido; depois o atalho sai. Alternativa: descartar (eram de teste).
+3. **Demandas que o Pedro capturou no navegador. Decidido pelo Pedro em 2026-10-27: importar.** na primeira abertura depois da T5, se houver alguma, oferecer "Importar N demandas" para um projeto escolhido; depois o atalho sai. Alternativa: descartar (eram de teste).
