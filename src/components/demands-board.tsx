@@ -192,6 +192,7 @@ export function DemandsBoard({
                 key={state}
                 type="button"
                 className="state-count"
+                data-state={state}
                 aria-pressed={view.state === state}
                 onClick={() =>
                   update({ state: view.state === state ? "" : state })

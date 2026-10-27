@@ -1,12 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
+import { IBM_Plex_Mono, Space_Grotesk } from "next/font/google";
 import { modeScript } from "@/lib/mode-script";
 import { themeScript } from "@/lib/theme-script";
 import "./globals.css";
 
-const geist = Geist({
-  variable: "--font-geist",
+// Marca Moraes Coding: Space Grotesk no texto e nos títulos, IBM Plex Mono nos números e rótulos
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
+});
+const plexMono = IBM_Plex_Mono({
+  variable: "--font-ibm-plex-mono",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -16,17 +22,21 @@ export const metadata: Metadata = {
   appleWebApp: { title: "TrilhaJp3", statusBarStyle: "default" },
 };
 
-// A barra do navegador acompanha o fundo da página: Papel no claro, Tinta no escuro.
+// A barra do navegador acompanha o fundo da página: Gelo no claro, Mata no escuro.
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F8FAF5" },
-    { media: "(prefers-color-scheme: dark)", color: "#0F1F14" },
+    { media: "(prefers-color-scheme: light)", color: "#F2F2EE" },
+    { media: "(prefers-color-scheme: dark)", color: "#0C2A1E" },
   ],
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-BR" suppressHydrationWarning className={`${geist.variable}`}>
+    <html
+      lang="pt-BR"
+      suppressHydrationWarning
+      className={`${spaceGrotesk.variable} ${plexMono.variable}`}
+    >
       <head>
         <script
           dangerouslySetInnerHTML={{ __html: `${themeScript};${modeScript}` }}

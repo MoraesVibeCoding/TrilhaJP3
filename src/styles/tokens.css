@@ -1,63 +1,70 @@
-/* Moraes CodeVibe — Design Tokens, marca V2 (evolução de 2026-10-23).
-   Valores de docs/brand/evolucao/tokens-v2.json. O kit original, com a V1, segue em docs/brand/tokens.
-   Nomes: ink = Tinta, forest = Floresta, leaf = Folha, mint = Neblina, paper = Papel, gold = Âmbar, pulse = Pulso.
-   Âmbar e Pulso nunca são texto nem borda sobre o papel claro (contraste de 2,7:1 e 1,3:1). */
+/* Moraes Coding: tokens do design system (artifact CeaPqHJ1X5V61mPWYFZnTN), aprovados em tasks/tm-spec.md.
+   Os nomes --mcv-* do app apontam para os tokens semânticos do design system:
+   paper = fundo, card = superficie, mint = superficie-suave, ink = texto, forest = texto-titulo,
+   text-soft = texto-apoio, line = borda, stone = borda-controle, leaf = links e sublinhados (Alta),
+   alta = botão alta, destaque = o número de hoje (uma vez por tela) e o foco, gold = Mostarda.
+   Sinal escuro e Mostarda nunca são texto sobre Gelo; o Sinal claro (#FF5A1F) só aparece no escuro. */
 
 :root {
-  /* Cores — light (padrão) */
-  --mcv-ink: #0f1f14;
-  --mcv-forest: #1b4d2e;
-  --mcv-leaf: #2f7d4b;
-  --mcv-leaf-soft: #a8c69a;
-  --mcv-mint: #edf4e7;
-  --mcv-paper: #f8faf5;
-  --mcv-gold: #d4892a;
-  --mcv-stone: #7c8a76;
-  --mcv-line: #d5dfcc;
+  /* Cores — claro (Gelo), padrão */
+  --mcv-ink: #08180f;
+  --mcv-forest: #0c2a1e;
+  --mcv-leaf: #14704a;
+  --mcv-leaf-soft: #d6ded8;
+  --mcv-mint: #e6ece7;
+  --mcv-paper: #f2f2ee;
+  --mcv-gold: #e3b23c;
+  --mcv-stone: #5c625e;
+  --mcv-text-soft: #5c625e;
+  --mcv-line: #d6ded8;
   --mcv-card: #ffffff;
-  --mcv-pulse: #a6f26b;
+  --mcv-destaque: #b83300;
+  /* Botão alta: o mesmo nos dois temas; ao passar o mouse fica Mata */
+  --mcv-alta: #14704a;
+  --mcv-alta-hover: #0c2a1e;
+  --mcv-on-alta: #f2f2ee;
 
-  /* Tipografia */
-  --mcv-font-display: "Geist", system-ui, sans-serif;
-  --mcv-font-body: "Geist", system-ui, -apple-system, sans-serif;
-  --mcv-font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  /* Tipografia: Space Grotesk e IBM Plex Mono vêm do next/font (globals.css) */
+  --mcv-font-display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --mcv-font-body: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --mcv-font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
 
-  /* Raio e espaçamento base */
-  /* Kit de marca V2 (2026-10-27): 10, 14 e 16 px */
-  --mcv-radius-sm: 10px;
-  --mcv-radius-md: 14px;
-  --mcv-radius-lg: 16px;
+  /* Raios do design system: raio-4 (foco, teclas), raio-6 (botões, campos), raio-12 (cartões, janelas) */
+  --mcv-radius-xs: 4px;
+  --mcv-radius-sm: 6px;
+  --mcv-radius-md: 12px;
+  --mcv-radius-lg: 12px;
   --mcv-space-unit: 8px;
 }
 
-/* Modo escuro — segue a preferência do sistema */
+/* Escuro (Mata) — segue a preferência do sistema */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --mcv-ink: #eef3e8;
-    --mcv-forest: #a8c69a;
-    --mcv-leaf: #8fb877;
-    --mcv-leaf-soft: #4d6b45;
-    --mcv-mint: #1c2b1e;
-    --mcv-paper: #0f1f14;
-    --mcv-gold: #d4892a;
-    --mcv-stone: #9db092;
-    --mcv-line: #2c4733;
-    --mcv-card: #15271a;
-    --mcv-pulse: #a6f26b;
+    --mcv-ink: #e6ece7;
+    --mcv-forest: #e6ece7;
+    --mcv-leaf: #9db5a8;
+    --mcv-leaf-soft: #24412f;
+    --mcv-mint: #08180f;
+    --mcv-paper: #0c2a1e;
+    --mcv-stone: #9db5a8;
+    --mcv-text-soft: #b9ccc1;
+    --mcv-line: #24412f;
+    --mcv-card: #08180f;
+    --mcv-destaque: #ff5a1f;
   }
 }
 
-/* Modo escuro forçado via atributo (toggle manual) */
+/* Escuro forçado via atributo (toggle manual) */
 :root[data-theme="dark"] {
-  --mcv-ink: #eef3e8;
-  --mcv-forest: #a8c69a;
-  --mcv-leaf: #8fb877;
-  --mcv-leaf-soft: #4d6b45;
-  --mcv-mint: #1c2b1e;
-  --mcv-paper: #0f1f14;
-  --mcv-gold: #d4892a;
-  --mcv-stone: #9db092;
-  --mcv-line: #2c4733;
-  --mcv-card: #15271a;
-  --mcv-pulse: #a6f26b;
+  --mcv-ink: #e6ece7;
+  --mcv-forest: #e6ece7;
+  --mcv-leaf: #9db5a8;
+  --mcv-leaf-soft: #24412f;
+  --mcv-mint: #08180f;
+  --mcv-paper: #0c2a1e;
+  --mcv-stone: #9db5a8;
+  --mcv-text-soft: #b9ccc1;
+  --mcv-line: #24412f;
+  --mcv-card: #08180f;
+  --mcv-destaque: #ff5a1f;
 }
