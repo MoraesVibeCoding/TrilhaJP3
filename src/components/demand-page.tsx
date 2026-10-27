@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { formatDueDate } from "@/lib/demand-labels";
 import { demandPath } from "@/lib/demand-url";
-import type { DemoDemand } from "@/lib/demo-data";
+import type { Demand } from "@/lib/demand-labels";
 import { formatActivity } from "@/lib/resume";
 import { useDemandState } from "@/lib/use-demand-state";
 import {
@@ -18,7 +18,7 @@ import {
 import { DemandEditForm } from "./demand-edit-form";
 import { useFlashMessage } from "@/lib/use-flash-message";
 
-export type PageDemand = DemoDemand;
+export type PageDemand = Demand;
 
 export function DemandPage({
   id,

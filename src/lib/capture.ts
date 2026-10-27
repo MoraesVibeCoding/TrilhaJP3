@@ -1,4 +1,4 @@
-import { PRIORITIES, type DemoDemand, type Priority } from "./demo-data";
+import { PRIORITIES, type Demand, type Priority } from "./demand-labels";
 
 export type CapturedDemand = ReturnType<typeof buildDemand>;
 
@@ -60,7 +60,7 @@ export function buildDemand(input: {
   projectId: string;
   priority: Priority;
   now: Date;
-}): DemoDemand & {
+}): Demand & {
   comments: [];
   attachments: [];
   history: [];

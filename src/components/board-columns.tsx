@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import type { DemandRow } from "@/lib/demands-view";
 import { useFlashMessage } from "@/lib/use-flash-message";
-import { DEMAND_STATES as STATES } from "@/lib/demo-data";
+import { DEMAND_STATES as STATES } from "@/lib/demand-labels";
 
 export function BoardColumns({
   rows,

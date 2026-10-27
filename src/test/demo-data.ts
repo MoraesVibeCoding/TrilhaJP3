@@ -1,9 +1,7 @@
-// Dados fictícios só para avaliar o visual da T1; saem quando a T4 e a T5 entrarem.
-export type ProjectStatus = "Ideia" | "Em andamento" | "Pausado" | "Concluído";
-export const DEMAND_STATES = ["A fazer", "Fazendo", "Feito"] as const;
-export const PRIORITIES = ["Alta", "Média", "Baixa"] as const;
-export type DemandState = (typeof DEMAND_STATES)[number];
-export type Priority = (typeof PRIORITIES)[number];
+// Dados fictícios dos testes: a semente do E2E (e2e/seed.ts) e os testes das páginas. O app não os lê.
+import type { Demand } from "@/lib/demand-labels";
+
+type ProjectStatus = "Ideia" | "Em andamento" | "Pausado" | "Concluído";
 
 export const demoProjects = [
   { id: "p1", name: "Site institucional", status: "Em andamento" },
@@ -16,30 +14,11 @@ export const demoProjects = [
   status: ProjectStatus;
 }[];
 
-// Referência fixa: a página é estática, então "hoje" não pode ser o relógio do build.
+// Referência fixa para os testes: "hoje" não pode depender do relógio de quem roda.
 export const demoNow = new Date(2026, 9, 22, 15, 0);
 
-export type DemoDemand = {
-  id: string;
-  projectId: string;
-  title: string;
-  state: DemandState;
-  priority: Priority;
-  lastActivityAt: string;
-  subtasks: readonly { title: string; done: boolean }[];
-  comments: readonly { author: string; at: string; text: string }[];
-  attachments: readonly { name: string }[];
-  history: readonly { at: string; text: string }[];
-  isNow?: boolean;
-  doneAt?: string;
-  description?: string;
-  // data sem hora, como o banco guarda (AAAA-MM-DD)
-  dueDate?: string;
-};
-
 type Lists = "comments" | "attachments" | "history";
-const raw: readonly (Omit<DemoDemand, Lists> &
-  Partial<Pick<DemoDemand, Lists>>)[] = [
+const raw: readonly (Omit<Demand, Lists> & Partial<Pick<Demand, Lists>>)[] = [
   {
     id: "d1",
     isNow: true,
@@ -154,7 +133,7 @@ const raw: readonly (Omit<DemoDemand, Lists> &
 ];
 
 // Sem comentário, anexo ou histórico, a lista vem vazia: as telas não precisam completar cada demanda.
-export const demoDemands: readonly DemoDemand[] = raw.map((d) => ({
+export const demoDemands: readonly Demand[] = raw.map((d) => ({
   comments: [],
   attachments: [],
   history: [],

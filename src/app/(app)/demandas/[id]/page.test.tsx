@@ -2,7 +2,7 @@ import { afterEach, expect, test } from "vitest";
 import { isValidElement, type ReactElement } from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterAll, beforeAll, vi } from "vitest";
-import { demoDemands, demoNow, demoProjects } from "@/lib/demo-data";
+import { demoDemands, demoNow, demoProjects } from "@/test/demo-data";
 
 // A leitura do banco é simulada com os dados de exemplo, e o relógio fica no dia deles.
 vi.mock("next/server", () => ({ connection: async () => undefined }));

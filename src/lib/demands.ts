@@ -1,7 +1,7 @@
 // Leitura das demandas da empresa (a RLS da T5 só devolve as dela), no formato que as telas já usam.
 import { getCurrentUser } from "@/lib/auth";
 import { PRIORITY_LABELS, STATE_LABELS } from "@/lib/demand-labels";
-import type { DemoDemand } from "@/lib/demo-data";
+import type { Demand } from "@/lib/demand-labels";
 import { createClient } from "@/lib/supabase/server";
 
 type TaskRow = {
@@ -22,8 +22,8 @@ type TaskRow = {
 // Comentários, anexos e histórico chegam na T9, T11 e T10: por ora, listas vazias.
 export function toDemand(
   row: TaskRow,
-  subtasks: DemoDemand["subtasks"] = [],
-): DemoDemand {
+  subtasks: Demand["subtasks"] = [],
+): Demand {
   return {
     id: row.id,
     projectId: row.project_id,
@@ -42,7 +42,7 @@ export function toDemand(
   };
 }
 
-export async function listDemands(): Promise<DemoDemand[]> {
+export async function listDemands(): Promise<Demand[]> {
   await getCurrentUser();
   const supabase = await createClient();
   const { data, error } = await supabase

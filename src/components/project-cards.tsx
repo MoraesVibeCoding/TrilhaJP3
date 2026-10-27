@@ -3,7 +3,7 @@
 import { useState } from "react";
 import type { ProjectGroup } from "@/lib/project-groups";
 import { StepProgress } from "./step-progress";
-import { DEMAND_STATES as STATES } from "@/lib/demo-data";
+import { DEMAND_STATES as STATES } from "@/lib/demand-labels";
 
 const PREVIEW = 2;
 

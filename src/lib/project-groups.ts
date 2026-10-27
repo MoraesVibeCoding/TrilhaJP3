@@ -1,5 +1,5 @@
 import type { DemandRow } from "./demands-view";
-import type { DemandState } from "./demo-data";
+import type { DemandState } from "./demand-labels";
 
 export type ProjectGroup = {
   id: string;

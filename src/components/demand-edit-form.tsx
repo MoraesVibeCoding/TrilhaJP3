@@ -5,14 +5,14 @@ import { useActionState, useEffect, useId, useRef } from "react";
 import { updateDemand } from "@/app/(app)/demandas/actions";
 import { PRIORITY_LABELS, priorityValue } from "@/lib/demand-labels";
 import type { DemandField } from "@/lib/demand-input";
-import type { DemoDemand } from "@/lib/demo-data";
+import type { Demand } from "@/lib/demand-labels";
 
 export function DemandEditForm({
   demand,
   onDone,
   onCancel,
 }: {
-  demand: DemoDemand;
+  demand: Demand;
   onDone: () => void;
   onCancel: () => void;
 }) {

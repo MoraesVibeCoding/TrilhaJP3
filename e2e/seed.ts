@@ -1,8 +1,7 @@
 // T5: a empresa do E2E recebe os projetos e demandas de demonstração, agora no Supabase.
-// shortcut: lê demo-data.ts; quando a T5.4 apagar esse arquivo, os dados passam para cá.
 import type { Page } from "@playwright/test";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { demoDemands, demoNow, demoProjects } from "../src/lib/demo-data";
+import { demoDemands, demoNow, demoProjects } from "../src/test/demo-data";
 
 const STATUS = {
   Ideia: "idea",

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { captureOptions, createDemand } from "@/app/(app)/demandas/actions";
 import { findSimilar, validateTitle } from "@/lib/capture";
-import { PRIORITIES, type Priority } from "@/lib/demo-data";
+import { PRIORITIES, type Priority } from "@/lib/demand-labels";
 import { useStoredState } from "@/lib/use-stored-state";
 import { DemandDialog } from "./demand-dialog";
 import { useFlashMessage } from "@/lib/use-flash-message";
