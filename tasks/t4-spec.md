@@ -1,6 +1,6 @@
 # T4: Projetos (criar, editar, listar, arquivar)
 
-Status: **rascunho com as decisões respondidas, aguardando aprovação do Pedro.** Nenhum código nem SQL foi escrito. Base: `docs/SPEC.md` (seções 4.2, 4.3 e 6), ADR 0003, `tasks/t2-spec.md`, `tasks/t3-spec.md`, `CONSTRAINTS.md`.
+Status: **aprovada pelo Pedro em 2026-10-27 ("siga conforme necessário"); em construção.**
 
 ## 1. Objetivo
 
