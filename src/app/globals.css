@@ -269,16 +269,6 @@ a {
   font-size: 1.25rem;
   margin: 2rem 0 0.75rem;
 }
-.demo-note {
-  margin-top: 0.75rem;
-  padding: 0.5rem 0.75rem;
-  max-width: 65ch;
-  font-size: 0.875rem;
-  color: var(--mcv-ink);
-  background: var(--mcv-mint);
-  border: 1px dashed var(--mcv-text-soft);
-  border-radius: var(--mcv-radius-sm);
-}
 
 .page-head {
   display: flex;
@@ -1422,9 +1412,6 @@ th[aria-sort] .sort-button {
 .demand-page .detail-list li {
   padding: 0.5rem 0;
   border-top: 1px solid var(--mcv-line);
-}
-.demand-page + .demo-note {
-  margin-top: 2.5rem;
 }
 @container (min-width: 32rem) {
   .demand-page-cols {

@@ -145,7 +145,7 @@ Marca V2 (evolução decidida por Pedro em 2026-10-23; kit oficial recebido em 2
 
 ### Secondary
 
-- **Âmbar** (#d4892a): **só preenchimento** com texto Tinta (6,04:1). Nunca texto nem borda sobre o papel claro (2,7:1). A nota de dados de demonstração usa borda tracejada em `text-soft`, não mais o âmbar.
+- **Âmbar** (#d4892a): **só preenchimento** com texto Tinta (6,04:1). Nunca texto nem borda sobre o papel claro (2,7:1).
 - **Pulso** (#a6f26b): significa **"Claude está trabalhando"**, e só isso. Só sobre fundo escuro (Floresta 7,2:1, Tinta 12,7:1) ou com contorno Floresta de 2,5 px; sobre o papel claro dá 1,29:1. O ponto do ícone da marca é o único uso hoje; o indicador de IA entra com o campo Executor.
 
 ### Neutral
@@ -206,7 +206,7 @@ Cantos suaves, raios do kit V2 (2026-10-27): 10px em botões e itens, 14px na ja
 
 ### Navigation
 
-Barra lateral em Menta. Itens de 44px de altura, texto Tinta; o atual vai sobre Cartão, em Verde Floresta e peso 600, com `aria-current="page"`. Itens: Retomar, Demandas e "Projetos" seguido de "em breve" (0.8125rem), indisponível em `text-soft` com `aria-disabled` e cursor `not-allowed`. No celular, botão de menu com `aria-expanded`.
+Barra lateral em Menta. Itens de 44px de altura, texto Tinta; o atual vai sobre Cartão, em Verde Floresta e peso 600, com `aria-current="page"`. Itens: Retomar, Demandas e Projetos; logo abaixo, o botão Sair no mesmo estilo. No celular, botão de menu com `aria-expanded`.
 
 ### Icon buttons (tema, Foco/Completo, menu, fechar)
 
@@ -243,7 +243,7 @@ Três colunas, A fazer, Fazendo e Feito, a partir de 60rem (o mesmo ponto em que
 
 ### Captura rápida (T6d)
 
-Botão primário (Floresta, texto Papel, 44px) na barra do topo no computador, com o texto "Nova demanda" e a tecla `C` como dica; no celular vira um botão flutuante de 56px no canto de baixo à direita, com o texto só para leitor de tela, e o conteúdo ganha folga embaixo para nunca ser coberto. A janela reaproveita a janela da demanda (fundo fosco, foco preso e devolvido): título "Nova demanda", um campo de texto (Enter cria, Esc cancela), Projeto (lembra o último usado) e Prioridade (Média). Título vazio diz "Escreva o título da demanda." num `role="alert"`. Título parecido com outra demanda mostra "Parecida com:" e a lista, e o botão vira "Criar mesmo assim". Criada, a demanda nasce em A fazer, a janela fecha e uma confirmação "Demanda criada: …" fica à vista por 4 segundos. O atalho `C` não vale digitando, com modificador nem com outra janela aberta. A tecla da dica (`kbd`) usa raio de 4px e Geist 600 em 0,75rem: a escala "key" e o raio "xs", só para teclas.
+Botão primário (Floresta, texto Papel, 44px) na barra do topo no computador, com o texto "Nova demanda" e a tecla `C` como dica; no celular vira um botão flutuante de 56px no canto de baixo à direita, com o texto só para leitor de tela, e o conteúdo ganha folga embaixo para nunca ser coberto. A janela reaproveita a janela da demanda (fundo fosco, foco preso e devolvido): título "Nova demanda", um campo de texto (Enter cria, Esc cancela), Projeto (lembra o último usado) e Prioridade (Média). Título vazio diz "Escreva o título da demanda." num `role="alert"`. Título parecido com outra demanda mostra "Parecida com:" e a lista, e o botão vira "Criar mesmo assim". Desde a T5 a janela grava no banco: ao abrir, busca os projetos reais e os títulos para o aviso de parecida ("Carregando…" enquanto isso; sem projeto, um link para Projetos). Criada, a demanda nasce em A fazer, a janela fecha e uma confirmação "Demanda criada: …" fica à vista por 4 segundos; se não gravar, a janela fica aberta com o título e o erro. O atalho `C` não vale digitando, com modificador nem com outra janela aberta. A tecla da dica (`kbd`) usa raio de 4px e Geist 600 em 0,75rem: a escala "key" e o raio "xs", só para teclas.
 
 ### Controles, véu e movimento
 
@@ -260,6 +260,10 @@ Janela centrada (máx. 40rem) sobre a página, fundo Papel, borda Linha, raio 12
 ### Demanda em página inteira (T5b)
 
 Rota `/demandas/{id}`, link permanente, para sessões longas (proposta A, escolhida pelo Pedro em 2026-10-25). Topo: caminho "Demandas / {projeto}" (o primeiro é link), título em Display, linha de metadados em `text-soft` 0,875rem (estado, projeto · prioridade · última atividade) com "Marcar como Agora" ou "Tirar de Agora" e "Copiar link" à direita, e um filete. "Copiar link" confirma "Link copiado." na mesma faixa de aviso do Quadro (4 segundos); sem área de transferência, diz que o endereço está na barra do navegador. Corpo em três colunas separadas por filetes verticais de 1px, sem cartões nem sombra: Subtarefas (18rem, numeradas, filete entre os itens, o passo atual em Verde Floresta, peso 600 e "agora" por extenso) | Agora (título de seção, o passo em Step 1,75rem, "Passo N de M", filete de progresso, "Concluir passo") e Comentários | Anexos e Histórico (18rem). Tudo aberto, com títulos h2 de 1,25rem, nunca grupos recolhíveis. As colunas seguem a largura da área de conteúdo (container query): 3 com 60rem ou mais, 2 com 32rem ou mais (Anexos e Histórico descem lado a lado), 1 abaixo disso, onde os botões ocupam a própria linha. No Foco ficam só Subtarefas e Agora; some "Marcar como Agora", "Copiar link" fica. Id desconhecido: "Demanda não encontrada." com link para Demandas.
+
+### Editar a demanda e importar do navegador (T5.3)
+
+Propostas A e C, aprovadas pelo Pedro em 2026-10-27 (telas reais em HTML). **Editar:** botão secundário "Editar" na linha de metadados da página inteira, entre "Marcar como Agora" e "Copiar link". Abre o próprio cabeçalho (título e metadados) como formulário, no padrão de Projetos: Cartão com borda Linha e raio md; Título (1,25rem, peso 600) e Descrição na largura toda; Prioridade e Prazo (`input type="date"`) lado a lado; "Cancelar" e "Salvar" à direita. Erro por campo como em Projetos, com o foco no primeiro campo inválido; ao fechar, o foco volta a "Editar" e "Demanda salva." aparece na faixa de aviso. Fora da edição, o prazo entra nos metadados ("Prazo 30 de out.", com o ano só se for outro) e a descrição fica logo abaixo do filete, em medida de 65ch, respeitando as quebras de linha. **Importar:** enquanto houver demandas capturadas só no navegador (antes da T5), Demandas mostra no topo um aviso em Neblina com borda de controle: a frase "N demandas capturadas só neste navegador." em peso 600, a lista com caixas de marcar (todas marcadas, alvo de 44px, filete entre elas), o campo Projeto e "Importar N demandas" (primário); "Descartar as desmarcadas" (secundário) aparece quando alguma está desmarcada. Importadas, somem do navegador, e o aviso "N demandas importadas para {projeto}." fica na faixa de aviso. Sem projeto, aponta para Projetos.
 
 ### App instalado (T12)
 

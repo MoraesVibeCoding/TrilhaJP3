@@ -1,10 +1,14 @@
 # STATUS — TrilhaJp3
 
-Atualizado em 2026-10-26 (T3 construída: login, sessão e tela de entrada). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
+Atualizado em 2026-10-27 (T4 mesclada; T5 construída, PR aberta). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
 
 ## Próxima ação
 
-Pedro: decidir o ajuste do guarda do piso (bloqueia asserção trocada; ver PR da T4) e revisar a PR da T4; instalar o app no iPad para conferir o ícone e a tela cheia. Eu: T5 (demandas reais) depois da T4.
+Pedro: revisar e mesclar a PR da T5 (`claude/t5-demandas`); o `check:floor` fica vermelho pelas asserções reescritas na troca para dados reais, como na T4. Depois: spec da troca de marca para Moraes Coding (decidida para depois da T5) e T7. A branch antiga `claude/t5-spec` pode ser apagada (o reapoio sobre a `main` foi publicado com nome novo porque o force-push foi bloqueado).
+
+## Marca (2026-10-27)
+
+A empresa passou a se chamar **Moraes Coding** (direção visual B · Gráfico: Mata, Gelo, Sinal laranja; Space Grotesk e IBM Plex Mono; M em barras). Decisão do Pedro: o app troca de marca **depois da T5**, numa tarefa própria com spec e o processo do `impeccable`. Até lá o app segue na marca V2 da Moraes CodeVibe. Pacote de referência fora do repositório (o manual traz o nome completo do Pedro; só SVGs e tokens entram aqui).
 
 ## Repositório e ambiente (2026-10-26)
 
@@ -27,7 +31,7 @@ Ver `docs/PRINCIPIOS-OBJETIVOS.md`, seção 5.
 
 ## Em uma frase
 
-TrilhaJp3 é o sistema de gestão da Moraes CodeVibe. A v1 é o módulo Projetos e demandas. A T0 (base, Prettier, CI, Playwright) e a T1-R (casca, Retomar, janela da demanda, interruptor Foco/Completo, revisão final do `impeccable`) estão prontas. A T6a (Demandas em Tabela, versão A, com dados de demonstração) está pronta. A T6b (Por projeto, cartões) também. A T6c (Quadro, menu Mover para) também. A T6d (captura rápida, janela) também. A T5b (demanda em página inteira, `/demandas/[id]`, proposta A em três colunas; a janela troca o endereço e as alterações ficam no navegador) está pronta, com revisão final do `impeccable`. A T2 (empresas, vínculos e RLS no Supabase de teste, `tasks/t2-spec.md`) está pronta. A T3 (login com e-mail e senha, Proxy, tela `/entrar` proposta B, botão Sair, `tasks/t3-spec.md`) também. A T4 (projetos reais em `/projetos`, `tasks/t4-spec.md`) também, com o kit de marca V2 oficial adotado (raios, títulos em Floresta, SVGs em `docs/brand/v2-kit/`). A próxima é a T5, que troca as demandas de demonstração por reais.
+TrilhaJp3 é o sistema de gestão da empresa (Moraes Coding; o app ainda mostra Moraes CodeVibe até a troca de marca). A v1 é o módulo Projetos e demandas. Prontas e em `main`: T0, T1-R, T2 (empresas e RLS), T3 (login), T4 (projetos), T12 (PWA) e as telas da T5b e T6a a T6d. A T5 (demandas reais: tabela `tasks`, leitura, mover, Agora, Concluir passo, captura, editar na página inteira, importar as capturadas no navegador) está construída na branch `claude/t5-demandas`, com PR. Próximas: marca Moraes Coding, T7 (subtarefas), T8 a T11, T13, T14.
 
 ## Decisões fechadas (resumo)
 
@@ -39,18 +43,16 @@ TrilhaJp3 é o sistema de gestão da Moraes CodeVibe. A v1 é o módulo Projetos
 6. Varredura de segredos: recurso nativo do GitHub, não o gitleaks (exige licença para organização).
 7. Design: toda decisão de design e layout passa pela skill `impeccable`, usando o kit de marca em `docs/brand/`.
 
-## Estado do código (branch `claude/elegant-turing-h68599`, sem PR)
+## Estado do código (2026-10-27)
 
 | Item | Estado |
 |---|---|
-| Next.js 16 + TypeScript estrito + ESLint | Pronto |
-| Vitest (1 teste de fumaça) | Pronto, verde |
-| Prettier (`format`, `format:check`) | Pronto, verde |
-| Playwright E2E (1 teste de fumaça) | Pronto, verde |
-| CI no GitHub Actions (formatação, lint, tipos, teste, build, E2E) | Verde nas execuções #1 e #2 |
-| `.gitattributes` com `eol=lf` | Commit `60970dc`, a execução #3 do CI ainda não foi conferida |
-| Supabase: esquema e RLS (T2) | Pronto: `organizations`, `memberships`, `private.is_member`; 6 testes de integração (`npm run test:db`) |
-| Supabase: login (T3) | Pronto: Proxy com `getClaims()`, `/entrar`, Sair, `getCurrentUser()`; E2E com usuário fictício por execução (o CI precisa dos 3 segredos no passo do E2E) |
+| Base (Next.js 16, TS estrito, ESLint, Prettier, Vitest, Playwright, CI) | Pronto |
+| Supabase: empresas, vínculos e RLS (T2) | Pronto |
+| Login e sessão (T3) | Pronto |
+| Projetos (T4) | Pronto, em `main` (PR #4) |
+| Demandas reais (T5) | Construída na branch `claude/t5-demandas`; 323 testes unitários, E2E 113, banco 29, axe 22 |
+| CI | `check:floor` vermelho por asserções reescritas (aceito pelo Pedro na T4 e na T5); o resto verificado localmente |
 
 Comandos: `npm run db:migrate` (aplica `supabase/migrations/` pela Management API; `--rollback <versão>` reverte), `npm run test:db`, `npm test`, `npm run test:e2e`, `npm run lint`, `npm run typecheck`, `npm run format:check`, `npm run build`.
 

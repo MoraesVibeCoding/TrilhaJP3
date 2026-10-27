@@ -1,6 +1,6 @@
 # T5: Demandas reais e três estados
 
-Status: **aprovada pelo Pedro em 2026-10-27; em construção** (fatias 1 e 2 prontas). Depende da T4 (PR #4, tabela `projects`). Base: `docs/SPEC.md` (4.2 e 6), ADR 0003, `tasks/t4-spec.md`, `CONSTRAINTS.md`.
+Status: **aprovada pelo Pedro em 2026-10-27; construída** (4 fatias). Ajustes: subtarefas lidas na T5 (decisão 4); edição (proposta A) e importação (proposta C) aprovadas pelo Pedro em 2026-10-27 com as telas reais; `use-demand-state.ts` ficou, agora gravando no banco pelas Server Actions; `use-captured.ts` fica só para a importação; os dados de demonstração foram para `src/test/demo-data.ts`. Depende da T4 (PR #4, tabela `projects`). Base: `docs/SPEC.md` (4.2 e 6), ADR 0003, `tasks/t4-spec.md`, `CONSTRAINTS.md`.
 
 ## 1. Objetivo
 
