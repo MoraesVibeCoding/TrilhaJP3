@@ -1,6 +1,6 @@
 # T4: Projetos (criar, editar, listar, arquivar)
 
-Status: **rascunho, aguardando aprovação do Pedro.** Nenhum código nem SQL foi escrito. Base: `docs/SPEC.md` (seções 4.2, 4.3 e 6), ADR 0003, `tasks/t2-spec.md`, `tasks/t3-spec.md`, `CONSTRAINTS.md`.
+Status: **rascunho com as decisões respondidas, aguardando aprovação do Pedro.** Nenhum código nem SQL foi escrito. Base: `docs/SPEC.md` (seções 4.2, 4.3 e 6), ADR 0003, `tasks/t2-spec.md`, `tasks/t3-spec.md`, `CONSTRAINTS.md`.
 
 ## 1. Objetivo
 
@@ -40,11 +40,11 @@ Demandas reais (T5), ligar a visão Por projeto e o Retomar aos projetos reais (
 2. **RLS de escrita é o primeiro caso de `insert`/`update` do app:** `with check` errado deixaria gravar em outra empresa. Mitigação: testes do item 4.1 com duas empresas, revisão adversarial.
 3. **Link externo:** só `https://`, aberto com `rel="noopener noreferrer"`; nada de `javascript:`.
 
-## 7. Decisões abertas (uma de cada vez)
+## 7. Decisões
 
-1. **Dados de demonstração.** Recomendação: só `/projetos` usa dados reais na T4; as outras telas trocam na T5, junto com as demandas (senão as demandas de demonstração apontariam para projetos que não existem). Alternativa: trocar tudo agora e deixar as demandas vazias até a T5.
-2. **Campos do formulário.** Recomendação: todos os do modelo (nome, descrição, estado, prioridade, link). Alternativa: só nome e estado agora.
-3. **Arquivados.** Recomendação: um filtro "Arquivados (N)" na própria página, com "Restaurar". Alternativa: arquivados somem sem caminho de volta pela interface.
+1. **Dados de demonstração. Decidido pelo Pedro em 2026-10-27: seguir a recomendação.** só `/projetos` usa dados reais na T4; as outras telas trocam na T5, junto com as demandas (senão as demandas de demonstração apontariam para projetos que não existem). Alternativa: trocar tudo agora e deixar as demandas vazias até a T5.
+2. **Campos do formulário. Decidido pelo Pedro em 2026-10-27: seguir a recomendação.** todos os do modelo (nome, descrição, estado, prioridade, link). Alternativa: só nome e estado agora.
+3. **Arquivados. Decidido pelo Pedro em 2026-10-27: seguir a recomendação.** um filtro "Arquivados (N)" na própria página, com "Restaurar". Alternativa: arquivados somem sem caminho de volta pela interface.
 
 ## 8. Tarefas depois da aprovação
 
