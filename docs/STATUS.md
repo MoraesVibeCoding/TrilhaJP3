@@ -66,7 +66,7 @@ Comandos: `npm run db:migrate` (aplica `supabase/migrations/` pela Management AP
 
 ## Notas de ambiente
 
-1. Computador do Pedro (Windows): Node 24.20, npm 11. O CI e a nuvem usam Node 22. Tudo passa nos dois. Ideia pendente: fixar `engines` no `package.json`.
+1. Computador do Pedro (Windows): Node 24.22, npm 11, Git 2.56. O CI e a nuvem usam Node 22. Tudo passa nos dois. Ideia pendente: fixar `engines` no `package.json`. Projeto em `C:\Users\pedro\Documents\TrilhaJP3` (clonado em 2026-10-27). No PowerShell: usar `npm.cmd` (a política de scripts bloqueia o `npm.ps1`); o Git foi posto no PATH do usuário à mão (`C:\Program Files\Git\cmd`). O `.env.local` sai do `.env.example`; criar com `Set-Content -Encoding ascii` (o `utf8` do Windows PowerShell põe um BOM que esconde a primeira variável). Sem o arquivo, o Proxy falha com "Your project's URL and Key are required".
 2. Identidade do Git configurada só no repositório local: Pedro Moraes, `contato@exemplo.com.br`.
 3. A skill `impeccable` está em `.claude/skills/impeccable/`. O launcher `scripts/impeccable` baixa um binário na primeira execução e precisa de aprovação do Pedro.
 4. **Decisão do Pedro em 2026-10-23 (R4): manter os hooks do `impeccable`** em `.claude/settings.local.json` (local, ignorado pelo Git). Eles rodam o detector depois de editar arquivos de interface. A decisão antiga de não instalá-los fica revogada.
