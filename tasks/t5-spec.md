@@ -50,5 +50,5 @@ Subtarefas (T7), etiquetas (T8), comentários (T9), histórico (T10), anexos (T1
 ## 8. Decisões abertas (uma de cada vez)
 
 1. **"Agora". Decidido pelo Pedro em 2026-10-27: a recomendação.** um campo `is_now` na demanda, com no máximo uma "Agora" por empresa (índice único parcial); na v1 só o Pedro usa. Alternativa: uma "Agora" por pessoa, numa tabela própria (mais certo para vários usuários, mais código agora).
-2. **Subtarefas, comentários, anexos e histórico até as tarefas deles.** Recomendação: os grupos continuam visíveis, vazios, com uma frase curta ("Nenhuma subtarefa ainda."). Alternativa: esconder os grupos até existirem.
+2. **Subtarefas, comentários, anexos e histórico até as tarefas deles. Decidido pelo Pedro em 2026-10-27: visíveis.** os grupos continuam visíveis, vazios, com uma frase curta ("Nenhuma subtarefa ainda."). Alternativa: esconder os grupos até existirem.
 3. **Demandas que o Pedro capturou no navegador.** Recomendação: na primeira abertura depois da T5, se houver alguma, oferecer "Importar N demandas" para um projeto escolhido; depois o atalho sai. Alternativa: descartar (eram de teste).
