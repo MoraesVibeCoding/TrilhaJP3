@@ -25,6 +25,17 @@ export function DemandDetail({
   onConclude: (id: string) => void;
   onToggleNow: (id: string) => void;
 }) {
+  // Grupo vazio não aparece como "(0)": os vazios viram uma linha só (proposta 4 do impeccable)
+  const empty = (
+    [
+      ["subtarefas", subtasks],
+      ["comentários", data.comments],
+      ["anexos", data.attachments],
+      ["histórico", data.history],
+    ] as const
+  )
+    .filter(([, items]) => items.length === 0)
+    .map(([name]) => name);
   return (
     <>
       <p className="detail-state">
@@ -37,31 +48,54 @@ export function DemandDetail({
       </p>
 
       <section aria-label="Agora" className="detail-now">
-        <DetailNow subtasks={subtasks} onConclude={() => onConclude(data.id)} />
+        {subtasks.length > 0 ? (
+          <DetailNow
+            subtasks={subtasks}
+            onConclude={() => onConclude(data.id)}
+          />
+        ) : (
+          <p className="detail-now-empty">{sem(empty)}</p>
+        )}
       </section>
 
-      <details open className="detail-group">
-        <summary>Subtarefas ({subtasks.length})</summary>
-        <SubtaskList subtasks={subtasks} />
-      </details>
+      {subtasks.length > 0 && (
+        <details open className="detail-group">
+          <summary>Subtarefas ({subtasks.length})</summary>
+          <SubtaskList subtasks={subtasks} />
+        </details>
+      )}
 
-      <details className="detail-group">
-        <summary>Comentários ({data.comments.length})</summary>
-        <CommentList comments={data.comments} />
-      </details>
+      {data.comments.length > 0 && (
+        <details className="detail-group">
+          <summary>Comentários ({data.comments.length})</summary>
+          <CommentList comments={data.comments} />
+        </details>
+      )}
 
-      <details className="detail-group">
-        <summary>Anexos ({data.attachments.length})</summary>
-        <AttachmentList attachments={data.attachments} />
-      </details>
+      {data.attachments.length > 0 && (
+        <details className="detail-group">
+          <summary>Anexos ({data.attachments.length})</summary>
+          <AttachmentList attachments={data.attachments} />
+        </details>
+      )}
 
-      <details className="detail-group">
-        <summary>Histórico ({data.history.length})</summary>
-        <HistoryList history={data.history} />
-      </details>
+      {data.history.length > 0 && (
+        <details className="detail-group">
+          <summary>Histórico ({data.history.length})</summary>
+          <HistoryList history={data.history} />
+        </details>
+      )}
+
+      {subtasks.length > 0 && empty.length > 0 && (
+        <p className="detail-empty">{sem(empty)}</p>
+      )}
     </>
   );
 }
+
+// "Sem anexos nem histórico"; "Sem subtarefas, comentários, anexos nem histórico"
+const sem = (names: readonly string[]) =>
+  `Sem ${names.length > 1 ? `${names.slice(0, -1).join(", ")} nem ${names.at(-1)}` : names[0]}`;
 
 // Peças da janela, reaproveitadas pela página inteira (T5b).
 export function NowToggle({
@@ -89,7 +123,7 @@ export function DetailNow({
   const next = nextIndex >= 0 ? subtasks[nextIndex] : null;
   if (!next)
     return (
-      <p className="detail-now-step">
+      <p className="detail-now-empty">
         {subtasks.length === 0 ? "Sem subtarefas" : "Sem passos pendentes"}
       </p>
     );

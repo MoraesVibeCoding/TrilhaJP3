@@ -116,7 +116,26 @@ a {
   justify-content: flex-end;
   gap: 0.75rem;
   padding: 0.75rem 1.5rem;
-  border-bottom: 1px solid var(--mcv-line);
+  border-bottom: 1px solid var(--mcv-chrome-line);
+  background: var(--mcv-chrome-bg);
+}
+/* Topo e barra lateral em Mata, "como um terminal de BI" (proposta 2 do impeccable): os tokens
+   trocam só dentro deles; a janela de captura e o aviso moram no topo e ficam com as cores da página */
+.shell-side,
+.shell-bar > :not(dialog, .capture-toast) {
+  --mcv-ink: var(--mcv-chrome-ink);
+  --mcv-forest: var(--mcv-chrome-ink);
+  --mcv-text-soft: var(--mcv-chrome-soft);
+  --mcv-mint: var(--mcv-chrome-bg);
+  --mcv-card: var(--mcv-chrome-current);
+  --mcv-line: var(--mcv-chrome-line);
+  --mcv-stone: var(--mcv-chrome-control);
+  --mcv-control-line: var(--mcv-chrome-control);
+  --mcv-leaf: var(--mcv-chrome-control);
+  --mcv-destaque: var(--mcv-chrome-focus);
+  --mcv-focus: var(--mcv-chrome-focus);
+  --mcv-icon-ground: var(--mcv-chrome-bg);
+  color: var(--mcv-ink);
 }
 .shell-bar .brand,
 .shell-bar .menu-button {
@@ -133,8 +152,8 @@ a {
   flex-direction: column;
   gap: 1.5rem;
   padding: 1.25rem 1rem;
-  background: var(--mcv-mint);
-  border-right: 1px solid var(--mcv-line);
+  background: var(--mcv-chrome-bg);
+  border-right: 1px solid var(--mcv-chrome-line);
 }
 .shell-side nav ul {
   list-style: none;
@@ -424,6 +443,9 @@ tbody th {
 
 .resume-open {
   all: unset;
+  /* 24px de linha + 2 × 10px: alvo de 44px; a margem negativa devolve o espaço ao layout */
+  padding-block: 10px;
+  margin-block: -10px;
   font-weight: 600;
   cursor: pointer;
   text-decoration: underline;
@@ -450,6 +472,13 @@ tbody th {
   display: grid;
   gap: 0.25rem;
   justify-items: start;
+}
+.detail-now-empty,
+.detail-empty {
+  color: var(--mcv-text-soft);
+}
+.detail-empty {
+  margin-top: 0.75rem;
 }
 .detail-now-step {
   font-family: var(--mcv-font-display);
@@ -575,6 +604,7 @@ tbody th {
   color: var(--mcv-forest);
   font-weight: 600;
 }
+.now-block .detail-now-empty,
 .now-block .detail-now-step {
   margin-top: 0.75rem;
 }
@@ -659,6 +689,7 @@ tbody th {
   background: var(--mcv-card);
   color: var(--mcv-ink);
   font: inherit;
+  font-size: 1rem;
   font-weight: 400;
 }
 .filters .secondary-button {
@@ -1062,7 +1093,7 @@ th[aria-sort] .sort-button {
   background: var(--mcv-card);
   color: var(--mcv-ink);
   font: inherit;
-  font-size: 0.875rem;
+  font-size: 1rem;
 }
 [data-mode="focus"] .shell-main:has(.board-columns) {
   max-width: 60rem;
@@ -1585,29 +1616,34 @@ th[aria-sort] .sort-button {
 }
 
 /* Projetos (T4), proposta A: grupos por estado com filetes; editar abre a linha como formulário */
+/* Abas no mesmo sublinhado das visões de Demandas (proposta 6 do impeccable) */
 .project-tabs {
   display: flex;
-  gap: 0.25rem;
-  margin: 1rem 0 1.5rem;
+  flex-wrap: wrap;
+  gap: 0 1.5rem;
+  max-width: 56rem;
+  margin: 1.25rem 0 1.5rem;
+  border-bottom: 1px solid var(--mcv-line);
 }
 .project-tabs a {
   display: inline-flex;
   align-items: center;
   min-height: 2.75rem;
-  padding: 0 0.875rem;
-  border: 1px solid transparent;
-  border-radius: 999px;
   color: var(--mcv-text-soft);
-  font-size: 0.875rem;
-  font-weight: 600;
   text-decoration: none;
+  white-space: nowrap;
+}
+.project-tabs a:hover {
+  color: var(--mcv-ink);
 }
 .project-tabs a[aria-current="page"] {
-  border-color: var(--mcv-line);
-  background: var(--mcv-card);
-  color: var(--mcv-forest);
+  color: var(--mcv-ink);
+  font-weight: 600;
+  border-bottom: 2px solid var(--mcv-ink);
+  margin-bottom: -1px;
 }
 .project-group {
+  max-width: 56rem;
   margin-bottom: 2rem;
 }
 .project-group h2 {
@@ -1630,7 +1666,7 @@ ul.project-group {
 }
 .project-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 6rem minmax(0, 14rem) auto;
+  grid-template-columns: minmax(0, 1fr) 9rem minmax(0, 10rem) auto;
   align-items: center;
   gap: 0.5rem 1rem;
   padding: 0.625rem 0;
@@ -1741,4 +1777,21 @@ kbd,
 /* O número de hoje, uma vez por tela: a contagem de Fazendo no Quadro */
 .board-column[data-state="Fazendo"] h2 b {
   color: var(--mcv-destaque);
+}
+
+/* Proposta 1 do impeccable: um só botão cheio por tela. A partir de 60rem "Nova demanda" é fantasma;
+   abaixo disso é o botão flutuante e continua cheio */
+@media (min-width: 60rem) {
+  .capture-button {
+    background: transparent;
+    color: var(--mcv-ink);
+    border: 1.5px solid var(--mcv-control-line);
+  }
+  .capture-button:hover {
+    background: transparent;
+    border-color: var(--mcv-ink);
+  }
+  .capture-button kbd {
+    background: var(--mcv-line);
+  }
 }

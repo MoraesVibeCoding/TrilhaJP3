@@ -147,8 +147,7 @@ function ProjectRow({
     <div className="project-row">
       <strong className="project-name">{project.name}</strong>
       <span className="project-meta">
-        <span className="visually-hidden">Prioridade </span>
-        {PROJECT_PRIORITIES[project.priority]}
+        Prioridade {PROJECT_PRIORITIES[project.priority]}
       </span>
       {project.link ? (
         <a

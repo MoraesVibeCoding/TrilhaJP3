@@ -833,3 +833,18 @@ test("after back and forward the page is usable, with no modal left stuck", asyn
   await expect(page.getByRole("dialog")).toBeHidden();
   await expect(opener).toBeFocused();
 });
+
+// Propostas 5 e 9 do impeccable: selects sem zoom no iPhone e títulos com área de toque de 44px.
+test("Demandas selects are 16px and demand titles have a 44px touch target", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/demandas");
+  const sizes = await page
+    .locator(".field select")
+    .evaluateAll((els) => els.map((e) => getComputedStyle(e).fontSize));
+  expect(sizes.length).toBeGreaterThan(0);
+  for (const size of sizes) expect(size).toBe("16px");
+  const title = page.locator(".resume-open:visible").first();
+  expect((await title.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+});

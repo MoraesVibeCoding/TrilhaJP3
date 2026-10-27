@@ -114,3 +114,46 @@ test("groups are collapsible with counts; Subtarefas starts open", () => {
   expect(group("Anexos (1)").open).toBe(false);
   expect(group("Histórico (1)").open).toBe(false);
 });
+
+// Proposta 4 do impeccable (aprovada em 2026-10-27): o vazio não grita nem repete grupos "(0)".
+test("a demand with nothing yet says so in one quiet line, with no empty groups", () => {
+  const { container } = render(
+    <DemandDetail
+      data={data({ comments: [], attachments: [], history: [] })}
+      subtasks={[]}
+      isNow={false}
+      onConclude={vi.fn()}
+      onToggleNow={vi.fn()}
+    />,
+  );
+  const line = screen.getByText(
+    "Sem subtarefas, comentários, anexos nem histórico",
+  );
+  expect(line.className).toBe("detail-now-empty");
+  expect(container.querySelectorAll("summary")).toHaveLength(0);
+});
+
+test("empty groups hide and are named in one line after the others", () => {
+  const { container } = render(
+    <DemandDetail
+      data={data({ attachments: [], history: [] })}
+      subtasks={subs}
+      isNow={false}
+      onConclude={vi.fn()}
+      onToggleNow={vi.fn()}
+    />,
+  );
+  expect(
+    [...container.querySelectorAll("summary")].map((s) => s.textContent),
+  ).toEqual(["Subtarefas (3)", "Comentários (1)"]);
+  expect(screen.getByText("Sem anexos nem histórico").className).toBe(
+    "detail-empty",
+  );
+});
+
+test("the all-done note is quiet text, not the size of a step", () => {
+  setup([{ title: "Home", done: true }]);
+  expect(screen.getByText("Sem passos pendentes").className).toBe(
+    "detail-now-empty",
+  );
+});

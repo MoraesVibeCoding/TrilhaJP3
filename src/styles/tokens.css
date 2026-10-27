@@ -23,6 +23,14 @@
   --mcv-alta: #14704a;
   --mcv-alta-hover: #0c2a1e;
   --mcv-on-alta: #f2f2ee;
+  /* Topo e barra lateral (chrome): Mata no claro, com o item atual em Noite */
+  --mcv-chrome-bg: #0c2a1e;
+  --mcv-chrome-current: #08180f;
+  --mcv-chrome-ink: #e6ece7;
+  --mcv-chrome-soft: #b9ccc1;
+  --mcv-chrome-line: #24412f;
+  --mcv-chrome-control: #9db5a8;
+  --mcv-chrome-focus: #ff5a1f;
 
   /* Tipografia: Space Grotesk e IBM Plex Mono vêm do next/font (globals.css) */
   --mcv-font-display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
@@ -40,6 +48,9 @@
 /* Escuro (Mata) — segue a preferência do sistema */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
+    /* no escuro o chrome é Noite e o item atual é Mata */
+    --mcv-chrome-bg: #08180f;
+    --mcv-chrome-current: #0c2a1e;
     --mcv-ink: #e6ece7;
     --mcv-forest: #e6ece7;
     --mcv-leaf: #9db5a8;
@@ -56,6 +67,9 @@
 
 /* Escuro forçado via atributo (toggle manual) */
 :root[data-theme="dark"] {
+  /* no escuro o chrome é Noite e o item atual é Mata */
+  --mcv-chrome-bg: #08180f;
+  --mcv-chrome-current: #0c2a1e;
   --mcv-ink: #e6ece7;
   --mcv-forest: #e6ece7;
   --mcv-leaf: #9db5a8;

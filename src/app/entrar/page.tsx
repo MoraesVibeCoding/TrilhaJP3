@@ -20,7 +20,7 @@ export default function LoginPage() {
           <h1 className="login-title">Entrar</h1>
           <LoginForm />
           <p className="login-note">
-            Esqueceu a senha? Redefina pelo painel do Supabase.
+            Esqueceu a senha? Peça a troca a quem administra a conta da empresa.
           </p>
         </div>
       </main>

@@ -164,3 +164,13 @@ describe("arquivados", () => {
     expect(screen.queryByRole("button", { name: "Novo projeto" })).toBeNull();
   });
 });
+
+// Proposta 7 do impeccable: a prioridade diz que é prioridade, à vista.
+test("a linha mostra a prioridade com o rótulo à vista", () => {
+  render(<ProjectList projects={projects} showArchived={false} />);
+  const label = screen.getAllByText(
+    (_, el) =>
+      el?.className === "project-meta" && el.textContent === "Prioridade Média",
+  )[0]!;
+  expect(label.querySelector(".visually-hidden")).toBeNull();
+});

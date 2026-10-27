@@ -161,3 +161,35 @@ test("Mostarda is a fill only: never text or border (1.8:1 on Gelo)", () => {
 test("the lime pulse left the app (decision 1 of the brand spec)", () => {
   expect(tokens + globals).not.toMatch(/--mcv-pulse|#a6f26b/i);
 });
+
+// Proposta 2 do impeccable (aprovada em 2026-10-27): topo e barra lateral em Mata no claro, Noite no escuro.
+test("the shell chrome is Mata in light and Noite in dark, and its text, borders and focus read on it", () => {
+  expect(light("mcv-chrome-bg", tokens)).toBe("#0c2a1e");
+  expect(dark("mcv-chrome-bg")).toBe("#08180f");
+  // o escuro só redefine o fundo e o item atual; o resto do chrome vale nos dois temas
+  const darkOrLight = (n: string) =>
+    new RegExp(`--${n}:`).test(darkBlock) ? dark(n) : light(n, tokens);
+  for (const pick of [(n: string) => light(n, tokens), darkOrLight]) {
+    for (const bg of ["mcv-chrome-bg", "mcv-chrome-current"]) {
+      for (const fg of [
+        "mcv-chrome-ink",
+        "mcv-chrome-soft",
+        "mcv-chrome-focus",
+      ]) {
+        expect(ratio(pick(fg), pick(bg))).toBeGreaterThanOrEqual(4.5);
+      }
+      expect(
+        ratio(pick("mcv-chrome-control"), pick(bg)),
+      ).toBeGreaterThanOrEqual(3);
+    }
+  }
+  // a janela de captura e o aviso moram no topo, mas não herdam as cores dele
+  expect(globals).toMatch(/\.shell-bar > :not\(dialog, \.capture-toast\)/);
+});
+
+// Proposta 1 do impeccable: um só botão cheio por tela; "Nova demanda" é fantasma a partir de 60rem.
+test("Nova demanda is a ghost button from 60rem up", () => {
+  expect(globals).toMatch(
+    /@media \(min-width: 60rem\) \{\s*\.capture-button \{[^}]*background: transparent;[^}]*border: 1\.5px solid var\(--mcv-control-line\)/,
+  );
+});
