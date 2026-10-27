@@ -78,6 +78,17 @@ for (const theme of themes) {
       expect(await scan(page)).toEqual([]);
     });
 
+    test("Projetos, com o formulário de criação aberto", async ({ page }) => {
+      await page.goto("/projetos");
+      await page.getByRole("button", { name: "Novo projeto" }).click();
+      const form = page.getByRole("form", { name: "Novo projeto" });
+      // Só espaços: passa pelo required do navegador e cai no erro do servidor.
+      await form.getByLabel("Nome").fill("   ");
+      await form.getByRole("button", { name: "Criar projeto" }).click();
+      await expect(page.getByText("Dê um nome ao projeto.")).toBeVisible();
+      expect(await scan(page)).toEqual([]);
+    });
+
     test.describe("sem login", () => {
       test.use({ storageState: { cookies: [], origins: [] } });
 

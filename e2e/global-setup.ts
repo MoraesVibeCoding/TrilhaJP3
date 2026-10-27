@@ -1,5 +1,5 @@
 // Usuário fictício por execução (T3): entra uma vez pela tela real e guarda a sessão para os outros testes.
-// Precisa de NEXT_PUBLIC_SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY; o usuário é apagado no fim.
+// Precisa de NEXT_PUBLIC_SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY; usuário e empresa são apagados no fim.
 import { chromium, type FullConfig } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 
@@ -23,6 +23,19 @@ export default async function globalSetup(config: FullConfig) {
       `Não criou o usuário do E2E (o projeto gratuito pode estar pausado): ${error.message}`,
     );
   }
+  // T4: /projetos exige empresa; a do E2E sai junto com o usuário (vínculos e projetos em cascata).
+  const org = await admin
+    .from("organizations")
+    .insert({ name: `E2E ${email}` })
+    .select("id")
+    .single();
+  if (org.error) throw org.error;
+  const link = await admin.from("memberships").insert({
+    organization_id: org.data.id,
+    user_id: data.user.id,
+    role: "owner",
+  });
+  if (link.error) throw link.error;
   process.env.E2E_EMAIL = email;
   process.env.E2E_PASSWORD = password;
 
@@ -38,6 +51,7 @@ export default async function globalSetup(config: FullConfig) {
   await browser.close();
 
   return async () => {
+    await admin.from("organizations").delete().eq("id", org.data.id);
     await admin.auth.admin.deleteUser(data.user.id);
   };
 }

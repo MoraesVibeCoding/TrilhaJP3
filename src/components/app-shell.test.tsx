@@ -44,12 +44,15 @@ test("marks Demandas as current on /demandas and nested routes", () => {
   ).toBeNull();
 });
 
-test("keeps Projetos unavailable until it exists", () => {
+test("marks Projetos as current on its page (T4)", () => {
+  pathname.current = "/projetos";
   render(<AppShell>x</AppShell>);
-  expect(screen.queryByRole("link", { name: "Projetos" })).toBeNull();
-  expect(screen.getByText("Projetos").getAttribute("aria-disabled")).toBe(
-    "true",
-  );
+  expect(
+    screen.getByRole("link", { name: "Projetos" }).getAttribute("aria-current"),
+  ).toBe("page");
+  expect(
+    screen.getByRole("link", { name: "Retomar" }).getAttribute("aria-current"),
+  ).toBeNull();
 });
 
 test("offers a skip link to the main content", () => {
@@ -85,9 +88,11 @@ test("includes the focus/complete mode toggle", () => {
   ).toBeDefined();
 });
 
-test("Projetos is marked as coming soon in words, not only by color", () => {
+test("Projetos is a working link now (T4), no longer coming soon", () => {
   render(<AppShell>x</AppShell>);
-  expect(screen.getByText("em breve")).toBeDefined();
+  expect(
+    screen.getByRole("link", { name: "Projetos" }).getAttribute("href"),
+  ).toBe("/projetos");
 });
 
 test("offers Sair, which submits the sign-out action", () => {

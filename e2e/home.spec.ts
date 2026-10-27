@@ -353,9 +353,9 @@ test.describe("correções da revisão final", () => {
     ).toBeHidden();
   });
 
-  test("Projetos is marked em breve in the sidebar", async ({ page }) => {
+  test("Projetos is a link in the sidebar (T4)", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByText("em breve")).toBeVisible();
+    await expect(page.getByRole("link", { name: "Projetos" })).toBeVisible();
   });
 });
 

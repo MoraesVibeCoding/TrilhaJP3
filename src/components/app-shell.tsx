@@ -12,6 +12,7 @@ import { ThemeToggle } from "./theme-toggle";
 const NAV = [
   { href: "/", label: "Retomar" },
   { href: "/demandas", label: "Demandas" },
+  { href: "/projetos", label: "Projetos" },
 ];
 
 function isCurrent(pathname: string, href: string) {
@@ -74,11 +75,6 @@ export function AppShell({ children }: { children: ReactNode }) {
                 </Link>
               </li>
             ))}
-            <li>
-              <span aria-disabled="true">
-                Projetos <span className="nav-soon">em breve</span>
-              </span>
-            </li>
           </ul>
         </nav>
         {/* Logo abaixo da navegação: no pé ficaria fora da tela e, no celular, sob o botão flutuante */}
