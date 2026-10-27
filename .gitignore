@@ -54,3 +54,6 @@ next-env.d.ts
 
 # sessão do usuário fictício do E2E (T3)
 /e2e/.auth/
+
+# backups do banco (docs/OPERACAO-BACKUP.md): têm dados pessoais
+backup-*/
