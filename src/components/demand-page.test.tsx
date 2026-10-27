@@ -8,6 +8,12 @@ import {
 } from "@testing-library/react";
 import { DemandPage, type PageDemand } from "./demand-page";
 
+// A gravação fica pendente: a tela mostra a mudança otimista, como enquanto o servidor responde.
+vi.mock("@/app/(app)/demandas/actions", () => {
+  const saving = () => new Promise<boolean>(() => {});
+  return { moveDemand: saving, concludeStep: saving, setNow: saving };
+});
+
 afterEach(cleanup);
 
 const projects = [{ id: "p1", name: "Site institucional" }];

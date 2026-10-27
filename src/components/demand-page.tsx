@@ -29,7 +29,7 @@ export function DemandPage({
   projects: readonly { id: string; name: string }[];
   now: Date;
 }) {
-  const { current, conclude, toggleNow } = useDemandState(
+  const { current, conclude, toggleNow, failure } = useDemandState(
     useWithCaptured(demands),
   );
   const demand = current.find((d) => d.id === id);
@@ -139,7 +139,7 @@ export function DemandPage({
         </div>
       </div>
       <p role="status" className="board-message">
-        {message}
+        {message || failure}
       </p>
     </article>
   );

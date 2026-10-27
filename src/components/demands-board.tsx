@@ -106,7 +106,7 @@ export function DemandsBoard({
   now: Date;
   storageName?: string;
 }) {
-  const { current, conclude, moveTo, toggleNow } = useDemandState(
+  const { current, conclude, moveTo, toggleNow, failure } = useDemandState(
     useWithCaptured(demands),
   );
   const [stored, setStored] = useStoredState<Partial<ViewState>>(
@@ -393,6 +393,9 @@ export function DemandsBoard({
           />
         )}
       </DemandDialog>
+      <p role="alert" className="board-message">
+        {failure}
+      </p>
     </>
   );
 }

@@ -1,4 +1,10 @@
+import { resetDemo, seed } from "./seed";
 import { expect, test, type Page } from "@playwright/test";
+
+// Testes marcados com @grava mudam o banco: no fim, as demandas voltam ao estado inicial.
+test.afterEach(async ({}, testInfo) => {
+  if (testInfo.tags.includes("@grava")) await resetDemo();
+});
 
 const title = "Revisar textos da página inicial";
 const dialog = (page: Page) => page.getByRole("dialog", { name: title });
@@ -10,7 +16,7 @@ test.describe("endereço da janela", () => {
     await page.goto("/");
     await page.getByRole("button", { name: title }).click();
     await expect(dialog(page)).toBeVisible();
-    await expect(page).toHaveURL(`/demandas/${process.env.E2E_D1}`);
+    await expect(page).toHaveURL(`/demandas/${seed().demands.d1}`);
 
     await page.goBack();
     await expect(dialog(page)).toBeHidden();
@@ -26,7 +32,7 @@ test.describe("endereço da janela", () => {
     await page.goto("/demandas");
     const row = page.getByRole("button", { name: title }).first();
     await row.click();
-    await expect(page).toHaveURL(`/demandas/${process.env.E2E_D1}`);
+    await expect(page).toHaveURL(`/demandas/${seed().demands.d1}`);
     await page.keyboard.press("Escape");
     await expect(dialog(page)).toBeHidden();
     await expect(page).toHaveURL("/demandas");
@@ -47,7 +53,7 @@ test.describe("página inteira", () => {
       page,
     }) => {
       await page.setViewportSize({ width, height: 900 });
-      await page.goto(`/demandas/${process.env.E2E_D1}`);
+      await page.goto(`/demandas/${seed().demands.d1}`);
       await expect(
         page.getByRole("heading", { level: 1, name: title }),
       ).toBeVisible();
@@ -65,20 +71,24 @@ test.describe("página inteira", () => {
     });
   }
 
-  test("a step concluded in the window is still concluded on the page after a reload", async ({
-    page,
-  }) => {
-    await page.goto("/demandas");
-    await page.getByRole("button", { name: title }).first().click();
-    await dialog(page).getByRole("button", { name: "Concluir passo" }).click();
-    await page.reload();
-    const agora = page.getByRole("region", { name: "Agora" });
-    await expect(agora).toContainText("Rodapé");
-    await expect(agora).toContainText("Passo 3 de 3");
-  });
+  test(
+    "a step concluded in the window is still concluded on the page after a reload",
+    { tag: "@grava" },
+    async ({ page }) => {
+      await page.goto("/demandas");
+      await page.getByRole("button", { name: title }).first().click();
+      await dialog(page)
+        .getByRole("button", { name: "Concluir passo" })
+        .click();
+      await page.reload();
+      const agora = page.getByRole("region", { name: "Agora" });
+      await expect(agora).toContainText("Rodapé");
+      await expect(agora).toContainText("Passo 3 de 3");
+    },
+  );
 
   test("Foco shows only Subtarefas and Agora", async ({ page }) => {
-    await page.goto(`/demandas/${process.env.E2E_D1}`);
+    await page.goto(`/demandas/${seed().demands.d1}`);
     // o atalho só vale depois da hidratação: repete até o modo trocar, como em home.spec.ts
     await expect(async () => {
       if ((await page.locator("html").getAttribute("data-mode")) !== "focus")
@@ -118,7 +128,7 @@ test.describe("atalhos da página inteira", () => {
       page.getByRole("heading", { level: 1, name: title }),
     ).toBeVisible();
     await expect(page.getByRole("dialog")).toBeHidden();
-    await expect(page).toHaveURL(`/demandas/${process.env.E2E_D1}`);
+    await expect(page).toHaveURL(`/demandas/${seed().demands.d1}`);
     // a página substitui a janela no histórico: Voltar leva direto à lista
     await page.goBack();
     await expect(page).toHaveURL("/demandas");
@@ -133,13 +143,13 @@ test.describe("atalhos da página inteira", () => {
     context,
   }) => {
     await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-    await page.goto(`/demandas/${process.env.E2E_D1}`);
+    await page.goto(`/demandas/${seed().demands.d1}`);
     await page.getByRole("button", { name: "Copiar link" }).click();
     await expect(
       page.getByRole("status").filter({ hasText: "Link copiado." }),
     ).toBeVisible();
     expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
-      new URL(`/demandas/${process.env.E2E_D1}`, page.url()).href,
+      new URL(`/demandas/${seed().demands.d1}`, page.url()).href,
     );
   });
 

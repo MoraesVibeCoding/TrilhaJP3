@@ -1,18 +1,8 @@
 // Leitura das demandas da empresa (a RLS da T5 só devolve as dela), no formato que as telas já usam.
 import { getCurrentUser } from "@/lib/auth";
-import type { DemandState, DemoDemand, Priority } from "@/lib/demo-data";
+import { PRIORITY_LABELS, STATE_LABELS } from "@/lib/demand-labels";
+import type { DemoDemand } from "@/lib/demo-data";
 import { createClient } from "@/lib/supabase/server";
-
-const STATE: Record<string, DemandState> = {
-  todo: "A fazer",
-  doing: "Fazendo",
-  done: "Feito",
-};
-const PRIORITY: Record<string, Priority> = {
-  high: "Alta",
-  medium: "Média",
-  low: "Baixa",
-};
 
 type TaskRow = {
   id: string;
@@ -36,8 +26,8 @@ export function toDemand(
     id: row.id,
     projectId: row.project_id,
     title: row.title,
-    state: STATE[row.state],
-    priority: PRIORITY[row.priority],
+    state: STATE_LABELS[row.state],
+    priority: PRIORITY_LABELS[row.priority],
     isNow: row.is_now,
     lastActivityAt: row.updated_at,
     ...(row.done_at ? { doneAt: row.done_at } : {}),

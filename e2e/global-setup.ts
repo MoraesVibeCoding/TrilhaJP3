@@ -37,9 +37,9 @@ export default async function globalSetup(config: FullConfig) {
     role: "owner",
   });
   if (link.error) throw link.error;
-  // T5: as telas leem do banco; a demanda d1 da demonstração vira E2E_D1 (uuid real).
-  const ids = await seedDemo(admin, org.data.id);
-  process.env.E2E_D1 = ids.d1;
+  // T5: as telas leem do banco; os testes acham os ids reais em E2E_SEED (seed.ts).
+  const seeded = await seedDemo(admin, org.data.id);
+  process.env.E2E_SEED = JSON.stringify(seeded);
   process.env.E2E_EMAIL = email;
   process.env.E2E_PASSWORD = password;
 

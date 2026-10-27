@@ -5,6 +5,8 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   // T3: o app exige login; global-setup.ts entra com um usuário fictício e apaga no fim.
   globalSetup: "./e2e/global-setup.ts",
+  // T5: as telas leem e gravam no mesmo banco; um worker só, para nenhum teste ler no meio da gravação de outro.
+  workers: 1,
   use: {
     baseURL: "http://localhost:3000",
     storageState: "e2e/.auth/user.json",

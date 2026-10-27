@@ -1,6 +1,6 @@
 // T5: a empresa do E2E recebe os projetos e demandas de demonstração, agora no Supabase.
 // shortcut: lê demo-data.ts; quando a T5.4 apagar esse arquivo, os dados passam para cá.
-import type { SupabaseClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { demoDemands, demoNow, demoProjects } from "../src/lib/demo-data";
 
 const STATUS = {
@@ -14,9 +14,17 @@ const PRIORITY = { Alta: "high", Média: "medium", Baixa: "low" } as const;
 
 const sameDay = (a: Date, b: Date) => a.toDateString() === b.toDateString();
 
-// Devolve o id real de cada demanda de demonstração (d1 → uuid).
+// O que o global-setup criou; os testes leem daqui (process.env passa para os workers).
+export type Seed = {
+  organizationId: string;
+  projects: Record<string, string>;
+  demands: Record<string, string>;
+};
+
+export const seed = (): Seed => JSON.parse(process.env.E2E_SEED!);
+
 export async function seedDemo(admin: SupabaseClient, organizationId: string) {
-  const projectIds = new Map<string, string>();
+  const projects: Record<string, string> = {};
   for (const p of demoProjects) {
     const { data, error } = await admin
       .from("projects")
@@ -28,10 +36,36 @@ export async function seedDemo(admin: SupabaseClient, organizationId: string) {
       .select("id")
       .single();
     if (error) throw error;
-    projectIds.set(p.id, data.id);
+    projects[p.id] = data.id;
   }
+  const demands = Object.fromEntries(
+    demoDemands.map((d) => [d.id, crypto.randomUUID()]),
+  );
+  const result = { organizationId, projects, demands };
+  await seedTasks(admin, result);
+  return result;
+}
 
-  const ids: Record<string, string> = {};
+// Teste que grava no banco chama no fim: as demandas voltam ao estado inicial, com os mesmos ids.
+export async function resetDemo() {
+  const admin = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { persistSession: false, autoRefreshToken: false } },
+  );
+  const current = seed();
+  const { error } = await admin
+    .from("tasks")
+    .delete()
+    .eq("organization_id", current.organizationId);
+  if (error) throw error;
+  await seedTasks(admin, current);
+}
+
+async function seedTasks(
+  admin: SupabaseClient,
+  { organizationId, projects, demands }: Seed,
+) {
   const insert = async (row: object) => {
     const { data, error } = await admin
       .from("tasks")
@@ -51,7 +85,6 @@ export async function seedDemo(admin: SupabaseClient, organizationId: string) {
   let base = Date.now();
   for (const d of old) {
     const task = await insert(row(d));
-    ids[d.id] = task.id;
     const back = demoNow.getTime() - new Date(d.doneAt!).getTime();
     const { data, error } = await admin
       .from("tasks")
@@ -69,10 +102,10 @@ export async function seedDemo(admin: SupabaseClient, organizationId: string) {
   for (const [i, d] of rest.entries()) {
     const at = new Date(base + (i + 1) * 1000).toISOString();
     const task = await insert({ ...row(d), updated_at: at });
-    ids[d.id] = task.id;
     for (const [j, s] of d.subtasks.entries()) {
       await insert({
         ...row(d),
+        id: crypto.randomUUID(),
         is_now: false,
         parent_task_id: task.id,
         title: s.title,
@@ -82,11 +115,11 @@ export async function seedDemo(admin: SupabaseClient, organizationId: string) {
       });
     }
   }
-  return ids;
 
   function row(d: (typeof demoDemands)[number]) {
     return {
-      project_id: projectIds.get(d.projectId),
+      id: demands[d.id],
+      project_id: projects[d.projectId],
       title: d.title,
       state: STATE[d.state],
       priority: PRIORITY[d.priority],
