@@ -4,7 +4,7 @@ Atualizado em 2026-10-26 (T3 construída: login, sessão e tela de entrada). Lei
 
 ## Próxima ação
 
-Pedro: aprovar a spec da T4 (`tasks/t4-spec.md`) e responder às 3 decisões abertas; instalar o app no iPad para conferir o ícone e a tela cheia. Eu: construir a T4 depois da aprovação.
+Pedro: decidir o ajuste do guarda do piso (bloqueia asserção trocada; ver PR da T4) e revisar a PR da T4; instalar o app no iPad para conferir o ícone e a tela cheia. Eu: T5 (demandas reais) depois da T4.
 
 ## Repositório e ambiente (2026-10-26)
 
@@ -27,7 +27,7 @@ Ver `docs/PRINCIPIOS-OBJETIVOS.md`, seção 5.
 
 ## Em uma frase
 
-TrilhaJp3 é o sistema de gestão da Moraes CodeVibe. A v1 é o módulo Projetos e demandas. A T0 (base, Prettier, CI, Playwright) e a T1-R (casca, Retomar, janela da demanda, interruptor Foco/Completo, revisão final do `impeccable`) estão prontas. A T6a (Demandas em Tabela, versão A, com dados de demonstração) está pronta. A T6b (Por projeto, cartões) também. A T6c (Quadro, menu Mover para) também. A T6d (captura rápida, janela) também. A T5b (demanda em página inteira, `/demandas/[id]`, proposta A em três colunas; a janela troca o endereço e as alterações ficam no navegador) está pronta, com revisão final do `impeccable`. A T2 (empresas, vínculos e RLS no Supabase de teste, `tasks/t2-spec.md`) está pronta. A T3 (login com e-mail e senha, Proxy, tela `/entrar` proposta B, botão Sair, `tasks/t3-spec.md`) também. As próximas são a T4 e a T5, que trocam os dados de demonstração por dados reais.
+TrilhaJp3 é o sistema de gestão da Moraes CodeVibe. A v1 é o módulo Projetos e demandas. A T0 (base, Prettier, CI, Playwright) e a T1-R (casca, Retomar, janela da demanda, interruptor Foco/Completo, revisão final do `impeccable`) estão prontas. A T6a (Demandas em Tabela, versão A, com dados de demonstração) está pronta. A T6b (Por projeto, cartões) também. A T6c (Quadro, menu Mover para) também. A T6d (captura rápida, janela) também. A T5b (demanda em página inteira, `/demandas/[id]`, proposta A em três colunas; a janela troca o endereço e as alterações ficam no navegador) está pronta, com revisão final do `impeccable`. A T2 (empresas, vínculos e RLS no Supabase de teste, `tasks/t2-spec.md`) está pronta. A T3 (login com e-mail e senha, Proxy, tela `/entrar` proposta B, botão Sair, `tasks/t3-spec.md`) também. A T4 (projetos reais em `/projetos`, `tasks/t4-spec.md`) também, com o kit de marca V2 oficial adotado (raios, títulos em Floresta, SVGs em `docs/brand/v2-kit/`). A próxima é a T5, que troca as demandas de demonstração por reais.
 
 ## Decisões fechadas (resumo)
 

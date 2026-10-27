@@ -66,16 +66,19 @@ export async function updateProject(
   return { saved: true };
 }
 
-export async function setArchived(form: FormData) {
+// Responde se arquivou (ou restaurou) de fato: a tela não anuncia sucesso que não houve.
+export async function setArchived(form: FormData): Promise<boolean> {
   await getCurrentUser();
   const projectId = id.safeParse(form.get("id"));
-  if (!projectId.success) return;
+  if (!projectId.success) return false;
   const archived = form.get("archived") === "true";
   const supabase = await createClient();
-  await supabase
+  const { data, error } = await supabase
     .from("projects")
     .update({ archived_at: archived ? new Date().toISOString() : null })
     .eq("id", projectId.data)
     .select("id");
+  if (error || !data?.length) return false;
   revalidatePath(PATH);
+  return true;
 }

@@ -191,8 +191,11 @@ function ArchivedList({
           <form
             className="project-row project-row-archived"
             action={async (form) => {
-              await setArchived(form);
-              onRestored(`“${project.name}” voltou para Ativos.`);
+              onRestored(
+                (await setArchived(form))
+                  ? `“${project.name}” voltou para Ativos.`
+                  : "Não foi possível restaurar. Tente de novo.",
+              );
             }}
           >
             <strong className="project-name">{project.name}</strong>
@@ -229,6 +232,8 @@ function ProjectForm({
     undefined,
   );
   const prefix = useId();
+  const [archiveFailed, setArchiveFailed] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
   const title = project ? `Editar ${project.name}` : "Novo projeto";
 
   useEffect(() => {
@@ -236,6 +241,13 @@ function ProjectForm({
   }, [state, onDone]);
 
   const errors = state && "errors" in state ? state.errors : {};
+
+  // Erro de campo: o foco vai ao primeiro campo inválido, e o leitor de tela lê o rótulo e a mensagem.
+  useEffect(() => {
+    formRef.current
+      ?.querySelector<HTMLElement>('[aria-invalid="true"]')
+      ?.focus();
+  }, [state]);
   const values = state && "values" in state ? state.values : undefined;
   const value = (field: ProjectField) =>
     values?.[field] ?? project?.[field] ?? undefined;
@@ -255,10 +267,15 @@ function ProjectForm({
     );
 
   return (
-    <form className="project-form" action={action} aria-label={title}>
-      {errors.form && (
+    <form
+      ref={formRef}
+      className="project-form"
+      action={action}
+      aria-label={title}
+    >
+      {(errors.form || archiveFailed) && (
         <p className="project-form-error" role="alert">
-          {errors.form}
+          {errors.form ?? "Não foi possível arquivar. Tente de novo."}
         </p>
       )}
       {project && <input type="hidden" name="id" value={project.id} />}
@@ -345,8 +362,9 @@ function ProjectForm({
               type="submit"
               className="secondary-button project-archive"
               formAction={async (form) => {
-                await setArchived(form);
-                onDone(`“${project.name}” foi para Arquivados.`);
+                if (await setArchived(form))
+                  onDone(`“${project.name}” foi para Arquivados.`);
+                else setArchiveFailed(true);
               }}
             >
               Arquivar

@@ -1,6 +1,6 @@
 # T4: Projetos (criar, editar, listar, arquivar)
 
-Status: **aprovada pelo Pedro em 2026-10-27 ("siga conforme necessário"); em construção.**
+Status: **aprovada pelo Pedro em 2026-10-27 ("siga conforme necessário"); construída.** Ajustes: arquivar não pede confirmação (é reversível em Arquivados e mostra aviso); a página usa `await connection()` antes de ler o Supabase (o cliente lê o relógio, o que quebraria a pré-renderização).
 
 ## 1. Objetivo
 

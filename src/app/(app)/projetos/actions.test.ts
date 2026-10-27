@@ -131,8 +131,18 @@ describe("setArchived", () => {
     expect(revalidatePath).toHaveBeenCalledTimes(2);
   });
 
-  test("id inválido não chama o banco", async () => {
-    await setArchived(form({ id: "abc", archived: "true" }));
+  test("id inválido não chama o banco e responde falha", async () => {
+    expect(await setArchived(form({ id: "abc", archived: "true" }))).toBe(
+      false,
+    );
     expect(db.calls).toEqual([]);
+  });
+
+  test("responde se arquivou de fato: erro ou nenhuma linha é falha", async () => {
+    expect(await setArchived(form({ id: ID, archived: "true" }))).toBe(true);
+    db.rows = [];
+    expect(await setArchived(form({ id: ID, archived: "true" }))).toBe(false);
+    db.error = { message: "falhou" };
+    expect(await setArchived(form({ id: ID, archived: "true" }))).toBe(false);
   });
 });

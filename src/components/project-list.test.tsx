@@ -14,7 +14,7 @@ const actions = vi.hoisted(() => ({
     errors: { name: "Dê um nome ao projeto." },
     values: { name: "", status: "idea", priority: "medium" },
   })),
-  setArchived: vi.fn(async () => undefined),
+  setArchived: vi.fn(async () => true),
 }));
 vi.mock("@/app/(app)/projetos/actions", () => actions);
 
@@ -105,12 +105,27 @@ describe("ativos", () => {
       screen.getByRole("button", { name: "Editar Painel financeiro" }),
     );
     const form = screen.getByRole("form", { name: "Editar Painel financeiro" });
-    fireEvent.click(within(form).getByRole("button", { name: "Salvar" }));
+    const save = within(form).getByRole("button", { name: "Salvar" });
+    save.focus();
+    fireEvent.click(save);
     const error = await within(form).findByText("Dê um nome ao projeto.");
     const name = within(form).getByLabelText("Nome");
     expect(name.getAttribute("aria-invalid")).toBe("true");
     expect(name.getAttribute("aria-describedby")).toBe(error.id);
     expect(actions.updateProject).toHaveBeenCalledOnce();
+    expect(document.activeElement).toBe(name);
+  });
+
+  test("se arquivar falhar, avisa a falha em vez de sucesso", async () => {
+    actions.setArchived.mockResolvedValueOnce(false as never);
+    render(<ProjectList projects={projects} showArchived={false} />);
+    fireEvent.click(
+      screen.getByRole("button", { name: "Editar Painel financeiro" }),
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Arquivar" }));
+    expect(
+      await screen.findByText("Não foi possível arquivar. Tente de novo."),
+    ).toBeDefined();
   });
 
   test("Novo projeto abre o formulário de criação; salvar fecha e avisa", async () => {
