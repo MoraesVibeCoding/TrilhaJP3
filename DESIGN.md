@@ -21,12 +21,12 @@ typography:
   display:
     fontFamily: "Space Grotesk, Helvetica Neue, Arial, sans-serif"
     fontSize: "clamp(1.75rem, 1.4rem + 1.5vw, 2.5rem)"
-    fontWeight: 600
+    fontWeight: 700
     lineHeight: 1.15
   headline:
     fontFamily: "Space Grotesk, Helvetica Neue, Arial, sans-serif"
     fontSize: "1.25rem"
-    fontWeight: 600
+    fontWeight: 700
     lineHeight: 1.5
   body:
     fontFamily: "Space Grotesk, Helvetica Neue, Arial, sans-serif"

@@ -57,7 +57,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Títulos em Floresta (kit V2: heading = floresta); no escuro o token vira verde claro */
+/* Títulos em texto-titulo (Mata no claro, Névoa no escuro), Space Grotesk 700 */
 h1,
 h2,
 h3 {
