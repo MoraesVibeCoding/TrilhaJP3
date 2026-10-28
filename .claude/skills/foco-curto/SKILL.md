@@ -1,10 +1,10 @@
 ---
-name: modo-pedro
+name: foco-curto
 description: 'Jeito de trabalhar com o Pedro neste projeto: conversa no formato i-have-adhd (próxima ação primeiro, passos numerados, estado a cada turno), texto enxuto (sem enchimento, código exato) e código mínimo (a menor mudança completa). Sempre ativo pelo hook de início de sessão; "modo normal" desliga na sessão.'
 disable-model-invocation: true
 ---
 
-# modo-pedro
+# foco-curto
 
 Vale para toda resposta da sessão, mesmo quando o assunto muda. Na dúvida, vale. Desliga só com "modo normal" ou "stop adhd mode"; confirme em uma linha.
 
