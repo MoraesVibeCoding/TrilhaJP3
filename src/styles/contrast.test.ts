@@ -19,7 +19,8 @@ const light = (name: string, css: string) =>
   css.match(new RegExp(`--${name}:\\s*(#[0-9a-fA-F]{6})`))![1];
 
 test("soft text meets WCAG AA (4.5:1) on paper, mint and card in light mode", () => {
-  const soft = light("mcv-text-soft", globals);
+  expect(globals).toMatch(/--mcv-text-soft:\s*var\(--mcv-stone\)/);
+  const soft = light("mcv-stone", tokens);
   for (const bg of ["mcv-paper", "mcv-mint", "mcv-card"]) {
     expect(ratio(soft, light(bg, tokens))).toBeGreaterThanOrEqual(4.5);
   }
@@ -57,49 +58,101 @@ test("no color is hard-coded outside the token declarations", () => {
   expect(offenders).toEqual([]);
 });
 
-// Marca V2 (docs/brand/evolucao/tokens-v2.json), decisões do Pedro de 2026-10-23.
-test("light tokens follow the brand V2 palette", () => {
-  expect(light("mcv-ink", tokens)).toBe("#0f1f14");
-  expect(light("mcv-forest", tokens)).toBe("#1b4d2e");
-  expect(light("mcv-leaf", tokens)).toBe("#2f7d4b");
-  expect(light("mcv-mint", tokens)).toBe("#edf4e7");
-  expect(light("mcv-paper", tokens)).toBe("#f8faf5");
-  expect(light("mcv-gold", tokens)).toBe("#d4892a");
-  expect(light("mcv-pulse", tokens)).toBe("#a6f26b");
+// Marca Moraes Coding (docs/brand/moraes-coding/tokens.json), spec em tasks/marca-spec.md.
+test("light tokens follow the Moraes Coding palette (Claro, Gelo)", () => {
+  expect(light("mcv-paper", tokens)).toBe("#f2f2ee");
+  expect(light("mcv-card", tokens)).toBe("#ffffff");
+  expect(light("mcv-mint", tokens)).toBe("#e6ece7");
+  expect(light("mcv-ink", tokens)).toBe("#08180f");
+  expect(light("mcv-forest", tokens)).toBe("#0c2a1e");
+  expect(light("mcv-leaf", tokens)).toBe("#14704a");
+  expect(light("mcv-stone", tokens)).toBe("#5c625e");
+  expect(light("mcv-line", tokens)).toBe("#d6ded8");
+  expect(light("mcv-gold", tokens)).toBe("#e3b23c");
+  expect(light("mcv-pulse", tokens)).toBe("#b83300");
 });
 
-test("the dark ground is the brand Tinta", () => {
-  expect(dark("mcv-paper")).toBe("#0f1f14");
-  expect(dark("mcv-pulse")).toBe("#a6f26b");
+test("dark tokens follow the Moraes Coding palette (Escuro, Mata)", () => {
+  expect(dark("mcv-paper")).toBe("#0c2a1e");
+  expect(dark("mcv-card")).toBe("#08180f");
+  expect(dark("mcv-ink")).toBe("#e6ece7");
+  expect(dark("mcv-forest")).toBe("#e6ece7");
+  expect(dark("mcv-line")).toBe("#24412f");
+  expect(dark("mcv-pulse")).toBe("#ff5a1f");
 });
 
-test("Folha (leaf) reaches 4.5:1 as text on paper and card; on mint it is 4.5 at best", () => {
-  for (const bg of ["mcv-paper", "mcv-card"]) {
+test("the system dark theme and the forced dark theme carry the same values", () => {
+  const media = tokens.slice(
+    tokens.indexOf("@media (prefers-color-scheme: dark)"),
+    tokens.indexOf(':root[data-theme="dark"]'),
+  );
+  for (const name of ["mcv-paper", "mcv-card", "mcv-ink", "mcv-pulse"]) {
+    expect(media).toContain(`--${name}: ${dark(name)};`);
+  }
+});
+
+test("text and headings reach 4.5:1 on every ground in both themes", () => {
+  for (const fg of ["mcv-ink", "mcv-forest"]) {
+    for (const bg of ["mcv-paper", "mcv-card", "mcv-mint"]) {
+      expect(
+        ratio(light(fg, tokens), light(bg, tokens)),
+      ).toBeGreaterThanOrEqual(4.5);
+      expect(ratio(dark(fg), dark(bg))).toBeGreaterThanOrEqual(4.5);
+    }
+  }
+});
+
+test("soft text meets 4.5:1 on every ground in dark mode", () => {
+  const soft = globals
+    .slice(globals.indexOf(':root[data-theme="dark"]'))
+    .match(/--mcv-text-soft:\s*(#[0-9a-fA-F]{6})/)![1];
+  for (const bg of ["mcv-paper", "mcv-card", "mcv-mint"]) {
+    expect(ratio(soft, dark(bg))).toBeGreaterThanOrEqual(4.5);
+  }
+});
+
+test("Alta (leaf) reaches 4.5:1 on paper, card and mint, but stays a border or underline", () => {
+  for (const bg of ["mcv-paper", "mcv-card", "mcv-mint"]) {
     expect(
       ratio(light("mcv-leaf", tokens), light(bg, tokens)),
     ).toBeGreaterThanOrEqual(4.5);
   }
-  // sobre a Neblina fica em 4,497:1: só como borda ou sublinhado, nunca como cor de texto
   expect(globals).not.toMatch(/(^|[^-])color:\s*var\(--mcv-leaf\)/m);
 });
 
-test("Floresta carries paper text on buttons (7:1) in light mode", () => {
+test("Mata carries Gelo text on buttons (7:1) in light mode", () => {
   expect(
     ratio(light("mcv-paper", tokens), light("mcv-forest", tokens)),
   ).toBeGreaterThanOrEqual(7);
 });
 
-test("the lime pulse is only used on dark grounds (Floresta and Tinta)", () => {
-  const pulse = light("mcv-pulse", tokens);
-  expect(ratio(pulse, light("mcv-forest", tokens))).toBeGreaterThanOrEqual(4.5);
-  expect(ratio(pulse, dark("mcv-paper"))).toBeGreaterThanOrEqual(4.5);
-  // sobre o papel claro ele reprova (1,29:1): nenhuma regra pode usá-lo como texto ou borda
+test("the signal reaches 4.5:1 on its grounds and is only a fill (once per screen)", () => {
+  for (const bg of ["mcv-paper", "mcv-card"]) {
+    expect(
+      ratio(light("mcv-pulse", tokens), light(bg, tokens)),
+    ).toBeGreaterThanOrEqual(4.5);
+    expect(ratio(dark("mcv-pulse"), dark(bg))).toBeGreaterThanOrEqual(4.5);
+  }
+  // o Sinal claro (#FF5A1F) dá 2,8:1 sobre o Gelo: no tema claro só vale o Sinal escuro
+  expect(tokens.slice(0, tokens.indexOf("@media"))).not.toMatch(/#ff5a1f/i);
   expect(globals).not.toMatch(
     /(^|[^-])(color|border[\w-]*|outline[\w-]*):[^;]*var\(--mcv-pulse\)/m,
   );
 });
 
-test("Âmbar is a fill only: never text or border (2.7:1 on paper)", () => {
+test("focus ring is the signal at 3px, offset 3px (3:1 on every ground)", () => {
+  expect(globals).toMatch(/--mcv-focus:\s*var\(--mcv-pulse\)/);
+  expect(globals).not.toMatch(/outline:\s*2px solid var\(--mcv-focus\)/);
+  expect(globals).toMatch(/outline:\s*3px solid var\(--mcv-focus\)/);
+});
+
+test("the brand has no shadows", () => {
+  for (const m of globals.matchAll(/--mcv-shadow:\s*([^;]+);/g)) {
+    expect(m[1].trim()).toBe("none");
+  }
+});
+
+test("Mostarda is a fill only: never text or border (1.8:1 on Gelo)", () => {
   expect(globals).not.toMatch(
     /(^|[^-])(color|border[\w-]*|outline[\w-]*):[^;]*var\(--mcv-gold\)/m,
   );

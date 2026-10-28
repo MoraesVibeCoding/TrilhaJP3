@@ -1,6 +1,6 @@
 # TM: troca de marca para Moraes Coding
 
-Status: **aprovada pelo Pedro em 2026-10-28 ("De acordo"); fatia 1 em andamento.** Decidida em 2026-10-27 para depois da T5, que foi mesclada (PR #5).
+Status: **aprovada pelo Pedro em 2026-10-28 ("De acordo"); proposta A escolhida em 2026-10-28.** Decidida em 2026-10-27 para depois da T5, que foi mesclada (PR #5).
 
 Fonte da marca: design system "Moraes Coding" no claude.ai (`https://claude.ai/artifact/CeaPqHJ1X5V61mPWYFZnTN`), versão de 2026-10-27, que traz `tokens.json`, os SVGs dos logos e dos 36 ícones de interface, os componentes e o pacote `moraes-coding-marca.zip`.
 
@@ -56,7 +56,7 @@ O app deixa de mostrar a marca V2 da Moraes CodeVibe e passa a mostrar a marca M
 
 Os tokens já vêm decididos pela marca. O que falta decidir é como a casca do app usa as duas superfícies. Cada proposta vem num arquivo HTML para o Pedro aprovar, conforme o `CLAUDE.md`.
 
-- **A · Barra lateral em Mata.** A barra lateral fica escura (Mata, texto Névoa), como o "topo de terminal de BI" da marca. O conteúdo fica em Gelo. O Sinal marca a demanda Agora.
+- **A · Barra lateral em Mata (escolhida pelo Pedro em 2026-10-28; maquete em `https://claude.ai/artifact/Bab15FzZhbonEHyttbruE5`).** A barra lateral fica escura (Mata, texto Névoa), como o "topo de terminal de BI" da marca. O conteúdo fica em Gelo. O Sinal marca a demanda Agora.
 - **B · Tudo em Gelo.** Barra lateral e conteúdo claros, separados por uma borda fina. A Mata aparece só no logo e nos títulos. É a opção mais calma.
 - **C · Faixa superior em Mata.** Uma faixa escura fina no topo da área de conteúdo, com o título da página e o bloco Agora. A barra lateral fica clara.
 

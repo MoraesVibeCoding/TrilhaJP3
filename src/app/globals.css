@@ -6,14 +6,16 @@
   --mcv-font-display: var(--font-geist), system-ui, -apple-system, sans-serif;
   --mcv-font-body: var(--font-geist), system-ui, -apple-system, sans-serif;
   --mcv-font-mono: ui-monospace, "SF Mono", Menlo, monospace;
-  --mcv-focus: var(--mcv-forest);
-  /* Pedra (#7c8a76) dá só 3,5:1 no papel; este tom passa de 4,5:1 (AA) */
-  --mcv-text-soft: #526350;
-  /* Borda de controle: Pedra dá 3,5:1 no papel (WCAG 1.4.11); a Linha, 1,3:1, fica só para divisores */
+  /* Foco no sinal: 5,3:1 sobre o Gelo no claro, 4,9:1 sobre a Mata no escuro */
+  --mcv-focus: var(--mcv-pulse);
+  /* Apoio da marca: 5,6:1 no Gelo, 6,2:1 no branco, 5,2:1 na Névoa */
+  --mcv-text-soft: var(--mcv-stone);
+  /* Borda de controle: apoio dá 5,6:1 no Gelo (WCAG 1.4.11); a Linha, 1,2:1, fica só para divisores */
   --mcv-control-line: var(--mcv-stone);
-  /* Véu da janela: tinta verde com croma visível, nunca cinza */
-  --mcv-scrim: rgb(31 74 44 / 0.4);
-  --mcv-shadow: 0 1px 2px rgb(22 36 26 / 0.12);
+  /* Véu da janela: Noite translúcida, nunca cinza */
+  --mcv-scrim: rgb(8 24 15 / 0.4);
+  /* A marca não usa sombras: a profundidade vem da troca de superfície */
+  --mcv-shadow: none;
   color-scheme: light;
 }
 
@@ -21,10 +23,10 @@
   :root:not([data-theme="light"]) {
     --mcv-icon-pulse-line: transparent;
     color-scheme: dark;
-    --mcv-text-soft: var(--mcv-stone);
+    /* Apoio escuro 2 da marca: 9,1:1 na Mata, 10,9:1 na Noite */
+    --mcv-text-soft: #b9ccc1;
     /* No escuro o véu escurece de verdade, senão clareia a página */
-    --mcv-scrim: rgb(8 14 10 / 0.6);
-    --mcv-shadow: 0 1px 2px rgb(0 0 0 / 0.4);
+    --mcv-scrim: rgb(4 12 8 / 0.6);
   }
 }
 
@@ -35,9 +37,8 @@
 :root[data-theme="dark"] {
   --mcv-icon-pulse-line: transparent;
   color-scheme: dark;
-  --mcv-text-soft: var(--mcv-stone);
-  --mcv-scrim: rgb(8 14 10 / 0.6);
-  --mcv-shadow: 0 1px 2px rgb(0 0 0 / 0.4);
+  --mcv-text-soft: #b9ccc1;
+  --mcv-scrim: rgb(4 12 8 / 0.6);
 }
 
 *,
@@ -81,8 +82,8 @@ a {
 }
 
 :focus-visible {
-  outline: 2px solid var(--mcv-focus);
-  outline-offset: 2px;
+  outline: 3px solid var(--mcv-focus);
+  outline-offset: 3px;
   border-radius: var(--mcv-radius-sm);
 }
 
@@ -439,8 +440,8 @@ tbody th {
   text-decoration-color: var(--mcv-leaf);
 }
 .resume-open:focus-visible {
-  outline: 2px solid var(--mcv-focus);
-  outline-offset: 2px;
+  outline: 3px solid var(--mcv-focus);
+  outline-offset: 3px;
   border-radius: var(--mcv-radius-sm);
 }
 
@@ -702,8 +703,8 @@ tbody th {
   color: var(--mcv-ink);
 }
 .sort-button:focus-visible {
-  outline: 2px solid var(--mcv-focus);
-  outline-offset: 2px;
+  outline: 3px solid var(--mcv-focus);
+  outline-offset: 3px;
   border-radius: var(--mcv-radius-sm);
 }
 th[aria-sort] .sort-button {
