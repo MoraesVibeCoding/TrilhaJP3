@@ -1,6 +1,6 @@
 # TM: troca de marca para Moraes Coding
 
-Status: **rascunho, aguarda aprovação do Pedro.** Decidida em 2026-10-27 para depois da T5, que foi mesclada (PR #5).
+Status: **aprovada pelo Pedro em 2026-10-28 ("De acordo"); fatia 1 em andamento.** Decidida em 2026-10-27 para depois da T5, que foi mesclada (PR #5).
 
 Fonte da marca: design system "Moraes Coding" no claude.ai (`https://claude.ai/artifact/CeaPqHJ1X5V61mPWYFZnTN`), versão de 2026-10-27, que traz `tokens.json`, os SVGs dos logos e dos 36 ícones de interface, os componentes e o pacote `moraes-coding-marca.zip`.
 
