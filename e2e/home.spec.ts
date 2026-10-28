@@ -848,3 +848,16 @@ test("Demandas selects are 16px and demand titles have a 44px touch target", asy
   const title = page.locator(".resume-open:visible").first();
   expect((await title.boundingBox())!.height).toBeGreaterThanOrEqual(44);
 });
+
+// Fatia 2 da marca, opção C: no computador e no iPad o tema e o Foco dizem a ação; no celular, só o ícone.
+test("theme and focus toggles show their names from 60rem, only the icon on a phone", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const label = page.locator(".theme-toggle .toggle-label");
+  await expect(label).toHaveText("Escuro");
+  await expect(label).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(label).toBeHidden();
+  await expect(page.locator(".theme-toggle svg")).toBeVisible();
+});

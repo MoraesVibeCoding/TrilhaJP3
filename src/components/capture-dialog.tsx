@@ -8,6 +8,7 @@ import { PRIORITIES, type Priority } from "@/lib/demand-labels";
 import { useStoredState } from "@/lib/use-stored-state";
 import { DemandDialog } from "./demand-dialog";
 import { useFlashMessage } from "@/lib/use-flash-message";
+import { Icon } from "./icon";
 
 const PREFS_KEY = "trilhajp3-captura";
 
@@ -237,18 +238,7 @@ export function CaptureButton({ prefsKey = PREFS_KEY }: { prefsKey?: string }) {
         title="Nova demanda (C)"
         onClick={() => setOpen(true)}
       >
-        <svg
-          viewBox="0 0 24 24"
-          width="20"
-          height="20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          aria-hidden="true"
-        >
-          <path d="M12 5v14M5 12h14" />
-        </svg>
+        <Icon name="adicionar" size={18} />
         <span className="capture-label">Nova demanda</span>
         <kbd aria-hidden="true">C</kbd>
       </button>

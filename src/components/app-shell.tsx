@@ -2,6 +2,7 @@
 
 import { signOut } from "@/app/entrar/actions";
 import { BrandIcon } from "./brand-icon";
+import { Icon } from "./icon";
 import { CaptureButton } from "./capture-dialog";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -57,18 +58,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           aria-label={open ? "Fechar menu" : "Abrir menu"}
           onClick={() => setOpen((value) => !value)}
         >
-          <svg
-            viewBox="0 0 24 24"
-            width="20"
-            height="20"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.75"
-            strokeLinecap="round"
-            aria-hidden="true"
-          >
-            <path d="M4 7h16M4 12h16M4 17h16" />
-          </svg>
+          <Icon name="menu" />
         </button>
         <span className="brand">
           <BrandIcon />

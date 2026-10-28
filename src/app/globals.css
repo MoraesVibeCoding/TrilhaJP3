@@ -1,7 +1,6 @@
 @import "../styles/tokens.css";
 
 :root {
-  --mcv-icon-ground: var(--mcv-paper);
   --mcv-font-display:
     var(--font-space-grotesk), "Helvetica Neue", Arial, sans-serif;
   --mcv-font-body:
@@ -122,6 +121,7 @@ a {
 /* Topo e barra lateral em Mata, "como um terminal de BI" (proposta 2 do impeccable): os tokens
    trocam só dentro deles; a janela de captura e o aviso moram no topo e ficam com as cores da página */
 .shell-side,
+.login-band,
 .shell-bar > :not(dialog, .capture-toast) {
   --mcv-ink: var(--mcv-chrome-ink);
   --mcv-forest: var(--mcv-chrome-ink);
@@ -134,7 +134,6 @@ a {
   --mcv-leaf: var(--mcv-chrome-control);
   --mcv-destaque: var(--mcv-chrome-focus);
   --mcv-focus: var(--mcv-chrome-focus);
-  --mcv-icon-ground: var(--mcv-chrome-bg);
   color: var(--mcv-ink);
 }
 .shell-bar .brand,
@@ -1099,20 +1098,16 @@ th[aria-sort] .sort-button {
   max-width: 60rem;
 }
 
-/* Ícone da marca V2: o traço herda a cor do texto; o Pulso ganha contorno Floresta no claro (1,3:1 sem ele) */
+/* Logo Moraes Coding (ícone): barras e linha de base em texto-titulo, a barra de hoje em destaque.
+   No topo, na barra lateral e na faixa da entrada os tokens do chrome trocam os dois (Névoa e Sinal) */
 .brand-icon {
   flex: none;
-  color: var(--mcv-ink);
 }
-.brand-icon [data-terminal] {
-  fill: var(--mcv-icon-ground);
-  stroke: currentColor;
+.brand-icon rect {
+  fill: var(--mcv-forest);
 }
-.brand-icon [data-pulse] {
+.brand-icon [data-bar="hoje"] {
   fill: var(--mcv-destaque);
-}
-.shell-side .brand-icon {
-  --mcv-icon-ground: var(--mcv-mint);
 }
 
 .sort-field--always {
@@ -1506,26 +1501,9 @@ th[aria-sort] .sort-button {
   justify-content: space-between;
   gap: 2rem;
   padding: 2.5rem;
-  background: var(--mcv-forest);
-  color: var(--mcv-mint);
-}
-/* No escuro o Floresta vira verde claro e a faixa ofuscaria: usa a superfície da barra lateral */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .login-band {
-    background: var(--mcv-mint);
-    color: var(--mcv-ink);
-    border-right: 1px solid var(--mcv-line);
-  }
-}
-:root[data-theme="dark"] .login-band {
-  background: var(--mcv-mint);
-  color: var(--mcv-ink);
-  border-right: 1px solid var(--mcv-line);
-}
-/* Sobre Mata o traço é Névoa */
-.login-band .brand-icon {
-  color: inherit;
-  --mcv-icon-ground: transparent;
+  /* a faixa usa o chrome do topo: Mata no claro, Noite no escuro, com filete à direita */
+  background: var(--mcv-chrome-bg);
+  border-right: 1px solid var(--mcv-chrome-line);
 }
 .login-claim {
   max-width: 16ch;
@@ -1793,5 +1771,23 @@ kbd,
   }
   .capture-button kbd {
     background: var(--mcv-line);
+  }
+}
+
+/* Tema e Foco (fatia 2 da marca, opção C): no celular só o ícone; a partir de 60rem, o nome da ação ao lado */
+.toggle-label {
+  display: none;
+}
+@media (min-width: 60rem) {
+  .labeled-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: auto;
+    padding: 0 0.875rem;
+    font: inherit;
+  }
+  .toggle-label {
+    display: inline;
   }
 }

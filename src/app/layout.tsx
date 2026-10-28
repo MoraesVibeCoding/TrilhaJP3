@@ -22,11 +22,11 @@ export const metadata: Metadata = {
   appleWebApp: { title: "TrilhaJp3", statusBarStyle: "default" },
 };
 
-// A barra do navegador acompanha o fundo da página: Gelo no claro, Mata no escuro.
+// A barra do navegador acompanha o topo do app: Mata no claro, Noite no escuro.
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F2F2EE" },
-    { media: "(prefers-color-scheme: dark)", color: "#0C2A1E" },
+    { media: "(prefers-color-scheme: light)", color: "#0C2A1E" },
+    { media: "(prefers-color-scheme: dark)", color: "#08180F" },
   ],
 };
 
