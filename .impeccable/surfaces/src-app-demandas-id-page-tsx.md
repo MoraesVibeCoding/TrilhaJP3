@@ -20,8 +20,8 @@ Pedro em sessão longa de planejamento no computador ou iPad: precisa ver subtar
 
 ## Direction contract
 THESIS: a mesa de trabalho da demanda: tudo aberto lado a lado, o passo atual no centro. Recusa a janela esticada com grupos recolhidos e a pilha de abas.
-OWN-WORLD: papel esverdeado, filetes verticais de 1px separando as colunas, Geist em tudo (600 e -0.02em no título e no passo), verde-floresta só no passo atual, no item atual da lista e no botão primário. Sem cartões, sem sombra.
+OWN-WORLD (marca Moraes Coding desde 2026-10-28; tokens e regras em DESIGN.md): Gelo no corpo, topo e barra lateral em Mata (Noite no escuro), filetes de 1px, Space Grotesk no texto e títulos (700 e -0.02em), IBM Plex Mono em números e rótulos, sem sombras, foco de 3px laranja, laranja (destaque) uma vez por tela, botão alta e botões fantasma.
 STORY: Pedro lê o passo, conclui, confere o que falta à esquerda e o contexto à direita, e copia o link para voltar depois.
-FIRST VIEWPORT: caminho e h1 no topo, metadados numa linha com os dois botões à direita; filete; esquerda (18rem) Subtarefas numeradas com o atual em Floresta; centro, seção Agora com o passo em 1,75rem, "Passo N de M", filete de progresso e "Concluir passo", depois Comentários; direita (18rem) Anexos e Histórico.
+FIRST VIEWPORT: caminho e h1 no topo, metadados numa linha com os dois botões à direita; filete; esquerda (18rem) Subtarefas numeradas com o atual em texto-titulo e peso 600; centro, seção Agora com o passo em 1,75rem, "Passo N de M", filete de progresso e "Concluir passo", depois Comentários; direita (18rem) Anexos e Histórico.
 FORM: três colunas (mesa dividida), posição 4 da lista ordenada, entregue pelo sorteio (índice 4), seed:def2c418e855cc39.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance

@@ -1,30 +1,25 @@
 @import "../styles/tokens.css";
 
 :root {
-  --mcv-icon-ground: var(--mcv-paper);
-  --mcv-icon-pulse-line: var(--mcv-forest);
-  --mcv-font-display: var(--font-geist), system-ui, -apple-system, sans-serif;
-  --mcv-font-body: var(--font-geist), system-ui, -apple-system, sans-serif;
-  --mcv-font-mono: ui-monospace, "SF Mono", Menlo, monospace;
-  --mcv-focus: var(--mcv-forest);
-  /* Pedra (#7c8a76) dá só 3,5:1 no papel; este tom passa de 4,5:1 (AA) */
-  --mcv-text-soft: #526350;
-  /* Borda de controle: Pedra dá 3,5:1 no papel (WCAG 1.4.11); a Linha, 1,3:1, fica só para divisores */
+  --mcv-font-display:
+    var(--font-space-grotesk), "Helvetica Neue", Arial, sans-serif;
+  --mcv-font-body:
+    var(--font-space-grotesk), "Helvetica Neue", Arial, sans-serif;
+  --mcv-font-mono: var(--font-ibm-plex-mono), ui-monospace, Menlo, monospace;
+  /* Foco do design system: 3px em destaque (Sinal escuro no claro, Sinal no escuro), deslocado 3px */
+  --mcv-focus: var(--mcv-destaque);
+  /* Borda de controle (borda-controle): 5,6:1 no Gelo (WCAG 1.4.11); a Linha fica só para divisores */
   --mcv-control-line: var(--mcv-stone);
-  /* Véu da janela: tinta verde com croma visível, nunca cinza */
-  --mcv-scrim: rgb(31 74 44 / 0.4);
-  --mcv-shadow: 0 1px 2px rgb(22 36 26 / 0.12);
+  /* Véu da janela: metade Mata, metade Alta, translúcido; verde com croma visível, nunca cinza */
+  --mcv-scrim: rgb(16 77 52 / 0.45);
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --mcv-icon-pulse-line: transparent;
     color-scheme: dark;
-    --mcv-text-soft: var(--mcv-stone);
-    /* No escuro o véu escurece de verdade, senão clareia a página */
-    --mcv-scrim: rgb(8 14 10 / 0.6);
-    --mcv-shadow: 0 1px 2px rgb(0 0 0 / 0.4);
+    /* No escuro o véu escurece de verdade (Noite), senão clareia a página */
+    --mcv-scrim: rgb(8 24 15 / 0.7);
   }
 }
 
@@ -33,11 +28,8 @@
 }
 
 :root[data-theme="dark"] {
-  --mcv-icon-pulse-line: transparent;
   color-scheme: dark;
-  --mcv-text-soft: var(--mcv-stone);
-  --mcv-scrim: rgb(8 14 10 / 0.6);
-  --mcv-shadow: 0 1px 2px rgb(0 0 0 / 0.4);
+  --mcv-scrim: rgb(8 24 15 / 0.7);
 }
 
 *,
@@ -65,13 +57,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Títulos em Floresta (kit V2: heading = floresta); no escuro o token vira verde claro */
+/* Títulos em texto-titulo (Mata no claro, Névoa no escuro), Space Grotesk 700 */
 h1,
 h2,
 h3 {
   color: var(--mcv-forest);
   font-family: var(--mcv-font-display);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.02em;
   text-wrap: balance;
 }
@@ -81,9 +73,9 @@ a {
 }
 
 :focus-visible {
-  outline: 2px solid var(--mcv-focus);
-  outline-offset: 2px;
-  border-radius: var(--mcv-radius-sm);
+  outline: 3px solid var(--mcv-focus);
+  outline-offset: 3px;
+  border-radius: var(--mcv-radius-xs);
 }
 
 ::selection {
@@ -97,8 +89,8 @@ a {
   left: 1rem;
   top: -4rem;
   padding: 0.5rem 1rem;
-  background: var(--mcv-forest);
-  color: var(--mcv-paper);
+  background: var(--mcv-alta);
+  color: var(--mcv-on-alta);
   border-radius: var(--mcv-radius-sm);
   z-index: 10;
 }
@@ -118,12 +110,33 @@ a {
 
 .shell-bar {
   grid-area: bar;
+  /* item de grade: sem isto a coluna cresce até caber o nome inteiro e a página rola na horizontal */
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 0.75rem;
   padding: 0.75rem 1.5rem;
-  border-bottom: 1px solid var(--mcv-line);
+  border-bottom: 1px solid var(--mcv-chrome-line);
+  background: var(--mcv-chrome-bg);
+}
+/* Topo e barra lateral em Mata, "como um terminal de BI" (proposta 2 do impeccable): os tokens
+   trocam só dentro deles; a janela de captura e o aviso moram no topo e ficam com as cores da página */
+.shell-side,
+.login-band,
+.shell-bar > :not(dialog, .capture-toast) {
+  --mcv-ink: var(--mcv-chrome-ink);
+  --mcv-forest: var(--mcv-chrome-ink);
+  --mcv-text-soft: var(--mcv-chrome-soft);
+  --mcv-mint: var(--mcv-chrome-bg);
+  --mcv-card: var(--mcv-chrome-current);
+  --mcv-line: var(--mcv-chrome-line);
+  --mcv-stone: var(--mcv-chrome-control);
+  --mcv-control-line: var(--mcv-chrome-control);
+  --mcv-leaf: var(--mcv-chrome-control);
+  --mcv-destaque: var(--mcv-chrome-focus);
+  --mcv-focus: var(--mcv-chrome-focus);
+  color: var(--mcv-ink);
 }
 .shell-bar .brand,
 .shell-bar .menu-button {
@@ -140,8 +153,8 @@ a {
   flex-direction: column;
   gap: 1.5rem;
   padding: 1.25rem 1rem;
-  background: var(--mcv-mint);
-  border-right: 1px solid var(--mcv-line);
+  background: var(--mcv-chrome-bg);
+  border-right: 1px solid var(--mcv-chrome-line);
 }
 .shell-side nav ul {
   list-style: none;
@@ -164,12 +177,6 @@ a {
   background: var(--mcv-card);
   color: var(--mcv-forest);
   font-weight: 600;
-  box-shadow: var(--mcv-shadow);
-}
-.side-foot {
-  margin-top: auto;
-  font-size: 0.8125rem;
-  color: var(--mcv-text-soft);
 }
 .signout-button {
   width: 100%;
@@ -187,13 +194,21 @@ a {
   background: var(--mcv-line);
 }
 
+/* Logo + nome da empresa do usuário (vem do banco): o respiro de duas barras do logo (8px) entre eles;
+   nome longo de cliente corta com reticências em vez de empurrar os botões do topo */
 .brand {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  min-width: 0;
   font-family: var(--mcv-font-display);
   font-weight: 600;
   font-size: 1.125rem;
+}
+.brand-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .shell-main {
@@ -211,16 +226,16 @@ a {
   place-items: center;
   width: 2.75rem;
   height: 2.75rem;
-  border: 1px solid var(--mcv-line);
+  border: 1.5px solid var(--mcv-control-line);
   border-radius: var(--mcv-radius-sm);
-  background: var(--mcv-card);
+  background: transparent;
   color: var(--mcv-ink);
   cursor: pointer;
 }
 .theme-toggle:hover,
 .menu-button:hover,
 .icon-button:hover {
-  border-color: var(--mcv-leaf);
+  border-color: var(--mcv-ink);
 }
 
 @media (max-width: 47.99rem) {
@@ -350,8 +365,11 @@ td {
   vertical-align: baseline;
 }
 thead th {
-  font-size: 0.8125rem;
-  font-weight: 600;
+  font-size: 0.75rem;
+  font-weight: 500;
+  /* 0,06em: com 0,1em "PRIORIDADE" e a seta não cabem na coluna no iPad */
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--mcv-text-soft);
 }
 tbody th {
@@ -365,7 +383,8 @@ tbody th {
   padding: 0.125rem 0.625rem;
   border: 1px solid var(--mcv-line);
   border-radius: 999px;
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
   background: var(--mcv-card);
 }
 .badge[data-state="Fazendo"] {
@@ -429,6 +448,9 @@ tbody th {
 
 .resume-open {
   all: unset;
+  /* 24px de linha + 2 × 10px: alvo de 44px; a margem negativa devolve o espaço ao layout */
+  padding-block: 10px;
+  margin-block: -10px;
   font-weight: 600;
   cursor: pointer;
   text-decoration: underline;
@@ -439,9 +461,9 @@ tbody th {
   text-decoration-color: var(--mcv-leaf);
 }
 .resume-open:focus-visible {
-  outline: 2px solid var(--mcv-focus);
-  outline-offset: 2px;
-  border-radius: var(--mcv-radius-sm);
+  outline: 3px solid var(--mcv-focus);
+  outline-offset: 3px;
+  border-radius: var(--mcv-radius-xs);
 }
 
 .detail-state {
@@ -456,6 +478,13 @@ tbody th {
   gap: 0.25rem;
   justify-items: start;
 }
+.detail-now-empty,
+.detail-empty {
+  color: var(--mcv-text-soft);
+}
+.detail-empty {
+  margin-top: 0.75rem;
+}
 .detail-now-step {
   font-family: var(--mcv-font-display);
   font-size: 1.75rem;
@@ -464,7 +493,8 @@ tbody th {
 }
 .detail-now-count {
   font-size: 0.875rem;
-  color: var(--mcv-text-soft);
+  font-weight: 600;
+  color: var(--mcv-destaque);
 }
 .primary-button {
   margin-top: 0.5rem;
@@ -472,14 +502,14 @@ tbody th {
   padding: 0.5rem 1.25rem;
   border: 0;
   border-radius: var(--mcv-radius-sm);
-  background: var(--mcv-forest);
-  color: var(--mcv-paper);
+  background: var(--mcv-alta);
+  color: var(--mcv-on-alta);
   font: inherit;
   font-weight: 600;
   cursor: pointer;
 }
 .primary-button:hover {
-  background: var(--mcv-ink);
+  background: var(--mcv-alta-hover);
 }
 
 .detail-group {
@@ -564,21 +594,22 @@ tbody th {
   margin-left: 0.75rem;
   min-height: 2.75rem;
   padding: 0.5rem 1rem;
-  border: 1px solid var(--mcv-line);
+  border: 1.5px solid var(--mcv-control-line);
   border-radius: var(--mcv-radius-sm);
-  background: var(--mcv-card);
+  background: transparent;
   color: var(--mcv-ink);
   font: inherit;
   cursor: pointer;
 }
 .secondary-button:hover {
-  border-color: var(--mcv-leaf);
+  border-color: var(--mcv-ink);
 }
 .secondary-button[aria-pressed="true"] {
   border-color: var(--mcv-forest);
   color: var(--mcv-forest);
   font-weight: 600;
 }
+.now-block .detail-now-empty,
 .now-block .detail-now-step {
   margin-top: 0.75rem;
 }
@@ -663,6 +694,7 @@ tbody th {
   background: var(--mcv-card);
   color: var(--mcv-ink);
   font: inherit;
+  font-size: 1rem;
   font-weight: 400;
 }
 .filters .secondary-button {
@@ -693,8 +725,6 @@ tbody th {
   padding: 0.625rem 0.75rem 0.625rem 0;
   min-height: 2.75rem;
   box-sizing: border-box;
-  font-size: 0.8125rem;
-  font-weight: 600;
   color: var(--mcv-text-soft);
   cursor: pointer;
 }
@@ -702,9 +732,9 @@ tbody th {
   color: var(--mcv-ink);
 }
 .sort-button:focus-visible {
-  outline: 2px solid var(--mcv-focus);
-  outline-offset: 2px;
-  border-radius: var(--mcv-radius-sm);
+  outline: 3px solid var(--mcv-focus);
+  outline-offset: 3px;
+  border-radius: var(--mcv-radius-xs);
 }
 th[aria-sort] .sort-button {
   color: var(--mcv-forest);
@@ -778,7 +808,7 @@ th[aria-sort] .sort-button {
   width: 100%;
 }
 .demands-table th:nth-child(1) {
-  width: 34%;
+  width: 31%;
 }
 .demands-table th:nth-child(2) {
   width: 22%;
@@ -787,7 +817,7 @@ th[aria-sort] .sort-button {
   width: 13%;
 }
 .demands-table th:nth-child(4) {
-  width: 13%;
+  width: 16%;
 }
 .demands-table th:nth-child(5) {
   width: 18%;
@@ -825,26 +855,25 @@ th[aria-sort] .sort-button {
   gap: 0.5rem;
   min-height: 2.75rem;
   padding: 0.5rem 1rem;
-  border: 1px solid var(--mcv-line);
+  border: 1.5px solid var(--mcv-control-line);
   border-radius: var(--mcv-radius-sm);
-  background: var(--mcv-card);
+  background: transparent;
   color: var(--mcv-ink);
   font: inherit;
   cursor: pointer;
-  font-variant-numeric: tabular-nums;
 }
 .state-count b {
-  font-family: var(--mcv-font-display);
   font-size: 1.375rem;
   font-weight: 600;
-  letter-spacing: -0.02em;
+}
+.state-count[data-state="Fazendo"] b {
+  color: var(--mcv-destaque);
 }
 .state-count:hover {
-  border-color: var(--mcv-leaf);
+  border-color: var(--mcv-ink);
 }
 .state-count[aria-pressed="true"] {
   border-color: var(--mcv-ink);
-  box-shadow: 0 0 0 1px var(--mcv-ink);
 }
 
 /* Revisão: audit, harden, animate, layout e typeset */
@@ -951,7 +980,7 @@ th[aria-sort] .sort-button {
 .project-card {
   padding: 1.25rem;
   border: 1px solid var(--mcv-line);
-  border-radius: var(--mcv-radius-sm);
+  border-radius: var(--mcv-radius-md);
   background: var(--mcv-card);
 }
 .project-card h2 {
@@ -1052,7 +1081,7 @@ th[aria-sort] .sort-button {
   gap: 0.25rem;
   padding: 0.75rem 0.875rem;
   border: 1px solid var(--mcv-line);
-  border-radius: var(--mcv-radius-sm);
+  border-radius: var(--mcv-radius-md);
   background: var(--mcv-card);
 }
 .board-card .resume-open {
@@ -1067,28 +1096,22 @@ th[aria-sort] .sort-button {
   background: var(--mcv-card);
   color: var(--mcv-ink);
   font: inherit;
-  font-size: 0.875rem;
+  font-size: 1rem;
 }
 [data-mode="focus"] .shell-main:has(.board-columns) {
   max-width: 60rem;
 }
 
-/* Ícone da marca V2: o traço herda a cor do texto; o Pulso ganha contorno Floresta no claro (1,3:1 sem ele) */
+/* Logo Moraes Coding (ícone): barras e linha de base em texto-titulo, a barra de hoje em destaque.
+   No topo, na barra lateral e na faixa da entrada os tokens do chrome trocam os dois (Névoa e Sinal) */
 .brand-icon {
   flex: none;
-  color: var(--mcv-ink);
 }
-.brand-icon [data-terminal] {
-  fill: var(--mcv-icon-ground);
-  stroke: currentColor;
+.brand-icon rect {
+  fill: var(--mcv-forest);
 }
-.brand-icon [data-pulse] {
-  fill: var(--mcv-pulse);
-  stroke: var(--mcv-icon-pulse-line);
-  stroke-width: 2.5;
-}
-.shell-side .brand-icon {
-  --mcv-icon-ground: var(--mcv-mint);
+.brand-icon [data-bar="hoje"] {
+  fill: var(--mcv-destaque);
 }
 
 .sort-field--always {
@@ -1108,7 +1131,6 @@ th[aria-sort] .sort-button {
   border: 1px solid var(--mcv-ink);
   border-radius: var(--mcv-radius-sm);
   background: var(--mcv-card);
-  box-shadow: var(--mcv-shadow);
   font-size: 0.875rem;
   font-weight: 600;
 }
@@ -1128,19 +1150,19 @@ th[aria-sort] .sort-button {
   padding: 0 1rem;
   border: 0;
   border-radius: var(--mcv-radius-sm);
-  background: var(--mcv-forest);
-  color: var(--mcv-paper);
+  background: var(--mcv-alta);
+  color: var(--mcv-on-alta);
   font: inherit;
   font-weight: 600;
   cursor: pointer;
 }
 .capture-button:hover {
-  background: var(--mcv-ink);
+  background: var(--mcv-alta-hover);
 }
 .capture-button kbd {
   padding: 0 0.375rem;
-  border-radius: 4px;
-  background: color-mix(in srgb, var(--mcv-paper) 22%, transparent);
+  border-radius: var(--mcv-radius-xs);
+  background: color-mix(in srgb, var(--mcv-on-alta) 22%, transparent);
   font: inherit;
   font-size: 0.75rem;
 }
@@ -1160,7 +1182,6 @@ th[aria-sort] .sort-button {
     padding: 0;
     justify-content: center;
     border-radius: var(--mcv-radius-lg);
-    box-shadow: var(--mcv-shadow);
   }
   /* o nome continua para leitores de tela: só sai da vista */
   .capture-button .capture-label {
@@ -1233,7 +1254,7 @@ th[aria-sort] .sort-button {
 }
 .capture-hint kbd {
   padding: 0 0.375rem;
-  border-radius: 4px;
+  border-radius: var(--mcv-radius-xs);
   background: var(--mcv-mint);
   font: inherit;
   font-size: 0.75rem;
@@ -1250,7 +1271,6 @@ th[aria-sort] .sort-button {
   border: 1px solid var(--mcv-ink);
   border-radius: var(--mcv-radius-sm);
   background: var(--mcv-card);
-  box-shadow: var(--mcv-shadow);
   font-size: 0.875rem;
   font-weight: 600;
 }
@@ -1485,27 +1505,9 @@ th[aria-sort] .sort-button {
   justify-content: space-between;
   gap: 2rem;
   padding: 2.5rem;
-  background: var(--mcv-forest);
-  color: var(--mcv-mint);
-}
-/* No escuro o Floresta vira verde claro e a faixa ofuscaria: usa a superfície da barra lateral */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .login-band {
-    background: var(--mcv-mint);
-    color: var(--mcv-ink);
-    border-right: 1px solid var(--mcv-line);
-  }
-}
-:root[data-theme="dark"] .login-band {
-  background: var(--mcv-mint);
-  color: var(--mcv-ink);
-  border-right: 1px solid var(--mcv-line);
-}
-/* Sobre Floresta o traço é Neblina e o Pulso dispensa contorno (regra da marca) */
-.login-band .brand-icon {
-  color: inherit;
-  --mcv-icon-ground: transparent;
-  --mcv-icon-pulse-line: transparent;
+  /* a faixa usa o chrome do topo: Mata no claro, Noite no escuro, com filete à direita */
+  background: var(--mcv-chrome-bg);
+  border-right: 1px solid var(--mcv-chrome-line);
 }
 .login-claim {
   max-width: 16ch;
@@ -1596,29 +1598,34 @@ th[aria-sort] .sort-button {
 }
 
 /* Projetos (T4), proposta A: grupos por estado com filetes; editar abre a linha como formulário */
+/* Abas no mesmo sublinhado das visões de Demandas (proposta 6 do impeccable) */
 .project-tabs {
   display: flex;
-  gap: 0.25rem;
-  margin: 1rem 0 1.5rem;
+  flex-wrap: wrap;
+  gap: 0 1.5rem;
+  max-width: 56rem;
+  margin: 1.25rem 0 1.5rem;
+  border-bottom: 1px solid var(--mcv-line);
 }
 .project-tabs a {
   display: inline-flex;
   align-items: center;
   min-height: 2.75rem;
-  padding: 0 0.875rem;
-  border: 1px solid transparent;
-  border-radius: 999px;
   color: var(--mcv-text-soft);
-  font-size: 0.875rem;
-  font-weight: 600;
   text-decoration: none;
+  white-space: nowrap;
+}
+.project-tabs a:hover {
+  color: var(--mcv-ink);
 }
 .project-tabs a[aria-current="page"] {
-  border-color: var(--mcv-line);
-  background: var(--mcv-card);
-  color: var(--mcv-forest);
+  color: var(--mcv-ink);
+  font-weight: 600;
+  border-bottom: 2px solid var(--mcv-ink);
+  margin-bottom: -1px;
 }
 .project-group {
+  max-width: 56rem;
   margin-bottom: 2rem;
 }
 .project-group h2 {
@@ -1641,7 +1648,7 @@ ul.project-group {
 }
 .project-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 6rem minmax(0, 14rem) auto;
+  grid-template-columns: minmax(0, 1fr) 9rem minmax(0, 10rem) auto;
   align-items: center;
   gap: 0.5rem 1rem;
   padding: 0.625rem 0;
@@ -1728,5 +1735,63 @@ ul.project-group {
   }
   .project-form {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Marca Moraes Coding (decisão 2): IBM Plex Mono em números, datas, contagens, rótulos e teclas */
+.state-count b,
+.board-column h2 b,
+.project-counts,
+.project-count,
+.project-progress,
+.detail-now-count,
+.resume-meta,
+.demands-count,
+.view-tabs small,
+thead th,
+.badge,
+kbd,
+.capture-button kbd,
+.capture-hint kbd {
+  font-family: var(--mcv-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+/* O número de hoje, uma vez por tela: a contagem de Fazendo no Quadro */
+.board-column[data-state="Fazendo"] h2 b {
+  color: var(--mcv-destaque);
+}
+
+/* Proposta 1 do impeccable: um só botão cheio por tela. A partir de 60rem "Nova demanda" é fantasma;
+   abaixo disso é o botão flutuante e continua cheio */
+@media (min-width: 60rem) {
+  .capture-button {
+    background: transparent;
+    color: var(--mcv-ink);
+    border: 1.5px solid var(--mcv-control-line);
+  }
+  .capture-button:hover {
+    background: transparent;
+    border-color: var(--mcv-ink);
+  }
+  .capture-button kbd {
+    background: var(--mcv-line);
+  }
+}
+
+/* Tema e Foco (fatia 2 da marca, opção C): no celular só o ícone; a partir de 60rem, o nome da ação ao lado */
+.toggle-label {
+  display: none;
+}
+@media (min-width: 60rem) {
+  .labeled-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: auto;
+    padding: 0 0.875rem;
+    font: inherit;
+  }
+  .toggle-label {
+    display: inline;
   }
 }

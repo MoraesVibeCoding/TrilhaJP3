@@ -9,17 +9,13 @@ const icon = (size?: number) => {
   return container.querySelector("svg")!;
 };
 
-test("at 32px or more it shows the two terminals and the lime pulse", () => {
+// Logo Moraes Coding: o M de cinco barras sobre a linha de base; a última barra é "o número de hoje".
+test("draws the M of five bars on a baseline, with today's bar last", () => {
   const svg = icon(32);
-  expect(svg.querySelectorAll("[data-terminal]")).toHaveLength(2);
-  expect(svg.querySelectorAll("[data-pulse]")).toHaveLength(1);
-});
-
-test("below 32px it loses the terminals and thickens the stroke", () => {
-  const svg = icon(28);
-  expect(svg.querySelectorAll("[data-terminal]")).toHaveLength(0);
-  expect(svg.querySelector("[data-pulse]")).not.toBeNull();
-  expect(svg.querySelector("path")!.getAttribute("stroke-width")).toBe("9");
+  const bars = svg.querySelectorAll("rect[data-bar]");
+  expect(bars).toHaveLength(5);
+  expect(bars[4]!.getAttribute("data-bar")).toBe("hoje");
+  expect(svg.querySelectorAll("rect[data-base]")).toHaveLength(1);
 });
 
 test("the minimum size is 24px", () => {

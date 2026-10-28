@@ -88,3 +88,14 @@ test("shows step progress: one mark per step, finished ones filled", () => {
   expect(container.querySelectorAll("[data-filled]")).toHaveLength(3);
   expect(container.querySelectorAll('[data-filled="true"]')).toHaveLength(1);
 });
+
+// Proposta 4 do impeccable: o vazio é uma nota em texto de apoio, não do tamanho de um passo.
+test("the empty note is quiet text, not the size of a step", () => {
+  setup({
+    nextSubtask: null,
+    nextStepNumber: null,
+    subtasksDone: 0,
+    subtasksTotal: 0,
+  });
+  expect(screen.getByText("Sem subtarefas").className).toBe("detail-now-empty");
+});

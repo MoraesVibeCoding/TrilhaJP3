@@ -33,10 +33,10 @@ test("the head links the manifest, the apple icon and a bar color per theme", as
       els.map((e) => `${e.getAttribute("media")}=${e.getAttribute("content")}`),
     );
   expect(themes).toEqual([
-    "(prefers-color-scheme: light)=#F8FAF5",
-    "(prefers-color-scheme: dark)=#0F1F14",
+    "(prefers-color-scheme: light)=#0C2A1E",
+    "(prefers-color-scheme: dark)=#08180F",
   ]);
   await expect(
     page.locator('meta[name="apple-mobile-web-app-title"]'),
-  ).toHaveAttribute("content", "TrilhaJp3");
+  ).toHaveAttribute("content", "Trilha JP3");
 });

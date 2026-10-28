@@ -110,3 +110,13 @@ test("Sair fica logo depois da navegação, não no pé da barra", () => {
   expect(next?.tagName).toBe("FORM");
   expect(next?.textContent).toBe("Sair");
 });
+
+// Tarefa de marca, decisões 3 e 5: o topo mostra o logo e o nome da empresa do usuário, lido do banco.
+test("shows the company name next to the logo, and no hard-coded company", () => {
+  render(<AppShell company="Moraes Coding">x</AppShell>);
+  const names = screen.getAllByText("Moraes Coding");
+  expect(names.length).toBeGreaterThan(0);
+  for (const n of names) expect(n.className).toBe("brand-name");
+  expect(screen.queryByText("Moraes CodeVibe")).toBeNull();
+  expect(screen.queryByText("TrilhaJp3")).toBeNull();
+});

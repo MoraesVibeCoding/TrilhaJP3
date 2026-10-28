@@ -1,49 +1,32 @@
-# STATUS — TrilhaJp3
+# STATUS — Trilha JP3
 
-Atualizado em 2026-10-27 (T4 mesclada; T5 construída, PR aberta). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
+Atualizado em 2026-10-28 (T5 mesclada; troca de marca para Moraes Coding construída, PR aberta). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
 
 ## Próxima ação
 
-Pedro: revisar e mesclar a PR da T5 (`claude/t5-demandas`); o `check:floor` fica vermelho pelas asserções reescritas na troca para dados reais, como na T4. Depois: spec da troca de marca para Moraes Coding (decidida para depois da T5) e T7. A branch antiga `claude/t5-spec` pode ser apagada (o reapoio sobre a `main` foi publicado com nome novo porque o force-push foi bloqueado).
+Pedro: revisar e mesclar a PR da troca de marca (`claude/tm-marca`). O `check:floor` fica vermelho pelas asserções da marca antiga trocadas pelas da nova (Geist, Floresta, Pulso, ícone de circuito, "TrilhaJp3", "Moraes CodeVibe"), como na T4 e na T5. Depois: T7 (subtarefas).
 
-## Marca (2026-10-27)
+## Marca (2026-10-27 e 2026-10-28)
 
-A empresa passou a se chamar **Moraes Coding** (direção visual B · Gráfico: Mata, Gelo, Sinal laranja; Space Grotesk e IBM Plex Mono; M em barras). Decisão do Pedro: o app troca de marca **depois da T5**, numa tarefa própria com spec e o processo do `impeccable`. Até lá o app segue na marca V2 da Moraes CodeVibe. Pacote de referência fora do repositório (o manual traz o nome completo do Pedro; só SVGs e tokens entram aqui).
-
-## Repositório e ambiente (2026-10-26)
-
-O trabalho continua no repositório público `MoraesVibeCoding/TrilhaJP3`, criado em 2026-10-26 com um commit único: o Actions de repositório privado tinha esgotado a cota de minutos, e o público não tem limite. Antes de publicar, telefone, e-mail e o endereço do projeto Supabase foram trocados por dados fictícios. O histórico completo, com os dados reais, fica no repositório privado `MoraesVibeCoding/GrupoPmVibeCoding` (PR #2), que vira arquivo. Sessões de nuvem usam `.claude/hooks/session-start.sh`: instala dependências, gitleaks, osv-scanner e semgrep, aponta o E2E para o Chromium do ambiente e busca `origin/main`.
-
-## Aprovado em 2026-10-22
-
-1. Layout: proposta B (mesa dividida), entrada **Retomar**, página **Demandas** com visões (Tabela, Por projeto, Quadro), demanda em janela com fundo fosco.
-2. 5 releases (`docs/PROPOSTA-SISTEMA.md`) e 3 acréscimos na R1: página inteira com link, captura rápida, barra lateral recolhível.
-3. Propostas 1 a 5 de `docs/PRINCIPIOS-OBJETIVOS.md` (Agora, estimativa, Feito hoje, Foco/Completo, aviso de excesso). Interruptor Foco/Completo na R1 (`docs/PRINCIPIOS-OBJETIVOS.md` 5b).
-4. Supabase: as 4 variáveis chegam ao ambiente de nuvem e foram validadas em 2026-10-26 (ver Pendências, item 1).
-
-## Adiado
-
-Integração com n8n (campo Executor, GitHub issue com `@claude`): adiada a pedido do Pedro em 2026-10-22. Para retomar: host da instância n8n, chave de API como segredo de rede, sessão nova. `npx @n8n/cli workflow list` já roda; falta só `N8N_URL` e a chave. Decisões 1, 2 e 4 da Q14 continuam abertas.
-
-## Ideias fora da tarefa atual
+A empresa passou a se chamar **Moraes Coding** e o app, **Trilha JP3**. A troca de marca (`tasks/tm-spec.md`) foi construída em 4 fatias na branch `claude/tm-marca`: (1) tokens do design system, Space Grotesk e IBM Plex Mono, sem sombras, foco de 3px laranja, laranja uma vez por tela, e as propostas aprovadas do `impeccable` (topo em Mata, "Nova demanda" fantasma, vazio sem gritar, selects de 16px, abas iguais, linha do projeto, texto de senha, alvos de 44px); (2) logo de barras, ícones do manual, tema e Foco com nome (opção C), ícones do app instalado; (3) nome da empresa do banco no topo, produto "Trilha JP3", migração `20261028120000_moraes_coding` (aplicada, com reversão testada); (4) documentos, revisões finais e PR. Pacote de referência fora do repositório (o manual traz o nome completo do Pedro; só SVGs e tokens entram aqui).
 
 Ver `docs/PRINCIPIOS-OBJETIVOS.md`, seção 5.
 
 ## Em uma frase
 
-TrilhaJp3 é o sistema de gestão da empresa (Moraes Coding; o app ainda mostra Moraes CodeVibe até a troca de marca). A v1 é o módulo Projetos e demandas. Prontas e em `main`: T0, T1-R, T2 (empresas e RLS), T3 (login), T4 (projetos), T12 (PWA) e as telas da T5b e T6a a T6d. A T5 (demandas reais: tabela `tasks`, leitura, mover, Agora, Concluir passo, captura, editar na página inteira, importar as capturadas no navegador) está construída na branch `claude/t5-demandas`, com PR. Próximas: marca Moraes Coding, T7 (subtarefas), T8 a T11, T13, T14.
+Trilha JP3 é o sistema de gestão da empresa (Moraes Coding). A v1 é o módulo Projetos e demandas. Prontas e em `main`: T0, T1-R, T2 (empresas e RLS), T3 (login), T4 (projetos), T5 (demandas reais), T12 (PWA) e as telas da T5b e T6a a T6d. A troca de marca para Moraes Coding está construída na branch `claude/tm-marca`, com PR. Próximas: T7 (subtarefas), T8 a T11, T13, T14.
 
 ## Decisões fechadas (resumo)
 
 1. Uso: só o Pedro na v1, login obrigatório, banco multiempresa desde o início (RLS por `organization_id`).
 2. Escopo da v1: projetos, demandas (a fazer, fazendo, feito), subtarefas de um nível, etiquetas, comentários, histórico por gatilhos no banco, anexos (imagens, PDF, documentos de escritório, até 10 MB, executáveis bloqueados).
 3. Stack: Next.js 16, TypeScript, Supabase (Postgres, Auth, Storage), Vercel, Vitest, Playwright. Interface em pt-BR, PWA.
-4. Nome do app: TrilhaJp3. Empresa: Moraes CodeVibe. Domínio `trilhajp3.com` (compra pendente, segundo o Pedro). A v1 começa no endereço padrão da Vercel.
+4. Nome do app: Trilha JP3. Empresa: Moraes Coding (o topo mostra o nome da empresa do usuário, lido do banco). Domínio `trilhajp3.com` (compra pendente, segundo o Pedro). A v1 começa no endereço padrão da Vercel.
 5. D1 e D2: desenvolver nos planos gratuitos e migrar para Vercel Pro e Supabase Pro antes de entrar qualquer dado real da empresa.
 6. Varredura de segredos: recurso nativo do GitHub, não o gitleaks (exige licença para organização).
 7. Design: toda decisão de design e layout passa pela skill `impeccable`, usando o kit de marca em `docs/brand/`.
 
-## Estado do código (2026-10-27)
+## Estado do código (2026-10-28)
 
 | Item | Estado |
 |---|---|
@@ -51,8 +34,9 @@ TrilhaJp3 é o sistema de gestão da empresa (Moraes Coding; o app ainda mostra 
 | Supabase: empresas, vínculos e RLS (T2) | Pronto |
 | Login e sessão (T3) | Pronto |
 | Projetos (T4) | Pronto, em `main` (PR #4) |
-| Demandas reais (T5) | Construída na branch `claude/t5-demandas`; 323 testes unitários, E2E 113, banco 29, axe 22 |
-| CI | `check:floor` vermelho por asserções reescritas (aceito pelo Pedro na T4 e na T5); o resto verificado localmente |
+| Demandas reais (T5) | Pronto, em `main` (PR #5) |
+| Marca Moraes Coding (TM) | Construída na branch `claude/tm-marca`; 341 testes unitários, E2E 120, banco 29 |
+| CI | `check:floor` vermelho por asserções reescritas (aceito pelo Pedro na T4 e na T5; de novo na TM, pelas asserções da marca antiga); o resto verificado localmente |
 
 Comandos: `npm run db:migrate` (aplica `supabase/migrations/` pela Management API; `--rollback <versão>` reverte), `npm run test:db`, `npm test`, `npm run test:e2e`, `npm run lint`, `npm run typecheck`, `npm run format:check`, `npm run build`.
 

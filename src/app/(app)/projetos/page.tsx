@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { ProjectList } from "@/components/project-list";
 import { listProjects } from "@/lib/projects";
 
-export const metadata: Metadata = { title: "Projetos · TrilhaJp3" };
+export const metadata: Metadata = { title: "Projetos · Trilha JP3" };
 
 // Lê a sessão e os dados da empresa: fica atrás de <Suspense> (cacheComponents).
 export default function Page({ searchParams }: PageProps<"/projetos">) {

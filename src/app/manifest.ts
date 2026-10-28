@@ -3,16 +3,16 @@ import type { MetadataRoute } from "next";
 // Instalável sem service worker: a v1 não tem modo offline (PRODUCT.md).
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "TrilhaJp3",
-    short_name: "TrilhaJp3",
-    description: "Sistema de gestão da Moraes CodeVibe",
+    name: "Trilha JP3",
+    short_name: "Trilha JP3",
+    description: "Sistema de gestão da Moraes Coding",
     lang: "pt-BR",
     start_url: "/",
     scope: "/",
     display: "standalone",
-    background_color: "#F8FAF5",
-    // Floresta: o fundo do ícone (proposta A da T12)
-    theme_color: "#1B4D2E",
+    background_color: "#F2F2EE",
+    // Mata: o fundo do ícone e do topo do app (marca Moraes Coding, fatia 2)
+    theme_color: "#0C2A1E",
     icons: [
       {
         src: "/icons/icon-192.png",

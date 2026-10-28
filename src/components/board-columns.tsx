@@ -24,7 +24,7 @@ export function BoardColumns({
         {STATES.map((state) => {
           const items = rows.filter((r) => r.state === state);
           return (
-            <section key={state} className="board-column">
+            <section key={state} className="board-column" data-state={state}>
               <h2>
                 <b>{items.length}</b> {state}
               </h2>

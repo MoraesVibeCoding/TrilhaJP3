@@ -10,7 +10,7 @@ test("home page loads with the app name and pt-BR language", async ({
   page,
 }) => {
   await page.goto("/");
-  await expect(page).toHaveTitle("TrilhaJp3");
+  await expect(page).toHaveTitle("Trilha JP3");
   await expect(page.locator("html")).toHaveAttribute("lang", "pt-BR");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Retomar");
 });
@@ -832,4 +832,65 @@ test("after back and forward the page is usable, with no modal left stuck", asyn
   await page.keyboard.press("Escape");
   await expect(page.getByRole("dialog")).toBeHidden();
   await expect(opener).toBeFocused();
+});
+
+// Propostas 5 e 9 do impeccable: selects sem zoom no iPhone e títulos com área de toque de 44px.
+test("Demandas selects are 16px and demand titles have a 44px touch target", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/demandas");
+  const sizes = await page
+    .locator(".field select")
+    .evaluateAll((els) => els.map((e) => getComputedStyle(e).fontSize));
+  expect(sizes.length).toBeGreaterThan(0);
+  for (const size of sizes) expect(size).toBe("16px");
+  const title = page.locator(".resume-open:visible").first();
+  expect((await title.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+});
+
+// Fatia 2 da marca, opção C: no computador e no iPad o tema e o Foco dizem a ação; no celular, só o ícone.
+test("theme and focus toggles show their names from 60rem, only the icon on a phone", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const label = page.locator(".theme-toggle .toggle-label");
+  await expect(label).toHaveText("Escuro");
+  await expect(label).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(label).toBeHidden();
+  await expect(page.locator(".theme-toggle svg")).toBeVisible();
+});
+
+// Tarefa de marca: o nome no topo é o da empresa do usuário, vindo do banco.
+test("the top shows the user's company name from the database", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await expect(
+    page.locator(".side-brand .brand-name", { hasText: "Empresa E2E" }),
+  ).toBeVisible();
+});
+
+// Revisão final da marca: no iPad (1024) o cabeçalho mono maiúsculo não pode encavalar a coluna vizinha.
+test("on an iPad the table headers do not overlap", async ({ page }) => {
+  await page.setViewportSize({ width: 1024, height: 1366 });
+  await page.goto("/demandas");
+  const boxes = await page
+    .locator(".demands-table thead th")
+    .evaluateAll((ths) =>
+      ths.map((th) => {
+        const content = th.firstElementChild ?? th;
+        const r = th.getBoundingClientRect();
+        const range = document.createRange();
+        range.selectNodeContents(content);
+        return {
+          right: r.right,
+          contentRight: range.getBoundingClientRect().right,
+        };
+      }),
+    );
+  expect(boxes.length).toBe(5);
+  for (const b of boxes)
+    expect(b.contentRight).toBeLessThanOrEqual(b.right + 0.5);
 });

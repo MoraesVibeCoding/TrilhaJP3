@@ -2,6 +2,7 @@
 
 import { signOut } from "@/app/entrar/actions";
 import { BrandIcon } from "./brand-icon";
+import { Icon } from "./icon";
 import { CaptureButton } from "./capture-dialog";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -40,7 +41,14 @@ function CurrentNavList() {
   return <NavList pathname={usePathname()} />;
 }
 
-export function AppShell({ children }: { children: ReactNode }) {
+export function AppShell({
+  children,
+  company,
+}: {
+  children: ReactNode;
+  // nome da empresa do usuário, lido do banco pelo layout (marca configurável por cliente)
+  company?: ReactNode;
+}) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -57,22 +65,11 @@ export function AppShell({ children }: { children: ReactNode }) {
           aria-label={open ? "Fechar menu" : "Abrir menu"}
           onClick={() => setOpen((value) => !value)}
         >
-          <svg
-            viewBox="0 0 24 24"
-            width="20"
-            height="20"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.75"
-            strokeLinecap="round"
-            aria-hidden="true"
-          >
-            <path d="M4 7h16M4 12h16M4 17h16" />
-          </svg>
+          <Icon name="menu" />
         </button>
         <span className="brand">
           <BrandIcon />
-          <span className="brand-name">TrilhaJp3</span>
+          <span className="brand-name">{company}</span>
         </span>
         <CaptureButton />
         <ModeToggle />
@@ -81,7 +78,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <aside className="shell-side" id="navegacao">
         <span className="brand side-brand">
           <BrandIcon />
-          <span className="brand-name">TrilhaJp3</span>
+          <span className="brand-name">{company}</span>
         </span>
         <nav aria-label="Principal">
           {/* Em /demandas/[id] o caminho só existe na requisição: sem Suspense o build falha. */}
@@ -95,7 +92,6 @@ export function AppShell({ children }: { children: ReactNode }) {
             Sair
           </button>
         </form>
-        <p className="side-foot">Moraes CodeVibe</p>
       </aside>
       <main id="conteudo" className="shell-main">
         {children}

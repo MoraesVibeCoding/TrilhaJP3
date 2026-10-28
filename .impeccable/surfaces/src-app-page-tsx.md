@@ -20,7 +20,7 @@ Pedro abre o app para retomar o que está "Fazendo". Se não quiser, vai para De
 
 ## Direction contract
 THESIS: a mesa dividida. Retomar e Demandas são duas leituras da mesma lista; a janela da demanda é o único lugar de edição. Recusa o painel de cartões repetidos e a planilha sem contexto.
-OWN-WORLD: papel esverdeado, menta na lateral, filetes de 1px, Geist em tudo (peso 600 e -0.02em nos títulos), verde-floresta apenas no estado Fazendo, no foco e no item atual. Fundo fosco da janela em tom de tinta verde translúcida com desfoque leve, nunca cinza.
+OWN-WORLD (marca Moraes Coding desde 2026-10-28; tokens e regras em DESIGN.md): Gelo no corpo, topo e barra lateral em Mata (Noite no escuro), filetes de 1px, Space Grotesk no texto e títulos (700 e -0.02em), IBM Plex Mono em números e rótulos, sem sombras, foco de 3px laranja, laranja (destaque) uma vez por tela, botão alta e botões fantasma.
 STORY: Pedro entende em segundos onde parou, abre a demanda sem perder a lista e troca a visão quando precisa de outra forma de pensar.
 FIRST VIEWPORT: lateral de 15rem; título Retomar à esquerda e atalho "Todas as demandas" à direita; abaixo, o bloco Agora com o passo atual em destaque e o botão Concluir passo; depois Em andamento e Feito hoje recolhido. "Nova demanda" fica para a T5.
 FORM: mesa dividida, posição 1 da lista ordenada, entregue pelo sorteio (índice 1), seed:e3b973ba9aaf01b0.

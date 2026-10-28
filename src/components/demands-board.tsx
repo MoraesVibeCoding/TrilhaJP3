@@ -1,6 +1,7 @@
 "use client";
 
 import { useDemandState } from "@/lib/use-demand-state";
+import { Icon } from "./icon";
 import { ImportCaptured } from "./import-captured";
 import { useStoredState } from "@/lib/use-stored-state";
 import {
@@ -77,22 +78,7 @@ function sanitize(v: Partial<ViewState>): ViewState {
 }
 
 function Caret({ dir }: { dir: "asc" | "desc" }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      width="14"
-      height="14"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      style={{ transform: dir === "asc" ? "rotate(180deg)" : undefined }}
-    >
-      <path d="M6 9l6 6 6-6" />
-    </svg>
-  );
+  return <Icon name={dir === "asc" ? "seta-cima" : "seta-baixo"} size={14} />;
 }
 
 export function DemandsBoard({
@@ -192,6 +178,7 @@ export function DemandsBoard({
                 key={state}
                 type="button"
                 className="state-count"
+                data-state={state}
                 aria-pressed={view.state === state}
                 onClick={() =>
                   update({ state: view.state === state ? "" : state })

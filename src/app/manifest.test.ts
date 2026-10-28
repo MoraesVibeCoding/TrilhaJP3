@@ -1,17 +1,17 @@
 import { expect, test } from "vitest";
 import manifest from "./manifest";
 
-test("the app installs as TrilhaJp3 in full screen with the brand icons", () => {
+test("the app installs as Trilha JP3 in full screen with the brand icons", () => {
   const m = manifest();
   expect(m).toMatchObject({
-    name: "TrilhaJp3",
-    short_name: "TrilhaJp3",
+    name: "Trilha JP3",
+    short_name: "Trilha JP3",
     lang: "pt-BR",
     start_url: "/",
     scope: "/",
     display: "standalone",
-    background_color: "#F8FAF5",
-    theme_color: "#1B4D2E",
+    background_color: "#F2F2EE",
+    theme_color: "#0C2A1E",
   });
   expect(m.icons).toEqual([
     {

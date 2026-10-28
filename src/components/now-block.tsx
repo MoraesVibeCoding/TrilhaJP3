@@ -44,7 +44,7 @@ export function NowBlock({
           </button>
         </>
       ) : (
-        <p className="detail-now-step">
+        <p className="detail-now-empty">
           {item.subtasksTotal === 0 ? "Sem subtarefas" : "Sem passos pendentes"}
         </p>
       )}

@@ -57,3 +57,15 @@ test("the F key is ignored while typing and with modifiers", () => {
   fireEvent.keyDown(document.body, { key: "f", metaKey: true });
   expect(document.documentElement.dataset.mode).toBeUndefined();
 });
+
+// Fatia 2 da marca, opção C: o nome da ação à vista ao lado do ícone.
+test("names the action next to the icon: Foco, then Completo", async () => {
+  render(<ModeToggle />);
+  const button = screen.getByRole("button", { name: "Ativar modo foco" });
+  expect(button.querySelector(".toggle-label")!.textContent).toBe("Foco");
+  fireEvent.click(button);
+  const back = await screen.findByRole("button", {
+    name: "Ativar modo completo",
+  });
+  expect(back.querySelector(".toggle-label")!.textContent).toBe("Completo");
+});
