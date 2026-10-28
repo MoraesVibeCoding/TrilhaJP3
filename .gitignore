@@ -50,6 +50,7 @@ next-env.d.ts
 .impeccable/questions/
 .impeccable/review/
 .impeccable/mocks/
+.impeccable/live/
 !.env.example
 
 # sessão do usuário fictício do E2E (T3)

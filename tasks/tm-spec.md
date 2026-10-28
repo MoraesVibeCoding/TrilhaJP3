@@ -1,6 +1,6 @@
 # TM: Marca Moraes Coding no app
 
-Status: **aprovada pelo Pedro em 2026-10-27** (decisões 1 a 5 e o nome do produto). Em construção. Decisão de origem: o Pedro definiu em 2026-10-27 que a empresa passa a ser Moraes Coding (direção visual B · Gráfico) e que o app troca de marca **depois da T5**. Base: pacote `moraes-coding-marca.zip` (manual de marca, `04-logo/svg/`), `DESIGN.md`, `PRODUCT.md`, `CONSTRAINTS.md`, regra de design do `CLAUDE.md` (toda decisão do `impeccable` vem com HTML para aprovação).
+Status: **aprovada pelo Pedro em 2026-10-27** (decisões 1 a 5 e o nome do produto). Construída em 2026-10-27 e 2026-10-28, nas fatias 1 a 4 (seção 10). Decisão de origem: o Pedro definiu em 2026-10-27 que a empresa passa a ser Moraes Coding (direção visual B · Gráfico) e que o app troca de marca **depois da T5**. Base: pacote `moraes-coding-marca.zip` (manual de marca, `04-logo/svg/`), `DESIGN.md`, `PRODUCT.md`, `CONSTRAINTS.md`, regra de design do `CLAUDE.md` (toda decisão do `impeccable` vem com HTML para aprovação).
 
 ## 1. Objetivo
 
@@ -106,3 +106,15 @@ Landing page, kit de lançamento, domínio `moraescoding.com.br`, registro no IN
 2. Tokens e fontes; 3 propostas do `impeccable` com HTML; escolha do Pedro.
 3. Ícone e PWA; nome nas telas; migração de renomear com reversão e teste.
 4. Documentos; critique e auditoria; revisão de segurança; `check:full`; `docs/STATUS.md`; PR.
+
+## 10. Construção e exceções aprovadas (2026-10-27 e 2026-10-28)
+
+Cada decisão de design veio com HTML das telas reais para o Pedro aprovar (regra do `CLAUDE.md`).
+
+1. **Fatia 1, tokens e fontes:** proposta A (o manual aplicado direto). Depois, a crítica e a auditoria do `impeccable` trouxeram 9 propostas; aprovadas 1, 2, 4, 5, 6, 7, 8 e 9, recusada a 3 (títulos de seção como rótulo mono).
+2. **Topo e barra lateral em Mata no claro** (proposta 2, "terminal de BI" do design system): tokens `--mcv-chrome-*`; no escuro, Noite. A faixa da entrada usa o mesmo chrome.
+3. **Um só botão cheio por tela** (proposta 1): "Nova demanda" vira fantasma a partir de 60rem; no celular o botão flutuante continua `alta`.
+4. **Exceção ao manual, ícones:** o design system não tem sol, lua e alvo; foram desenhados no traço dele (grade 24, 2px, pontas retas, cantos vivos) para os botões de tema e Foco, que mostram o nome da ação a partir de 60rem (opção C, 2026-10-28).
+5. **Não coberto pelo manual, véu da janela:** metade Mata, metade Alta a 45% no claro (verde com croma visível, exigência de um teste antigo) e Noite a 70% no escuro.
+6. **Arquivos oficiais do logo:** entram só o desenho, sem o bloco de metadados C2PA (pode ter dados de autoria; o repositório é público).
+7. **Nome no topo:** o da empresa do usuário, do banco, com reticências se não couber; a migração `20261028120000_moraes_coding` renomeou a empresa e foi revertida e reaplicada para testar a reversão.

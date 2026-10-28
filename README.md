@@ -1,6 +1,6 @@
-# TrilhaJp3
+# Trilha JP3
 
-Sistema de gestão da Moraes CodeVibe. A v1 é o módulo Projetos e demandas, em Next.js 16 e TypeScript. Por enquanto roda com dados de demonstração, fictícios, e guarda as alterações no navegador.
+Sistema de gestão da Moraes Coding. A v1 é o módulo Projetos e demandas, em Next.js 16 e TypeScript. Por enquanto roda com dados de demonstração, fictícios, e guarda as alterações no navegador.
 
 ```bash
 npm ci

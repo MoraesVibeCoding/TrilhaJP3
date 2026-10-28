@@ -1,4 +1,4 @@
-# Roadmap: TrilhaJp3 (v1, módulo Projetos e demandas)
+# Roadmap: Trilha JP3 (v1, módulo Projetos e demandas)
 
 Status: **proposta, aguardando "DE ACORDO" do Pedro.** Base: `docs/SPEC.md` (aprovada), `docs/STATUS.md`, revisão de 2026-10-22.
 Skills usadas para montar: `planning-and-task-breakdown`, `spec-driven-development`, `find-skills` (a busca no skills.sh falhou; nenhuma skill nova foi recomendada).
@@ -110,6 +110,7 @@ Decisões aprovadas em 2026-10-22: proposta **B, mesa dividida**. Entrada padrã
 
 **T4. 🎨 Projetos** (M): criar, editar, listar, arquivar. Validação com `zod`; testes de borda.
 **T5. 🎨 Demandas e três estados** (M) — ✅ construída (2026-10-27), `tasks/t5-spec.md`: tabela `tasks` com RLS, todas as telas com dados reais, mover, Agora, Concluir passo, captura, editar na página inteira, importar as capturadas no navegador; histórico começa a existir na T10.
+**TM. 🎨 Marca Moraes Coding** (M) — ✅ construída (2026-10-28), `tasks/tm-spec.md`: tokens do design system, Space Grotesk e IBM Plex Mono, logo de barras e ícones do manual, app instalado, nome da empresa do banco no topo, produto "Trilha JP3", migração de renomear a empresa com reversão.
 **T6a. 🎨 Retomar e Demandas em Tabela** (M) — ✅ tabela pronta (2026-10-23), com dados reais desde a T5: troca os dados de demonstração por dados reais; filtros por status e prioridade; seletor de visão com lembrança da escolha.
 **T6b. 🎨 Visão Por projeto** (S) — ✅ construída (2026-10-23), proposta B, cartões de projeto com "Ver mais N" (no lugar dos blocos recolhíveis).
 **T6c. 🎨 Visão Quadro por estado** (S) — ✅ construída (2026-10-23), proposta A: colunas A fazer, Fazendo, Feito e menu "Mover para…" (arrastar fica como melhoria futura).
@@ -130,7 +131,7 @@ Cada tarefa 🎨 repete a regra 1 (3 propostas, aprovação, revisor final). Cri
 
 ### Fase 4: Entrega
 
-**T12. 🎨 PWA** (S) — ✅ construída (2026-10-26), ícone A (Floresta): manifest e ícones do kit; instalável no computador, iPad (manual) e celular. Spec em `tasks/t12-spec.md`.
+**T12. 🎨 PWA** (S) — ✅ construída (2026-10-26), ícone A (Floresta), trocado pelo M de barras da Moraes Coding na TM: manifest e ícones; instalável no computador, iPad (manual) e celular. Spec em `tasks/t12-spec.md`.
 **T13. Endurecimento e observabilidade** (M): revisão OWASP sem pendência crítica, cabeçalhos de segurança, logs estruturados, métricas RED, rotina de backup documentada (`security-and-hardening`, `observability-and-instrumentation`).
 **T14. Produção** (M): migração para Vercel Pro e Supabase Pro (D1 e D2) **antes de dado real**, deploy progressivo, rollback testado, domínio `trilhajp3.com` se aprovado (`shipping-and-launch`, `ci-cd-and-automation`).
 
