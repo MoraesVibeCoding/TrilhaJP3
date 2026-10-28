@@ -21,5 +21,5 @@ Pedro cadastra e revisa os projetos reais da empresa: o que está em andamento, 
 
 ## Direction contract
 THESIS: a página responde "o que está andando?" antes de qualquer outra coisa; editar acontece no lugar.
-OWN-WORLD: DESIGN.md com o kit V2 (raios 10/14/16, títulos em Floresta), Geist, filetes de 1px.
+OWN-WORLD (marca Moraes Coding desde 2026-10-28; tokens e regras em DESIGN.md): Gelo no corpo, topo e barra lateral em Mata (Noite no escuro), filetes de 1px, Space Grotesk no texto e títulos (700 e -0.02em), IBM Plex Mono em números e rótulos, sem sombras, foco de 3px laranja, laranja (destaque) uma vez por tela, botão alta e botões fantasma.
 FINISH: critique 37/40 e auditoria 19/20 em 2026-10-27; achados P2 corrigidos.

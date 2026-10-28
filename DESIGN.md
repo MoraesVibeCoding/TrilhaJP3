@@ -168,7 +168,7 @@ Tokens do design system Moraes Coding (fatia 1 da tarefa de marca, 2026-10-27). 
 ## Typography
 
 **Display e corpo:** Space Grotesk (`next/font`, variável `--font-space-grotesk`), títulos h1 a h3 em 700 com -0.02em e `text-wrap: balance`, texto em 400 e 500.
-**Números e rótulos:** IBM Plex Mono 400 a 600 (`--font-ibm-plex-mono`) com `tabular-nums`: contagens (faixa, Quadro, Por projeto), "Passo N de M", datas e metadados de atividade, "Mostrando N de M", cabeçalhos de tabela (0,75rem, peso 500, 0,1em, maiúsculas), selos de estado (0,75rem) e teclas (`kbd`). Mono só em dado e medida, nunca como fantasia "técnica".
+**Números e rótulos:** IBM Plex Mono 400 a 600 (`--font-ibm-plex-mono`) com `tabular-nums`: contagens (faixa, Quadro, Por projeto), "Passo N de M", datas e metadados de atividade, "Mostrando N de M", cabeçalhos de tabela (0,75rem, peso 500, 0,06em, maiúsculas), selos de estado (0,75rem) e teclas (`kbd`). Mono só em dado e medida, nunca como fantasia "técnica".
 
 A escala de tamanhos das telas continua a mesma (16px de corpo); a escala do design system é de peças de marketing.
 

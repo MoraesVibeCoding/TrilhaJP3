@@ -21,11 +21,11 @@ Pedro varre e planeja muitas demandas (5 a 30 por projeto, 5 a 15 projetos). Com
 - Captura rápida (T6d, proposta B aprovada em 2026-10-23): botão "Nova demanda" na barra (flutuante no celular) e tecla `C`; janela de um campo, Enter cria, aviso "Parecida com:" antes de duplicar.
 - Abaixo de 60rem cada linha vira cartão: título, estado, projeto, prioridade, atividade e próxima subtarefa.
 - Foco mostra só as 5 primeiras (linhas da Tabela, cartões de cada coluna do Quadro, projetos de Por projeto) e diz quantas escondeu. Na Tabela, no Quadro e em Por projeto o texto é "Mostrando as 5 primeiras de N" (ou "os 5 primeiros" para projetos).
-- Marca V2 (2026-10-23), cores e fontes de DESIGN.md; o Pulso lime não aparece nesta página. Dados de demonstração rotulados.
+- Marca Moraes Coding, cores e fontes de DESIGN.md; o laranja só na contagem de Fazendo.
 
 ## Direction contract
 THESIS: uma só lista de demandas, duas apresentações do mesmo dado: tabela quando há largura, cartão quando não há; nunca rolagem horizontal. Recusa a planilha com colunas escondidas.
-OWN-WORLD: papel esverdeado, filetes de 1px, estado escrito por extenso em pílula, Geist em tudo (peso 600 e -0.02em nos títulos), cabeçalhos de coluna em tom suave AA, cartões com borda de 1px e raio de 12px, verde-floresta só no estado Fazendo, no foco e no cabeçalho ordenado ativo.
+OWN-WORLD (marca Moraes Coding desde 2026-10-28; tokens e regras em DESIGN.md): Gelo no corpo, topo e barra lateral em Mata (Noite no escuro), filetes de 1px, Space Grotesk no texto e títulos (700 e -0.02em), IBM Plex Mono em números e rótulos, sem sombras, foco de 3px laranja, laranja (destaque) uma vez por tela, botão alta e botões fantasma.
 STORY: Pedro filtra, ordena, encontra a demanda e a abre numa janela, sem perder o filtro ao voltar.
 FIRST VIEWPORT: título Demandas, seletor de visões, faixa de contagens (A fazer, Fazendo, Feito) como filtro de estado e selects de Projeto e Prioridade na mesma linha, e a tabela densa com cabeçalho Demanda, Projeto, Estado, Prioridade, Atividade, ordenada por prioridade.
 FORM: tabela que vira cartões, posição 7 da lista ordenada, entregue pelo sorteio (índice 7), seed:c4ab1b3fd53ab87d.

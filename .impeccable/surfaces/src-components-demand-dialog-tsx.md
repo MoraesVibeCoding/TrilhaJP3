@@ -21,7 +21,7 @@ Pedro abre uma demanda para saber o que fazer agora e fazer. Escala: até 10 sub
 
 ## Direction contract
 THESIS: a janela responde "o que faço agora?" antes de qualquer outra coisa; todo o resto é contexto recolhido. Recusa o formulário longo de campos.
-OWN-WORLD: papel esverdeado sobre fundo de tinta verde translúcida e desfoque leve; filetes de 1px; Geist em tudo (peso 600 e -0.02em no título); verde-floresta no passo atual e no foco. Sem sombra decorativa.
+OWN-WORLD (marca Moraes Coding desde 2026-10-28; tokens e regras em DESIGN.md): Gelo no corpo, topo e barra lateral em Mata (Noite no escuro), filetes de 1px, Space Grotesk no texto e títulos (700 e -0.02em), IBM Plex Mono em números e rótulos, sem sombras, foco de 3px laranja, laranja (destaque) uma vez por tela, botão alta e botões fantasma.
 STORY: Pedro lê o passo, conclui ou abre um grupo, e fecha sem perder a lista atrás.
 FIRST VIEWPORT: janela centrada (máx. 40rem), título e estado no topo, bloco "Agora" com a próxima subtarefa e o botão "Concluir passo", e abaixo quatro grupos com contagem, Subtarefas aberto.
 FORM: próxima ação em destaque, posição 7 da lista ordenada, entregue pelo sorteio (índice 7), seed:a0d89fd639efd23a.

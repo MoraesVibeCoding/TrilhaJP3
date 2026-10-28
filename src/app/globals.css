@@ -367,7 +367,8 @@ td {
 thead th {
   font-size: 0.75rem;
   font-weight: 500;
-  letter-spacing: 0.1em;
+  /* 0,06em: com 0,1em "PRIORIDADE" e a seta não cabem na coluna no iPad */
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--mcv-text-soft);
 }
@@ -724,8 +725,6 @@ tbody th {
   padding: 0.625rem 0.75rem 0.625rem 0;
   min-height: 2.75rem;
   box-sizing: border-box;
-  font-size: 0.8125rem;
-  font-weight: 600;
   color: var(--mcv-text-soft);
   cursor: pointer;
 }
@@ -809,7 +808,7 @@ th[aria-sort] .sort-button {
   width: 100%;
 }
 .demands-table th:nth-child(1) {
-  width: 34%;
+  width: 31%;
 }
 .demands-table th:nth-child(2) {
   width: 22%;
@@ -818,7 +817,7 @@ th[aria-sort] .sort-button {
   width: 13%;
 }
 .demands-table th:nth-child(4) {
-  width: 13%;
+  width: 16%;
 }
 .demands-table th:nth-child(5) {
   width: 18%;

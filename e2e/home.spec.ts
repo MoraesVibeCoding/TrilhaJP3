@@ -871,3 +871,26 @@ test("the top shows the user's company name from the database", async ({
     page.locator(".side-brand .brand-name", { hasText: "Empresa E2E" }),
   ).toBeVisible();
 });
+
+// Revisão final da marca: no iPad (1024) o cabeçalho mono maiúsculo não pode encavalar a coluna vizinha.
+test("on an iPad the table headers do not overlap", async ({ page }) => {
+  await page.setViewportSize({ width: 1024, height: 1366 });
+  await page.goto("/demandas");
+  const boxes = await page
+    .locator(".demands-table thead th")
+    .evaluateAll((ths) =>
+      ths.map((th) => {
+        const content = th.firstElementChild ?? th;
+        const r = th.getBoundingClientRect();
+        const range = document.createRange();
+        range.selectNodeContents(content);
+        return {
+          right: r.right,
+          contentRight: range.getBoundingClientRect().right,
+        };
+      }),
+    );
+  expect(boxes.length).toBe(5);
+  for (const b of boxes)
+    expect(b.contentRight).toBeLessThanOrEqual(b.right + 0.5);
+});
