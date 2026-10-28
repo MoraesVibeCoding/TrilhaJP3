@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { BrandIcon } from "@/components/brand-icon";
 import { LoginForm } from "@/components/login-form";
 
-export const metadata: Metadata = { title: "Entrar · TrilhaJp3" };
+export const metadata: Metadata = { title: "Entrar · Trilha JP3" };
 
 // Proposta B (mesa dividida), escolhida pelo Pedro em 2026-10-26.
 export default function LoginPage() {
@@ -11,9 +11,9 @@ export default function LoginPage() {
       <aside className="login-band">
         <span className="brand">
           <BrandIcon />
-          <span className="brand-name">TrilhaJp3</span>
+          <span className="brand-name">Trilha JP3</span>
         </span>
-        <p className="login-claim">Projetos e demandas da Moraes CodeVibe.</p>
+        <p className="login-claim">Projetos e demandas da Moraes Coding.</p>
       </aside>
       <main className="login-main">
         <div className="login-box">

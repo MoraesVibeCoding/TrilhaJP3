@@ -23,9 +23,9 @@ const params = (id: string) => Promise.resolve({ id });
 test("the tab title names the demand; an unknown id gets a neutral title", async () => {
   expect(
     (await generateMetadata({ params: params("d1") } as never)).title,
-  ).toBe("Revisar textos da página inicial · TrilhaJp3");
+  ).toBe("Revisar textos da página inicial · Trilha JP3");
   expect((await generateMetadata({ params: params("x") } as never)).title).toBe(
-    "Demanda · TrilhaJp3",
+    "Demanda · Trilha JP3",
   );
 });
 

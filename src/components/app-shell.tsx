@@ -41,7 +41,14 @@ function CurrentNavList() {
   return <NavList pathname={usePathname()} />;
 }
 
-export function AppShell({ children }: { children: ReactNode }) {
+export function AppShell({
+  children,
+  company,
+}: {
+  children: ReactNode;
+  // nome da empresa do usuário, lido do banco pelo layout (marca configurável por cliente)
+  company?: ReactNode;
+}) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -62,7 +69,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </button>
         <span className="brand">
           <BrandIcon />
-          <span className="brand-name">TrilhaJp3</span>
+          <span className="brand-name">{company}</span>
         </span>
         <CaptureButton />
         <ModeToggle />
@@ -71,7 +78,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <aside className="shell-side" id="navegacao">
         <span className="brand side-brand">
           <BrandIcon />
-          <span className="brand-name">TrilhaJp3</span>
+          <span className="brand-name">{company}</span>
         </span>
         <nav aria-label="Principal">
           {/* Em /demandas/[id] o caminho só existe na requisição: sem Suspense o build falha. */}
@@ -85,7 +92,6 @@ export function AppShell({ children }: { children: ReactNode }) {
             Sair
           </button>
         </form>
-        <p className="side-foot">Moraes CodeVibe</p>
       </aside>
       <main id="conteudo" className="shell-main">
         {children}

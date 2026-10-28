@@ -6,10 +6,10 @@ vi.mock("next/font/google", () => ({
   IBM_Plex_Mono: () => ({ variable: "font-ibm-plex-mono" }),
 }));
 
-test("installed on the iPad it is titled TrilhaJp3, and the bar follows the top bar (Mata, Noite)", async () => {
+test("installed on the iPad it is titled Trilha JP3, and the bar follows the top bar (Mata, Noite)", async () => {
   const { metadata, viewport } = await import("./layout");
   expect(metadata.appleWebApp).toEqual({
-    title: "TrilhaJp3",
+    title: "Trilha JP3",
     statusBarStyle: "default",
   });
   expect(viewport.themeColor).toEqual([

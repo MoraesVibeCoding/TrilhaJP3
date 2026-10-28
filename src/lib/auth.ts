@@ -8,6 +8,8 @@ export type CurrentUser = {
   id: string;
   email: string | undefined;
   organizationId: string;
+  // o nome que o topo mostra (marca configurável por cliente: decisão 3 da tarefa de marca)
+  organizationName: string;
 };
 
 export async function getCurrentUser(): Promise<CurrentUser> {
@@ -19,15 +21,21 @@ export async function getCurrentUser(): Promise<CurrentUser> {
   // A RLS da T2 só devolve vínculos das empresas do próprio usuário.
   const { data: memberships, error } = await supabase
     .from("memberships")
-    .select("organization_id")
+    .select("organization_id, organizations(name)")
     .limit(1);
   if (error) throw error;
   // Voltar para /entrar com sessão válida faria o Proxy devolver para "/" de novo.
   if (!memberships?.length) throw new Error("Usuário sem empresa vinculada.");
 
+  // vínculo -> empresa é muitos-para-um: o PostgREST devolve um objeto; sem tipos gerados, o cliente supõe lista
+  const org = memberships[0].organizations as unknown as {
+    name: string;
+  } | null;
+
   return {
     id: data.claims.sub,
     email: data.claims.email,
     organizationId: memberships[0].organization_id,
+    organizationName: org?.name ?? "",
   };
 }

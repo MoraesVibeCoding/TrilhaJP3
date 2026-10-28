@@ -38,5 +38,5 @@ test("the head links the manifest, the apple icon and a bar color per theme", as
   ]);
   await expect(
     page.locator('meta[name="apple-mobile-web-app-title"]'),
-  ).toHaveAttribute("content", "TrilhaJp3");
+  ).toHaveAttribute("content", "Trilha JP3");
 });

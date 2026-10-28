@@ -40,7 +40,7 @@ async function renderPage(search: Record<string, string>) {
 test("mostra os projetos da empresa; ?arquivados=1 troca para os arquivados", async () => {
   await renderPage({});
   expect(screen.getByText("Site institucional")).toBeDefined();
-  expect(metadata.title).toBe("Projetos · TrilhaJp3");
+  expect(metadata.title).toBe("Projetos · Trilha JP3");
   cleanup();
   await renderPage({ arquivados: "1" });
   expect(screen.getByText("Nenhum projeto arquivado.")).toBeDefined();

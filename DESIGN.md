@@ -1,5 +1,5 @@
 ---
-name: TrilhaJp3
+name: Trilha JP3
 description: Sistema de gestão (Trilha JP3) com a marca Moraes Coding, calmo e denso, verde-mata sobre Gelo ou Mata escura, com um sinal laranja no número que importa.
 colors:
   ink: "#08180F"
@@ -203,7 +203,7 @@ Raios do design system: 4px (`raio-4`) no anel de foco e nas teclas, 6px (`raio-
 
 ### Navigation
 
-**Logo:** o ícone do componente Logo da Moraes Coding (`BrandIcon`: cinco barras e a linha de base em `texto-titulo`, a barra de hoje em `destaque`; no chrome, Névoa e Sinal), 32px, com o nome ao lado. **Topo e barra lateral em Mata** ("terminal de BI" do design system; proposta 2 do impeccable, aprovada pelo Pedro em 2026-10-27): no claro, fundo Mata com texto Névoa, filetes #24412F, bordas de controle #9DB5A8 e foco Sinal #FF5A1F; no escuro, fundo Noite. Os tokens `--mcv-chrome-*` trocam os `--mcv-*` só dentro da barra lateral e dos itens do topo; a janela de captura e o aviso, que moram no topo, ficam com as cores da página. Itens de 44px de altura; o atual vai sobre `--mcv-chrome-current` (Noite no claro, Mata no escuro), em peso 600, com `aria-current="page"`, sem sombra. Itens: Retomar, Demandas e Projetos; logo abaixo, o botão Sair no mesmo estilo. No celular, botão de menu com `aria-expanded`.
+**Logo:** o ícone do componente Logo da Moraes Coding (`BrandIcon`: cinco barras e a linha de base em `texto-titulo`, a barra de hoje em `destaque`; no chrome, Névoa e Sinal), 32px, com o nome da empresa do usuário ao lado, lido do banco (`organizations.name` pela `getCurrentUser`, sob a RLS; decisões 3 e 5 da tarefa de marca): Space Grotesk 600, `texto-titulo`, por extenso ("Moraes Coding", nunca o wordmark "moraes.coding"), com reticências se não couber. O nome do produto, "Trilha JP3", fica no título da aba, no app instalado e na tela de entrada. **Topo e barra lateral em Mata** ("terminal de BI" do design system; proposta 2 do impeccable, aprovada pelo Pedro em 2026-10-27): no claro, fundo Mata com texto Névoa, filetes #24412F, bordas de controle #9DB5A8 e foco Sinal #FF5A1F; no escuro, fundo Noite. Os tokens `--mcv-chrome-*` trocam os `--mcv-*` só dentro da barra lateral e dos itens do topo; a janela de captura e o aviso, que moram no topo, ficam com as cores da página. Itens de 44px de altura; o atual vai sobre `--mcv-chrome-current` (Noite no claro, Mata no escuro), em peso 600, com `aria-current="page"`, sem sombra. Itens: Retomar, Demandas e Projetos; logo abaixo, o botão Sair no mesmo estilo. No celular, botão de menu com `aria-expanded`.
 
 ### Icon buttons (tema, Foco/Completo, menu, fechar)
 
@@ -271,7 +271,7 @@ O app se instala na tela inicial do iPad (Safari) e no computador (Chrome ou Edg
 
 ### Tela de entrada (T3)
 
-Rota `/entrar`, fora da casca (proposta B, mesa dividida, escolhida pelo Pedro em 2026-10-26). Faixa à esquerda (2fr, mínimo 18rem, padding 2,5rem) com o ícone e o nome no topo e a frase "Projetos e demandas da Moraes CodeVibe." embaixo, em Display 600, de 1,375 a 1,75rem conforme a largura; à direita, no Papel, o título "Entrar" (1,25rem) e o formulário até 22rem: rótulos de 0,8125rem peso 600, campos de 44px com borda de controle, botão primário de largura total. A faixa usa os tokens do chrome do topo: Mata no claro e Noite no escuro, texto e logo em Névoa, a barra de hoje do logo em Sinal, filete à direita. Abaixo de 45rem a faixa vira uma barra com ícone e nome e a frase some. O aviso de erro é o mesmo da captura: `texto` peso 600 sobre Névoa com borda de controle, nunca vermelho; vazio, fica no DOM (região viva) sem ocupar espaço. Pendente: "Entrando…" com o botão em `text-soft`. O botão Sair fica na barra lateral do app, logo abaixo da navegação, no estilo dos itens dela.
+Rota `/entrar`, fora da casca (proposta B, mesa dividida, escolhida pelo Pedro em 2026-10-26). Faixa à esquerda (2fr, mínimo 18rem, padding 2,5rem) com o ícone e o nome do produto ("Trilha JP3") no topo e a frase "Projetos e demandas da Moraes Coding." embaixo, em Display 600, de 1,375 a 1,75rem conforme a largura; à direita, no Papel, o título "Entrar" (1,25rem) e o formulário até 22rem: rótulos de 0,8125rem peso 600, campos de 44px com borda de controle, botão primário de largura total. A faixa usa os tokens do chrome do topo: Mata no claro e Noite no escuro, texto e logo em Névoa, a barra de hoje do logo em Sinal, filete à direita. Abaixo de 45rem a faixa vira uma barra com ícone e nome e a frase some. O aviso de erro é o mesmo da captura: `texto` peso 600 sobre Névoa com borda de controle, nunca vermelho; vazio, fica no DOM (região viva) sem ocupar espaço. Pendente: "Entrando…" com o botão em `text-soft`. O botão Sair fica na barra lateral do app, logo abaixo da navegação, no estilo dos itens dela.
 
 ### Projetos (T4)
 

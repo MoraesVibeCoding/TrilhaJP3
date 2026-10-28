@@ -10,7 +10,7 @@ test("home page loads with the app name and pt-BR language", async ({
   page,
 }) => {
   await page.goto("/");
-  await expect(page).toHaveTitle("TrilhaJp3");
+  await expect(page).toHaveTitle("Trilha JP3");
   await expect(page.locator("html")).toHaveAttribute("lang", "pt-BR");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Retomar");
 });
@@ -860,4 +860,14 @@ test("theme and focus toggles show their names from 60rem, only the icon on a ph
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(label).toBeHidden();
   await expect(page.locator(".theme-toggle svg")).toBeVisible();
+});
+
+// Tarefa de marca: o nome no topo é o da empresa do usuário, vindo do banco.
+test("the top shows the user's company name from the database", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await expect(
+    page.locator(".side-brand .brand-name", { hasText: "Empresa E2E" }),
+  ).toBeVisible();
 });

@@ -110,6 +110,8 @@ a {
 
 .shell-bar {
   grid-area: bar;
+  /* item de grade: sem isto a coluna cresce até caber o nome inteiro e a página rola na horizontal */
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -176,11 +178,6 @@ a {
   color: var(--mcv-forest);
   font-weight: 600;
 }
-.side-foot {
-  margin-top: auto;
-  font-size: 0.8125rem;
-  color: var(--mcv-text-soft);
-}
 .signout-button {
   width: 100%;
   min-height: 2.75rem;
@@ -197,13 +194,21 @@ a {
   background: var(--mcv-line);
 }
 
+/* Logo + nome da empresa do usuário (vem do banco): o respiro de duas barras do logo (8px) entre eles;
+   nome longo de cliente corta com reticências em vez de empurrar os botões do topo */
 .brand {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  min-width: 0;
   font-family: var(--mcv-font-display);
   font-weight: 600;
   font-size: 1.125rem;
+}
+.brand-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .shell-main {

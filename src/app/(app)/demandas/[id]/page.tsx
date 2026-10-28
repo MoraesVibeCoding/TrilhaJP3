@@ -11,7 +11,7 @@ export async function generateMetadata({
   await connection();
   const { id } = await params;
   const title = (await listDemands()).find((d) => d.id === id)?.title;
-  return { title: `${title ?? "Demanda"} · TrilhaJp3` };
+  return { title: `${title ?? "Demanda"} · Trilha JP3` };
 }
 
 export default function Page({ params }: PageProps<"/demandas/[id]">) {

@@ -61,7 +61,7 @@ export function ImportCaptured({
               {n} {n === 1 ? "demanda capturada" : "demandas capturadas"} só
               neste navegador.
             </b>{" "}
-            Elas foram criadas antes de o TrilhaJp3 gravar no banco. Marque as
+            Elas foram criadas antes de o Trilha JP3 gravar no banco. Marque as
             que quer trazer e escolha o projeto.
           </p>
           <fieldset className="import-list">

@@ -16,10 +16,10 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TrilhaJp3",
-  description: "Sistema de gestão da Moraes CodeVibe",
+  title: "Trilha JP3",
+  description: "Sistema de gestão da Moraes Coding",
   // instalado na tela inicial do iPad: barra de status padrão, o conteúdo não fica por baixo dela
-  appleWebApp: { title: "TrilhaJp3", statusBarStyle: "default" },
+  appleWebApp: { title: "Trilha JP3", statusBarStyle: "default" },
 };
 
 // A barra do navegador acompanha o topo do app: Mata no claro, Noite no escuro.

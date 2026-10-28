@@ -27,7 +27,7 @@ export default async function globalSetup(config: FullConfig) {
   // T4: /projetos exige empresa; a do E2E sai junto com o usuário (vínculos e projetos em cascata).
   const org = await admin
     .from("organizations")
-    .insert({ name: `E2E ${email}` })
+    .insert({ name: "Empresa E2E" })
     .select("id")
     .single();
   if (org.error) throw org.error;
