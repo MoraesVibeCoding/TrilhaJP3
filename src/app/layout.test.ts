@@ -2,7 +2,8 @@ import { expect, test, vi } from "vitest";
 
 // next/font só funciona dentro do Next; aqui basta o nome da variável CSS
 vi.mock("next/font/google", () => ({
-  Geist: () => ({ variable: "font-geist" }),
+  Space_Grotesk: () => ({ variable: "font-display" }),
+  IBM_Plex_Mono: () => ({ variable: "font-mono" }),
 }));
 
 test("installed on the iPad it is titled TrilhaJp3, and the bar follows the page background", async () => {

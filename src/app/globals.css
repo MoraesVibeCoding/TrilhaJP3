@@ -3,9 +3,10 @@
 :root {
   --mcv-icon-ground: var(--mcv-paper);
   --mcv-icon-pulse-line: var(--mcv-forest);
-  --mcv-font-display: var(--font-geist), system-ui, -apple-system, sans-serif;
-  --mcv-font-body: var(--font-geist), system-ui, -apple-system, sans-serif;
-  --mcv-font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  --mcv-font-display: var(--font-display), "Helvetica Neue", Arial, sans-serif;
+  --mcv-font-body: var(--font-display), "Helvetica Neue", Arial, sans-serif;
+  --mcv-font-mono:
+    var(--font-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
   /* Foco no sinal: 5,3:1 sobre o Gelo no claro, 4,9:1 sobre a Mata no escuro */
   --mcv-focus: var(--mcv-pulse);
   /* Apoio da marca: 5,6:1 no Gelo, 6,2:1 no branco, 5,2:1 na Névoa */
@@ -314,6 +315,7 @@ a {
   color: var(--mcv-text-soft);
 }
 .resume-meta {
+  font-family: var(--mcv-font-mono);
   display: grid;
   gap: 0.125rem;
   justify-items: end;
@@ -464,6 +466,7 @@ tbody th {
   line-height: 1.2;
 }
 .detail-now-count {
+  font-family: var(--mcv-font-mono);
   font-size: 0.875rem;
   color: var(--mcv-text-soft);
 }
@@ -835,7 +838,7 @@ th[aria-sort] .sort-button {
   font-variant-numeric: tabular-nums;
 }
 .state-count b {
-  font-family: var(--mcv-font-display);
+  font-family: var(--mcv-font-mono);
   font-size: 1.375rem;
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -969,6 +972,7 @@ th[aria-sort] .sort-button {
   font-variant-numeric: tabular-nums;
 }
 .project-counts b {
+  font-family: var(--mcv-font-mono);
   font-size: 1.375rem;
   font-weight: 600;
 }
@@ -1037,6 +1041,7 @@ th[aria-sort] .sort-button {
   font-size: 1rem;
 }
 .board-column h2 b {
+  font-family: var(--mcv-font-mono);
   font-size: 1.375rem;
   font-variant-numeric: tabular-nums;
 }

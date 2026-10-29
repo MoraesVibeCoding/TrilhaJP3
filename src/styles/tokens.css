@@ -21,9 +21,10 @@
   --mcv-pulse: #b83300;
 
   /* Tipografia */
-  --mcv-font-display: "Geist", system-ui, sans-serif;
-  --mcv-font-body: "Geist", system-ui, -apple-system, sans-serif;
-  --mcv-font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  --mcv-font-display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --mcv-font-body: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --mcv-font-mono:
+    "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 
   /* Raio e espaçamento base */
   /* Marca Moraes Coding: módulos 10, cartões 14, painéis 16 px */

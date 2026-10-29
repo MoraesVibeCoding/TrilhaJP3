@@ -1,12 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
+import { IBM_Plex_Mono, Space_Grotesk } from "next/font/google";
 import { modeScript } from "@/lib/mode-script";
 import { themeScript } from "@/lib/theme-script";
 import "./globals.css";
 
-const geist = Geist({
-  variable: "--font-geist",
+// Marca Moraes Coding: Space Grotesk em títulos e texto, IBM Plex Mono em números e rótulos.
+const display = Space_Grotesk({
+  variable: "--font-display",
   subsets: ["latin"],
+});
+const mono = IBM_Plex_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -26,7 +32,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-BR" suppressHydrationWarning className={`${geist.variable}`}>
+    <html
+      lang="pt-BR"
+      suppressHydrationWarning
+      className={`${display.variable} ${mono.variable}`}
+    >
       <head>
         <script
           dangerouslySetInnerHTML={{ __html: `${themeScript};${modeScript}` }}
