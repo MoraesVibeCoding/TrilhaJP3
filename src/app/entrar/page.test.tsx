@@ -13,7 +13,7 @@ afterEach(cleanup);
 test("mesa dividida: a marca na faixa e o formulário ao lado", () => {
   render(<LoginPage />);
   expect(screen.getByRole("complementary").textContent).toContain(
-    "Projetos e demandas da Moraes CodeVibe.",
+    "Projetos e demandas da Moraes Coding.",
   );
   expect(screen.getByRole("main").querySelector("h1")?.textContent).toBe(
     "Entrar",

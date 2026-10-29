@@ -17,16 +17,16 @@ const mono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: "TrilhaJp3",
-  description: "Sistema de gestão da Moraes CodeVibe",
+  description: "Sistema de gestão da Moraes Coding",
   // instalado na tela inicial do iPad: barra de status padrão, o conteúdo não fica por baixo dela
   appleWebApp: { title: "TrilhaJp3", statusBarStyle: "default" },
 };
 
-// A barra do navegador acompanha o fundo da página: Papel no claro, Tinta no escuro.
+// A barra do navegador acompanha o fundo da página: Gelo no claro, Mata no escuro.
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F8FAF5" },
-    { media: "(prefers-color-scheme: dark)", color: "#0F1F14" },
+    { media: "(prefers-color-scheme: light)", color: "#F2F2EE" },
+    { media: "(prefers-color-scheme: dark)", color: "#0C2A1E" },
   ],
 };
 

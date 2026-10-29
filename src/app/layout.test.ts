@@ -13,7 +13,7 @@ test("installed on the iPad it is titled TrilhaJp3, and the bar follows the page
     statusBarStyle: "default",
   });
   expect(viewport.themeColor).toEqual([
-    { media: "(prefers-color-scheme: light)", color: "#F8FAF5" },
-    { media: "(prefers-color-scheme: dark)", color: "#0F1F14" },
+    { media: "(prefers-color-scheme: light)", color: "#F2F2EE" },
+    { media: "(prefers-color-scheme: dark)", color: "#0C2A1E" },
   ]);
 });

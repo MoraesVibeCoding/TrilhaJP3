@@ -10,8 +10,9 @@ test("the app installs as TrilhaJp3 in full screen with the brand icons", () => 
     start_url: "/",
     scope: "/",
     display: "standalone",
-    background_color: "#F8FAF5",
-    theme_color: "#1B4D2E",
+    background_color: "#F2F2EE",
+    theme_color: "#0C2A1E",
+    description: "Sistema de gestão da Moraes Coding",
   });
   expect(m.icons).toEqual([
     {

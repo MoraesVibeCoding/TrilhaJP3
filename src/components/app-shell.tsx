@@ -95,7 +95,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             Sair
           </button>
         </form>
-        <p className="side-foot">Moraes CodeVibe</p>
+        <p className="side-foot">Moraes Coding</p>
       </aside>
       <main id="conteudo" className="shell-main">
         {children}

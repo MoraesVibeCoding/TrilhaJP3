@@ -1,8 +1,6 @@
 @import "../styles/tokens.css";
 
 :root {
-  --mcv-icon-ground: var(--mcv-paper);
-  --mcv-icon-pulse-line: var(--mcv-forest);
   --mcv-font-display: var(--font-display), "Helvetica Neue", Arial, sans-serif;
   --mcv-font-body: var(--font-display), "Helvetica Neue", Arial, sans-serif;
   --mcv-font-mono:
@@ -22,7 +20,6 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --mcv-icon-pulse-line: transparent;
     color-scheme: dark;
     /* Apoio escuro 2 da marca: 9,1:1 na Mata, 10,9:1 na Noite */
     --mcv-text-soft: #b9ccc1;
@@ -36,7 +33,6 @@
 }
 
 :root[data-theme="dark"] {
-  --mcv-icon-pulse-line: transparent;
   color-scheme: dark;
   --mcv-text-soft: #b9ccc1;
   --mcv-scrim: rgb(4 12 8 / 0.6);
@@ -1079,22 +1075,13 @@ th[aria-sort] .sort-button {
   max-width: 60rem;
 }
 
-/* Ícone da marca V2: o traço herda a cor do texto; o Pulso ganha contorno Floresta no claro (1,3:1 sem ele) */
+/* Ícone da marca: barras em Mata (Névoa no escuro) e a barra de hoje no sinal */
 .brand-icon {
   flex: none;
-  color: var(--mcv-ink);
-}
-.brand-icon [data-terminal] {
-  fill: var(--mcv-icon-ground);
-  stroke: currentColor;
+  color: var(--mcv-forest);
 }
 .brand-icon [data-pulse] {
   fill: var(--mcv-pulse);
-  stroke: var(--mcv-icon-pulse-line);
-  stroke-width: 2.5;
-}
-.shell-side .brand-icon {
-  --mcv-icon-ground: var(--mcv-mint);
 }
 
 .sort-field--always {
@@ -1507,11 +1494,10 @@ th[aria-sort] .sort-button {
   color: var(--mcv-ink);
   border-right: 1px solid var(--mcv-line);
 }
-/* Sobre Floresta o traço é Neblina e o Pulso dispensa contorno (regra da marca) */
+/* Sobre a Mata as barras são Névoa e a barra de hoje é o Sinal claro (4,9:1 na Mata) */
 .login-band .brand-icon {
   color: inherit;
-  --mcv-icon-ground: transparent;
-  --mcv-icon-pulse-line: transparent;
+  --mcv-pulse: #ff5a1f;
 }
 .login-claim {
   max-width: 16ch;
