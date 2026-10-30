@@ -1,6 +1,6 @@
 # T7: subtarefas de um nível
 
-Status: **rascunho, aguarda aprovação do Pedro.** Decisões do Pedro em 2026-10-30: criar, renomear, remover e marcar como feita (sem reordenar); estado só "feita ou não"; tela com 3 propostas do `impeccable` em HTML. Base: `docs/SPEC.md` (4.2 e 6, linha T7), `tasks/t5-spec.md` (decisão 4), ADR 0003, `CONSTRAINTS.md`.
+Status: **aprovada pelo Pedro em 2026-10-30 ("De acordo").** Decisões do Pedro em 2026-10-30: criar, renomear, remover e marcar como feita (sem reordenar); estado só "feita ou não"; tela com 3 propostas do `impeccable` em HTML. Base: `docs/SPEC.md` (4.2 e 6, linha T7), `tasks/t5-spec.md` (decisão 4), ADR 0003, `CONSTRAINTS.md`.
 
 ## 1. Objetivo
 
