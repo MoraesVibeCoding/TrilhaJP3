@@ -4,7 +4,7 @@ Atualizado em 2026-10-30 (T5 mesclada; troca de marca para Moraes Coding constru
 
 ## Próxima ação
 
-Pedro: revisar a troca de marca (branch `claude/marca-spec`, spec `tasks/marca-spec.md`) e pedir a PR. O `check:floor` fica vermelho pelas 20 asserções da marca V2 (e do nome antigo da empresa) trocadas pelas da Moraes Coding, como na T4 e na T5. Depois: T7. As branches antigas `claude/t5-spec` e `claude/t5-demandas` podem ser apagadas.
+Pedro: revisar a troca de marca (branch `claude/marca-spec`, spec `tasks/marca-spec.md`) e pedir a PR. O `check:floor` fica vermelho pelas 27 asserções da marca V2, do nome antigo da empresa e dos nomes `--mcv-*` trocadas pelas equivalentes da Moraes Coding, como na T4 e na T5. Depois: T7. As branches antigas `claude/t5-spec` e `claude/t5-demandas` podem ser apagadas.
 
 ## Marca (2026-10-27)
 
@@ -52,7 +52,7 @@ TrilhaJp3 é o sistema de gestão da empresa (Moraes Coding). A v1 é o módulo 
 | Login e sessão (T3) | Pronto |
 | Projetos (T4) | Pronto, em `main` (PR #4) |
 | Demandas reais (T5) | Pronto, em `main` (PR #5) |
-| Marca Moraes Coding | Construída na branch `claude/marca-spec`; 331 testes unitários, E2E 117, banco 29 (2026-10-29) |
+| Marca Moraes Coding | Construída na branch `claude/marca-spec`; 333 testes unitários, E2E 117, banco 29, build, gitleaks, osv-scanner, semgrep e npm audit limpos (2026-10-30) |
 | CI | `check:floor` vermelho por asserções reescritas (aceito pelo Pedro na T4 e na T5); o resto verificado localmente |
 
 Comandos: `npm run db:migrate` (aplica `supabase/migrations/` pela Management API; `--rollback <versão>` reverte), `npm run test:db`, `npm test`, `npm run test:e2e`, `npm run lint`, `npm run typecheck`, `npm run format:check`, `npm run build`.
