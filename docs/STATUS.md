@@ -1,6 +1,6 @@
 # STATUS — TrilhaJp3
 
-Atualizado em 2026-10-30 (T5 mesclada; troca de marca para Moraes Coding construída na branch `claude/marca-spec`). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
+Atualizado em 2026-10-30 (troca de marca mesclada, PR #9; spec da T7 aguarda aprovação). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
 
 ## Próxima ação
 
