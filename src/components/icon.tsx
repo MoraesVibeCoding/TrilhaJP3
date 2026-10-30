@@ -1,14 +1,18 @@
 // Ícones de interface da marca Moraes Coding: grade de 24, traço de 2px, pontas retas, cor do texto.
 // Traçados de docs/brand/moraes-coding/icones; só entram aqui os que a interface usa.
-// sol, lua e foco não existem no conjunto da marca: desenhados no mesmo traço.
+// sol e lua não existem no conjunto da marca: desenhados no mesmo traço, para o botão de tema dizer o tema de destino.
 const PATHS = {
+  inicio: "M4 11L12 4L20 11M6 9.5V20H18V9.5M10 20V14H14V20",
   menu: "M4 6H20M4 12H20M4 18H20",
+  pasta: "M3 6H10L12 8H21V19H3Z",
+  sair: "M10 4H4V20H10M14 8L18 12L14 16M18 12H9",
   fechar: "M5 5L19 19M19 5L5 19",
   adicionar: "M12 4V20M4 12H20",
   "seta-cima": "M5 10L12 3L19 10M12 3V21",
   "seta-baixo": "M5 14L12 21L19 14M12 21V3",
   painel: "M4 4H10V10H4ZM14 4H20V10H14ZM4 14H10V20H4ZM14 14H20V20H14Z",
-  foco: "M21 12A9 9 0 1 1 3 12A9 9 0 1 1 21 12ZM12 12H12.01",
+  visualizar:
+    "M2 12C5 6.5 19 6.5 22 12C19 17.5 5 17.5 2 12ZM15 12A3 3 0 1 1 9 12A3 3 0 1 1 15 12Z",
   sol: "M16 12A4 4 0 1 1 8 12A4 4 0 1 1 16 12ZM12 2V4M12 20V22M2 12H4M20 12H22M5 5L6.5 6.5M17.5 17.5L19 19M5 19L6.5 17.5M17.5 6.5L19 5",
   lua: "M20 14.5A8 8 0 0 1 9.5 4A8 8 0 1 0 20 14.5Z",
 } as const;

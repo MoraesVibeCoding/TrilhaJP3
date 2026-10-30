@@ -51,7 +51,11 @@ export function ResumeBoard({
       )}
       {(rest.length > 0 || !nowPick) && (
         <div className="resume-rest">
-          {rest.length > 0 && <h2>Em andamento ({rest.length})</h2>}
+          {rest.length > 0 && (
+            <h2>
+              Em andamento <span className="count">({rest.length})</span>
+            </h2>
+          )}
           <ResumeList items={rest} now={now} onOpen={openDemand} />
         </div>
       )}

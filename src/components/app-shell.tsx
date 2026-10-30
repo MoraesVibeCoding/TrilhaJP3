@@ -11,10 +11,10 @@ import { ModeToggle } from "./mode-toggle";
 import { ThemeToggle } from "./theme-toggle";
 
 const NAV = [
-  { href: "/", label: "Retomar" },
-  { href: "/demandas", label: "Demandas" },
-  { href: "/projetos", label: "Projetos" },
-];
+  { href: "/", label: "Retomar", icon: "inicio" },
+  { href: "/demandas", label: "Demandas", icon: "menu" },
+  { href: "/projetos", label: "Projetos", icon: "pasta" },
+] as const;
 
 function isCurrent(pathname: string, href: string) {
   return href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -23,12 +23,13 @@ function isCurrent(pathname: string, href: string) {
 function NavList({ pathname }: { pathname: string }) {
   return (
     <ul>
-      {NAV.map(({ href, label }) => (
+      {NAV.map(({ href, label, icon }) => (
         <li key={href}>
           <Link
             href={href}
             aria-current={isCurrent(pathname, href) ? "page" : undefined}
           >
+            <Icon name={icon} />
             {label}
           </Link>
         </li>
@@ -82,6 +83,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         {/* Logo abaixo da navegação: no pé ficaria fora da tela e, no celular, sob o botão flutuante */}
         <form action={signOut}>
           <button type="submit" className="signout-button">
+            <Icon name="sair" />
             Sair
           </button>
         </form>

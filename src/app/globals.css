@@ -172,7 +172,9 @@ a {
   gap: 0.25rem;
 }
 .shell-side nav a {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
   text-decoration: none;
   padding: 0.625rem 0.75rem;
   border-radius: var(--mc-raio-10);
@@ -193,6 +195,9 @@ a {
   color: var(--mc-texto-apoio);
 }
 .signout-button {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
   width: 100%;
   min-height: 2.75rem;
   padding: 0.625rem 0.75rem;
@@ -509,10 +514,42 @@ tbody th {
   border-bottom: 1px solid var(--mc-borda);
 }
 .detail-group summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   padding: 0.75rem 0;
   min-height: 2.75rem;
   font-weight: 600;
   cursor: pointer;
+  list-style: none;
+}
+.detail-group summary::-webkit-details-marker {
+  display: none;
+}
+/* Marcador no traço da marca (mc-avancar), no lugar do triângulo nativo; gira ao abrir */
+.detail-group summary::before {
+  content: "";
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  background: var(--mc-texto-titulo);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='square'%3E%3Cpath d='M14 5L21 12L14 19M21 12H3'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+  transition: rotate 120ms ease-out;
+}
+.detail-group[open] > summary::before {
+  rotate: 90deg;
+}
+@media (prefers-reduced-motion: reduce) {
+  .detail-group summary::before {
+    transition: none;
+  }
+}
+/* Contagem entre parênteses: número em IBM Plex Mono, ao lado do rótulo em Space Grotesk */
+.count {
+  font-family: var(--mc-fonte-mono);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
 }
 .detail-list {
   padding: 0 0 0.75rem 1.25rem;
@@ -606,10 +643,6 @@ tbody th {
   margin-top: 0.75rem;
 }
 
-.detail-group summary::marker,
-.done-today summary::marker {
-  color: var(--mc-texto-titulo);
-}
 .step-progress {
   display: flex;
   gap: 4px;
@@ -1178,6 +1211,10 @@ th[aria-sort] .sort-button {
     padding: 0;
     justify-content: center;
     border-radius: var(--mc-raio-16);
+  }
+  /* Com o menu do celular aberto o botão ficaria em Mata sobre o painel em Mata: sai de cena */
+  .shell[data-nav-open="true"] .capture-button {
+    display: none;
   }
   /* o nome continua para leitores de tela: só sai da vista */
   .capture-button .capture-label {

@@ -22,7 +22,9 @@ test("display and body fonts resolve to Space Grotesk, numbers to IBM Plex Mono"
 // A última font-family declarada para o seletor, em qualquer regra que o liste, é a que vale.
 const lastFontFamily = (selector: string) => {
   let last = "";
-  for (const [, selectors, body] of globals.matchAll(/([^{}]+)\{([^}]*)\}/g)) {
+  for (const [, selectors, body] of globals
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .matchAll(/([^{}]+)\{([^}]*)\}/g)) {
     if (!selectors.split(",").some((s) => s.trim() === selector)) continue;
     const m = body.match(/font-family:\s*([^;]+);/);
     if (m) last = m[1].trim();
@@ -37,6 +39,7 @@ test("counts, dates and step numbers use the mono family", () => {
     ".project-counts b",
     ".board-column h2 b",
     ".detail-now-count",
+    ".count",
   ]) {
     expect(lastFontFamily(sel), sel).toBe("var(--mc-fonte-mono)");
   }

@@ -47,7 +47,7 @@ export function ModeToggle() {
         title="Alternar Foco e Completo (F)"
         onClick={toggle}
       >
-        <Icon name={isFocus ? "painel" : "foco"} />
+        <Icon name={isFocus ? "painel" : "visualizar"} />
       </button>
       <span role="status" className="visually-hidden">
         {announcement}

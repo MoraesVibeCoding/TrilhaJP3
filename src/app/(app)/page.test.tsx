@@ -61,6 +61,9 @@ test("leads with Agora, then the rest in progress, then Feito hoje", async () =>
     demoDemands.filter((d) => d.state === "Fazendo").length - 1,
   );
   expect(
-    screen.getByText("Feito hoje (2)", { selector: "summary" }),
+    screen.getByText(
+      (_, el) =>
+        el?.tagName === "SUMMARY" && el.textContent === "Feito hoje (2)",
+    ),
   ).toBeDefined();
 });

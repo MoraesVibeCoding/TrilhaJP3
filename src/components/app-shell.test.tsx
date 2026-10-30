@@ -110,3 +110,13 @@ test("Sair fica logo depois da navegação, não no pé da barra", () => {
   expect(next?.tagName).toBe("FORM");
   expect(next?.textContent).toBe("Sair");
 });
+
+test("each navigation item and Sair carry a decorative brand icon, so the name stays the text", () => {
+  render(<AppShell>x</AppShell>);
+  for (const name of ["Retomar", "Demandas", "Projetos"]) {
+    const link = screen.getByRole("link", { name });
+    expect(link.querySelector('svg[aria-hidden="true"]')).not.toBeNull();
+  }
+  const sair = screen.getByRole("button", { name: "Sair" });
+  expect(sair.querySelector('svg[aria-hidden="true"]')).not.toBeNull();
+});
