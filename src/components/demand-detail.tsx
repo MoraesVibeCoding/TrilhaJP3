@@ -10,7 +10,7 @@ export type DetailData = {
   history: readonly { at: string; text: string }[];
 };
 
-type Subtask = { title: string; done: boolean };
+type Subtask = { id: string; title: string; done: boolean };
 
 export function DemandDetail({
   data,
@@ -136,7 +136,7 @@ export function SubtaskList({
     <ol className="detail-list" aria-label={label}>
       {subtasks.map((s, i) => (
         <li
-          key={s.title}
+          key={s.id}
           data-done={s.done}
           aria-current={i === nextIndex ? "step" : undefined}
         >

@@ -3,7 +3,7 @@ import { concludeStep, moveDemand, setNow } from "@/app/(app)/demandas/actions";
 import { stateValue } from "./demand-labels";
 import { useFlashMessage } from "./use-flash-message";
 
-type Subtask = { title: string; done: boolean };
+type Subtask = { id: string; title: string; done: boolean };
 type Change =
   | { id: string; state: string; at: string }
   | { id: string; step: true }

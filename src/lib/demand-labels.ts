@@ -11,7 +11,7 @@ export type Demand = {
   state: DemandState;
   priority: Priority;
   lastActivityAt: string;
-  subtasks: readonly { title: string; done: boolean }[];
+  subtasks: readonly { id: string; title: string; done: boolean }[];
   comments: readonly { author: string; at: string; text: string }[];
   attachments: readonly { name: string }[];
   history: readonly { at: string; text: string }[];

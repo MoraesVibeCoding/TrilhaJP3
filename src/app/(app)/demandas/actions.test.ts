@@ -43,6 +43,10 @@ const {
   captureOptions,
   updateDemand,
   importDemands,
+  addSubtask,
+  renameSubtask,
+  toggleSubtask,
+  archiveSubtask,
 } = await import("./actions");
 const { revalidatePath } = await import("next/cache");
 
@@ -335,5 +339,89 @@ describe("importDemands", () => {
       ok: false,
       error: "Não foi possível importar. Tente de novo.",
     });
+  });
+});
+
+describe("subtarefas (T7)", () => {
+  test("addSubtask lê o projeto da mãe de primeiro nível e cria a filha no fim", async () => {
+    db.results = [{ data: { project_id: "p1" } }, {}];
+    await expect(addSubtask(ID, "  Revisar textos  ")).resolves.toBe(true);
+    expect(db.queries).toEqual([
+      [
+        "from(tasks)",
+        `select("project_id")`,
+        `eq("id","${ID}")`,
+        `is("parent_task_id",null)`,
+        `is("archived_at",null)`,
+        "single()",
+      ],
+      [
+        "from(tasks)",
+        `insert({"organization_id":"org-1","project_id":"p1","parent_task_id":"${ID}","title":"Revisar textos","state":"todo"})`,
+      ],
+    ]);
+    expect(revalidatePath).toHaveBeenCalledWith("/", "layout");
+  });
+
+  test("addSubtask recusa título vazio e id inválido sem consultar o banco", async () => {
+    await expect(addSubtask(ID, "   ")).resolves.toBe(false);
+    await expect(addSubtask("x", "Passo")).resolves.toBe(false);
+    expect(db.queries).toEqual([]);
+  });
+
+  test("addSubtask devolve false quando a mãe não serve ou a gravação falha", async () => {
+    db.results = [{ error: { code: "PGRST116" } }];
+    await expect(addSubtask(ID, "Passo")).resolves.toBe(false);
+    db.results = [{ data: { project_id: "p1" } }, { error: { code: "23514" } }];
+    await expect(addSubtask(ID, "Passo")).resolves.toBe(false);
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
+  test("renameSubtask, toggleSubtask e archiveSubtask só alteram subtarefas", async () => {
+    db.results = [
+      { data: [{ id: STEP }] },
+      { data: [{ id: STEP }] },
+      { data: [{ id: STEP }] },
+    ];
+    await expect(renameSubtask(STEP, " Contato ")).resolves.toBe(true);
+    await expect(toggleSubtask(STEP, false)).resolves.toBe(true);
+    await expect(archiveSubtask(STEP)).resolves.toBe(true);
+    const only = [
+      `eq("id","${STEP}")`,
+      `not("parent_task_id","is",null)`,
+      `select("id")`,
+    ];
+    expect(db.queries[0]).toEqual([
+      "from(tasks)",
+      `update({"title":"Contato"})`,
+      ...only,
+    ]);
+    expect(db.queries[1]).toEqual([
+      "from(tasks)",
+      `update({"state":"todo"})`,
+      ...only,
+    ]);
+    expect(db.queries[2][1]).toMatch(
+      /^update\(\{"archived_at":"\d{4}-\d\d-\d\dT/,
+    );
+    expect(db.queries[2].slice(2)).toEqual(only);
+  });
+
+  test("toggleSubtask marca como feita", async () => {
+    db.results = [{ data: [{ id: STEP }] }];
+    await expect(toggleSubtask(STEP, true)).resolves.toBe(true);
+    expect(db.queries[0][1]).toBe(`update({"state":"done"})`);
+  });
+
+  test("entradas inválidas não chegam ao banco; nenhuma linha alterada é false", async () => {
+    await expect(renameSubtask(STEP, "")).resolves.toBe(false);
+    await expect(renameSubtask("x", "Ok")).resolves.toBe(false);
+    await expect(
+      toggleSubtask(STEP, "sim" as unknown as boolean),
+    ).resolves.toBe(false);
+    await expect(archiveSubtask("x")).resolves.toBe(false);
+    expect(db.queries).toEqual([]);
+    db.results = [{ data: [] }];
+    await expect(archiveSubtask(STEP)).resolves.toBe(false);
   });
 });

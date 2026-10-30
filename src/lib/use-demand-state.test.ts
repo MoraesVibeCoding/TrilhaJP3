@@ -21,7 +21,7 @@ type Demand = {
   state: string;
   lastActivityAt: string;
   doneAt?: string;
-  subtasks: readonly { title: string; done: boolean }[];
+  subtasks: readonly { id: string; title: string; done: boolean }[];
   isNow: boolean;
 };
 const demands: readonly Demand[] = [
@@ -30,8 +30,8 @@ const demands: readonly Demand[] = [
     state: "Fazendo",
     lastActivityAt: "2026-10-20T10:00:00",
     subtasks: [
-      { title: "Um", done: true },
-      { title: "Dois", done: false },
+      { id: "Um", title: "Um", done: true },
+      { id: "Dois", title: "Dois", done: false },
     ],
     isNow: true,
   },

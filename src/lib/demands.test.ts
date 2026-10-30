@@ -107,9 +107,9 @@ test("lê só demandas ativas; as filhas viram subtarefas, na ordem de criação
   expect(db.calls).toEqual(["tasks.is(archived_at)"]);
   expect(demands.map((d) => d.id)).toEqual(["t1"]);
   expect(demands[0].subtasks).toEqual([
-    { title: "Home", done: true },
-    { title: "Contato", done: false },
-    { title: "Rodapé", done: false },
+    { id: "Home", title: "Home", done: true },
+    { id: "Contato", title: "Contato", done: false },
+    { id: "Rodapé", title: "Rodapé", done: false },
   ]);
 });
 
