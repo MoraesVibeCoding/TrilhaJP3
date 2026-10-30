@@ -25,3 +25,20 @@ test("draws nothing when there are no steps", () => {
   expect(container.textContent).toBe("");
   expect(container.querySelectorAll("[data-filled]")).toHaveLength(0);
 });
+
+test("with the signal on, only the current step is marked", () => {
+  const { container } = render(<StepProgress done={2} total={4} signal />);
+  const current = container.querySelectorAll("[data-current]");
+  expect(current).toHaveLength(1);
+  expect(current[0]).toBe(container.querySelectorAll("[data-filled]")[2]);
+});
+
+test("without the signal, or with every step done, no step is marked", () => {
+  const { container } = render(
+    <>
+      <StepProgress done={2} total={4} />
+      <StepProgress done={3} total={3} signal />
+    </>,
+  );
+  expect(container.querySelectorAll("[data-current]")).toHaveLength(0);
+});

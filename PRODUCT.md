@@ -8,15 +8,15 @@ web
 
 ## Users
 
-Pedro Moraes, dono da Moraes CodeVibe e único usuário da v1. Usa o app principalmente no computador e no iPad, em sessões de planejamento e revisão: priorizar, quebrar demandas e revisar o que está parado. O celular serve só para consulta. Outros usuários e empresas virão depois (banco multiempresa desde o início).
+Pedro Moraes, dono da Moraes Coding e único usuário da v1. Usa o app principalmente no computador e no iPad, em sessões de planejamento e revisão: priorizar, quebrar demandas e revisar o que está parado. O celular serve só para consulta. Outros usuários e empresas virão depois (banco multiempresa desde o início).
 
 ## Product Purpose
 
-TrilhaJp3 é o sistema de gestão da Moraes CodeVibe. A v1 é o módulo Projetos e demandas: o Pedro cadastra os projetos em andamento e organiza as demandas de cada um, com subtarefas, etiquetas, comentários, anexos e histórico de alterações, numa tela única de visão geral. Sucesso da v1: o Pedro trabalha nele no lugar de ferramentas soltas.
+TrilhaJp3 é o sistema de gestão da Moraes Coding. A v1 é o módulo Projetos e demandas: o Pedro cadastra os projetos em andamento e organiza as demandas de cada um, com subtarefas, etiquetas, comentários, anexos e histórico de alterações, numa tela única de visão geral. Sucesso da v1: o Pedro trabalha nele no lugar de ferramentas soltas.
 
 ## Positioning
 
-Ferramenta com a marca e os dados da própria Moraes CodeVibe, sem depender de serviço de terceiros para guardar o trabalho da empresa.
+Ferramenta com a marca e os dados da própria Moraes Coding, sem depender de serviço de terceiros para guardar o trabalho da empresa.
 
 ## Operating Context
 
@@ -33,20 +33,20 @@ Interface em português do Brasil. Site responsivo instalável (PWA) no computad
 
 ## Brand Commitments
 
-Nome do app: TrilhaJp3. Empresa: Moraes CodeVibe. A **marca V2** (evolução decidida pelo Pedro em 2026-10-23) substitui a V1 no app: ícone M em circuito com nó de pulso, paleta Floresta, Folha, Pulso lime e Âmbar, Folha a 4,8:1. Tokens e logos em `docs/brand/evolucao/`; o kit V1 em `docs/brand/` fica como histórico e não foi alterado. Regras: o Pulso lime significa "Claude está trabalhando" e só aparece sobre fundo escuro ou com contorno Floresta; o Âmbar é só preenchimento com texto Tinta. **Exceção de tipografia, decidida em 2026-10-22: o app usa Geist** (títulos e texto) no lugar de Fraunces, Inter e JetBrains Mono, para um visual mais moderno; a Fraunces fica só no logotipo e em material de marca.
+Nome do app: TrilhaJp3. Empresa: **Moraes Coding** (antes Moraes CodeVibe). A marca Moraes Coding, direção B · Gráfico, substitui a V2 no app desde 2026-10-28 (ADR 0007, `tasks/marca-spec.md`): Gelo e Mata, M de cinco barras com a barra de hoje no Sinal, Space Grotesk em títulos e texto e IBM Plex Mono só em números. Tokens, logos e ícones em `docs/brand/moraes-coding/`; a V2 (`docs/brand/evolucao/`) e a V1 (`docs/brand/`) ficam como histórico. Regras: o Sinal laranja aparece uma vez por tela, como preenchimento (no app, o passo atual da demanda Agora), e é a cor do foco; sobre o Gelo vale o Sinal escuro `#B83300`, nunca o `#FF5A1F`; Mostarda é só preenchimento com texto Noite; sem sombras e sem gradientes; a barra lateral é a superfície escura (proposta A).
 
-**Voz da marca V2** (fundamentos completos em `docs/brand/evolucao/fundamentos-v2.md`, recebidos em 2026-10-26): "fala como quem sabe, não como quem vende". Sábio 70% (explica o porquê, prova com dados, sem soar professoral) e Mago 30% (a virada com IA, que aparece pouco, sem prometer mágica). Tom: um engenheiro experiente explicando para alguém ocupado: direto, gentil, com números. No app, isso vale para todo texto de interface: frases curtas, números concretos quando existem, nenhum jargão sem uma frase explicando, nada de inglês sem necessidade, nada de exagero ("turbinar", "revolucionário", "faz tudo sozinha", "sinergia"). O Pulso lime, que a marca usa "uma vez por peça, ligado a IA ou ao número principal", fica no app restrito a "Claude está trabalhando" (decisão de 2026-10-23). Regras de uso que o app segue: Folha sobre Neblina só a partir de 24 px (abaixo, Floresta); Âmbar sobre Floresta, evitar; logo com no mínimo 24 px, respiro igual à altura do ícone, sem distorcer, sem trocar a cor do pulso e nunca sobre fundo Pulso.
+**Voz da marca** (guia completo na seção "Voz e escrita" do design system Moraes Coding): "fala como quem sabe, não como quem vende". Tom: um engenheiro experiente explicando para alguém ocupado: direto, gentil, com números. No app, isso vale para todo texto de interface: frases curtas, número antes de adjetivo, nenhum jargão sem uma frase explicando, nada de inglês sem necessidade, nada de exagero ("turbinar", "revolucionário", "faz tudo sozinha", "sinergia"). Em texto corrido escreva "Moraes Coding", nunca "moraes.coding" (só no desenho do logo). Logo com no mínimo 24 px, sem distorcer, sem trocar a ordem das barras.
 
 ## Evidence on Hand
 
-Kit de marca em `docs/brand/` (PDF de diretrizes, logos, tokens) e a evolução V2 em `docs/brand/evolucao/` (tokens, logos, fundamentos com posicionamento, voz, mensagem e regras de uso). Não há depoimentos, clientes, métricas ou capturas de tela; nada disso deve ser inventado. O case "checkout 32% mais rápido" e o painel "Jornada Azul" das pranchas são simulados e não servem como prova.
+Marca atual em `docs/brand/moraes-coding/` (tokens, logos, ícones); histórico em `docs/brand/evolucao/` (V2) e `docs/brand/` (V1). Não há depoimentos, clientes, métricas ou capturas de tela; nada disso deve ser inventado. O case "checkout 32% mais rápido" e o painel "Jornada Azul" das pranchas são simulados e não servem como prova.
 
 ## Product Principles
 
 1. Poucas coisas, bem feitas: a v1 cobre só projetos e demandas.
 2. Os dados são da empresa: isolamento por empresa em todas as camadas.
 3. Qualidade antes de prazo: cada fatia só avança com teste passando.
-4. A marca Moraes CodeVibe aparece nos detalhes, não em enfeite.
+4. A marca Moraes Coding aparece nos detalhes, não em enfeite.
 
 ## Accessibility & Inclusion
 
