@@ -9,17 +9,14 @@ const icon = (size?: number) => {
   return container.querySelector("svg")!;
 };
 
-test("at 32px or more it shows the two terminals and the lime pulse", () => {
+test("it draws the M with five bars on a base line, the last bar being today's signal", () => {
   const svg = icon(32);
-  expect(svg.querySelectorAll("[data-terminal]")).toHaveLength(2);
+  expect(svg.querySelectorAll("[data-bar]")).toHaveLength(5);
   expect(svg.querySelectorAll("[data-pulse]")).toHaveLength(1);
-});
-
-test("below 32px it loses the terminals and thickens the stroke", () => {
-  const svg = icon(28);
-  expect(svg.querySelectorAll("[data-terminal]")).toHaveLength(0);
-  expect(svg.querySelector("[data-pulse]")).not.toBeNull();
-  expect(svg.querySelector("path")!.getAttribute("stroke-width")).toBe("9");
+  expect(svg.querySelectorAll("[data-bar]")[4].hasAttribute("data-pulse")).toBe(
+    true,
+  );
+  expect(svg.querySelectorAll("[data-base]")).toHaveLength(1);
 });
 
 test("the minimum size is 24px", () => {

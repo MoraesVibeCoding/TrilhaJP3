@@ -146,9 +146,10 @@ test.describe("janela da demanda", () => {
 
 test("the page link is a 44px touch target", async ({ page }) => {
   await page.goto("/");
-  const box = await page
-    .getByRole("link", { name: "Todas as demandas" })
-    .boundingBox();
+  const link = page.getByRole("link", { name: "Todas as demandas" });
+  // a página chega em streaming e o link do carregamento é trocado: medir só depois dos dados
+  await expect(page.getByText("Carregando…")).toHaveCount(0);
+  const box = await link.boundingBox();
   expect(box!.height).toBeGreaterThanOrEqual(44);
 });
 
@@ -525,6 +526,7 @@ test.describe("revisão final da T6a", () => {
 
   test("column widths stay put when the order changes", async ({ page }) => {
     await page.goto("/demandas");
+    await expect(table(page).locator("thead th").first()).toBeVisible();
     const xs = async () =>
       table(page)
         .locator("thead th")
@@ -561,12 +563,13 @@ test.describe("revisão final da T6a", () => {
   test("the three view tabs fit one line on a phone", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/demandas");
-    const heights = await page
+    const tabs = page
       .getByRole("group", { name: "Visões" })
-      .getByRole("button")
-      .evaluateAll((els) =>
-        els.map((e) => Math.round(e.getBoundingClientRect().height)),
-      );
+      .getByRole("button");
+    await expect(tabs).toHaveCount(3);
+    const heights = await tabs.evaluateAll((els) =>
+      els.map((e) => Math.round(e.getBoundingClientRect().height)),
+    );
     expect(heights).toHaveLength(3);
     expect(Math.max(...heights)).toBeLessThanOrEqual(50); // uma linha: 44 mínimos de toque
   });

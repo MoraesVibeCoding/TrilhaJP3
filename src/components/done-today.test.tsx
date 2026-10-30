@@ -23,7 +23,10 @@ test("is collapsed by default with the count and lists what was done", () => {
     />,
   );
   const group = screen
-    .getByText("Feito hoje (2)", { selector: "summary" })
+    .getByText(
+      (_, el) =>
+        el?.tagName === "SUMMARY" && el.textContent === "Feito hoje (2)",
+    )
     .closest("details")!;
   expect(group.open).toBe(false);
   expect(within(group).getAllByRole("listitem")).toHaveLength(2);

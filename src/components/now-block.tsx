@@ -34,7 +34,11 @@ export function NowBlock({
           <p className="detail-now-count">
             Passo {item.nextStepNumber} de {item.subtasksTotal}
           </p>
-          <StepProgress done={item.subtasksDone} total={item.subtasksTotal} />
+          <StepProgress
+            done={item.subtasksDone}
+            total={item.subtasksTotal}
+            signal
+          />
           <button
             type="button"
             className="primary-button"

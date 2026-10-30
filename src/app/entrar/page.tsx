@@ -13,7 +13,7 @@ export default function LoginPage() {
           <BrandIcon />
           <span className="brand-name">TrilhaJp3</span>
         </span>
-        <p className="login-claim">Projetos e demandas da Moraes CodeVibe.</p>
+        <p className="login-claim">Projetos e demandas da Moraes Coding.</p>
       </aside>
       <main className="login-main">
         <div className="login-box">

@@ -127,6 +127,8 @@ test("the floating button leaves room: the last card can scroll clear of it", as
 }) => {
   await page.setViewportSize({ width: 390, height: 800 });
   await page.goto("/demandas");
+  // os cartões chegam em streaming: rolar só depois de eles aparecerem
+  await expect(page.locator(".demand-card").first()).toBeVisible();
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
   const last = (await page.locator(".demand-card").last().boundingBox())!;
   const button = (await page

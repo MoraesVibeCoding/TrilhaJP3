@@ -1,7 +1,7 @@
 # ADR 0004: Geist como única família tipográfica do app
 
 ## Status
-Aceita. Exceção deliberada ao kit de marca V1.
+Substituída pela ADR 0007 (marca Moraes Coding) em 2026-10-28.
 
 ## Data
 2026-10-22

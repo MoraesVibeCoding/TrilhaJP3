@@ -1,7 +1,7 @@
 # ADR 0005: Marca V2 substitui a V1 no app
 
 ## Status
-Aceita.
+Substituída pela ADR 0007 (marca Moraes Coding) em 2026-10-28.
 
 ## Data
 2026-10-23

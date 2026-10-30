@@ -67,7 +67,10 @@ test("shows Agora, the rest in progress without repeating it, and Feito hoje", (
   expect(within(list).queryByText("Revisar textos")).toBeNull();
   expect(within(list).getByText("Definir checkout")).toBeDefined();
   expect(
-    screen.getByText("Feito hoje (1)", { selector: "summary" }),
+    screen.getByText(
+      (_, el) =>
+        el?.tagName === "SUMMARY" && el.textContent === "Feito hoje (1)",
+    ),
   ).toBeDefined();
 });
 

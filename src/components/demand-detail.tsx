@@ -41,22 +41,30 @@ export function DemandDetail({
       </section>
 
       <details open className="detail-group">
-        <summary>Subtarefas ({subtasks.length})</summary>
+        <summary>
+          Subtarefas <span className="count">({subtasks.length})</span>
+        </summary>
         <SubtaskList subtasks={subtasks} />
       </details>
 
       <details className="detail-group">
-        <summary>Comentários ({data.comments.length})</summary>
+        <summary>
+          Comentários <span className="count">({data.comments.length})</span>
+        </summary>
         <CommentList comments={data.comments} />
       </details>
 
       <details className="detail-group">
-        <summary>Anexos ({data.attachments.length})</summary>
+        <summary>
+          Anexos <span className="count">({data.attachments.length})</span>
+        </summary>
         <AttachmentList attachments={data.attachments} />
       </details>
 
       <details className="detail-group">
-        <summary>Histórico ({data.history.length})</summary>
+        <summary>
+          Histórico <span className="count">({data.history.length})</span>
+        </summary>
         <HistoryList history={data.history} />
       </details>
     </>

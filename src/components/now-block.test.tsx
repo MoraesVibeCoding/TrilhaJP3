@@ -87,4 +87,6 @@ test("shows step progress: one mark per step, finished ones filled", () => {
   );
   expect(container.querySelectorAll("[data-filled]")).toHaveLength(3);
   expect(container.querySelectorAll('[data-filled="true"]')).toHaveLength(1);
+  // o sinal da marca: o passo atual da demanda Agora, uma vez por tela
+  expect(container.querySelectorAll("[data-current]")).toHaveLength(1);
 });

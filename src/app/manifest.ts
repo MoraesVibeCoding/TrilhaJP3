@@ -5,14 +5,14 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "TrilhaJp3",
     short_name: "TrilhaJp3",
-    description: "Sistema de gestão da Moraes CodeVibe",
+    description: "Sistema de gestão da Moraes Coding",
     lang: "pt-BR",
     start_url: "/",
     scope: "/",
     display: "standalone",
-    background_color: "#F8FAF5",
-    // Floresta: o fundo do ícone (proposta A da T12)
-    theme_color: "#1B4D2E",
+    background_color: "#F2F2EE",
+    // Mata: o fundo do ícone do app (mc-app-icone.svg)
+    theme_color: "#0C2A1E",
     icons: [
       {
         src: "/icons/icon-192.png",

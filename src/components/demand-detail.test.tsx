@@ -108,7 +108,11 @@ test("Concluir passo is the element that should get the initial focus", () => {
 test("groups are collapsible with counts; Subtarefas starts open", () => {
   setup();
   const group = (name: string) =>
-    screen.getByText(name, { selector: "summary" }).closest("details")!;
+    screen
+      .getByText(
+        (_, el) => el?.tagName === "SUMMARY" && el.textContent === name,
+      )
+      .closest("details")!;
   expect(group("Subtarefas (3)").open).toBe(true);
   expect(group("Comentários (1)").open).toBe(false);
   expect(group("Anexos (1)").open).toBe(false);
