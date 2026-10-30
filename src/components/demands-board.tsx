@@ -2,6 +2,7 @@
 
 import { useDemandState } from "@/lib/use-demand-state";
 import { ImportCaptured } from "./import-captured";
+import { Icon } from "./icon";
 import { useStoredState } from "@/lib/use-stored-state";
 import {
   buildRows,
@@ -77,22 +78,7 @@ function sanitize(v: Partial<ViewState>): ViewState {
 }
 
 function Caret({ dir }: { dir: "asc" | "desc" }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      width="14"
-      height="14"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      style={{ transform: dir === "asc" ? "rotate(180deg)" : undefined }}
-    >
-      <path d="M6 9l6 6 6-6" />
-    </svg>
-  );
+  return <Icon name={dir === "asc" ? "seta-cima" : "seta-baixo"} size={14} />;
 }
 
 export function DemandsBoard({
