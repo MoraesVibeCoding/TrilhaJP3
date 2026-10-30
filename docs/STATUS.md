@@ -8,7 +8,7 @@ Pedro: revisar a troca de marca (branch `claude/marca-spec`, spec `tasks/marca-s
 
 ## Marca (2026-10-27)
 
-A empresa passou a se chamar **Moraes Coding** (direção visual B · Gráfico: Mata, Gelo, Sinal laranja; Space Grotesk e IBM Plex Mono; M em barras). A troca no app está construída (ADR 0007, `tasks/marca-spec.md`), com a casca na proposta A (barra lateral em Mata), escolhida pelo Pedro em 2026-10-28. Fonte: design system "Moraes Coding" no claude.ai; no repositório só entram tokens e SVGs (`docs/brand/moraes-coding/`), porque o manual traz o nome completo do Pedro. A empresa no banco de teste já se chama Moraes Coding (migração `20261029120000_moraes_coding`, reversível). Ficam para tarefas próprias: trocar os SVGs em linha da interface pelos 36 ícones novos e renomear as variáveis `--mcv-*`.
+A empresa passou a se chamar **Moraes Coding** (direção visual B · Gráfico: Mata, Gelo, Sinal laranja; Space Grotesk e IBM Plex Mono; M em barras). A troca no app está construída (ADR 0007, `tasks/marca-spec.md`), com a casca na proposta A (barra lateral em Mata), escolhida pelo Pedro em 2026-10-28. Fonte: design system "Moraes Coding" no claude.ai; no repositório só entram tokens e SVGs (`docs/brand/moraes-coding/`), porque o manual traz o nome completo do Pedro. A empresa no banco de teste já se chama Moraes Coding (migração `20261029120000_moraes_coding`, reversível). Na mesma branch, a pedido do Pedro: os ícones de interface da marca (componente `Icon`) e os tokens renomeados para os nomes semânticos da marca (`--mc-*`).
 
 ## Repositório e ambiente (2026-10-26)
 

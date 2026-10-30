@@ -47,6 +47,8 @@ O app deixa de mostrar a marca V2 da Moraes CodeVibe e passa a mostrar a marca M
 
 ## 4. Fora do escopo
 
+**Mudança de escopo em 2026-10-30, a pedido do Pedro:** os itens 1 (ícones de interface) e 4 (renomear as variáveis) entraram nesta tarefa. Os ícones vêm pelo componente `Icon`; os tokens passaram a `--mc-*` com os nomes semânticos da marca, e o token de sombra saiu.
+
 1. Trocar os ícones de interface (os SVGs em linha de `demand-dialog`, `demands-board`, `theme-toggle`, `mode-toggle`, `capture-dialog` e `app-shell`) pelos 36 ícones novos. Eles entram no repositório agora e a troca vira uma tarefa própria.
 2. Renomear a empresa na tabela `organizations` (a migração `20261026190000_moraes_codevibe` gravou "Moraes CodeVibe"). O nome não aparece na interface. Ver a pergunta 2 da seção 8.
 3. Os componentes Kpi, GraficoBarras, Selo e Painel da marca: o app ainda não tem painel de números.

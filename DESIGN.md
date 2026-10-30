@@ -138,7 +138,7 @@ A informação é escrita por extenso. Estado e prioridade nunca dependem só de
 
 ## Colors
 
-Tokens de `docs/brand/moraes-coding/tokens.json`, aplicados em `src/styles/tokens.css`. Os nomes `--mcv-*` vêm da marca anterior e continuam (a correspondência está no topo de `tokens.css`); os valores trocam por `data-theme` ou pela preferência do sistema, entre os temas Claro (Gelo) e Escuro (Mata).
+Tokens de `docs/brand/moraes-coding/tokens.json`, aplicados em `src/styles/tokens.css`. Os nomes `--mc-*` são os semânticos da marca (`fundo`, `superficie`, `texto`, `texto-titulo`, `destaque`…); os valores trocam por `data-theme` ou pela preferência do sistema, entre os temas Claro (Gelo) e Escuro (Mata).
 
 ### Primary
 
@@ -158,7 +158,7 @@ Tokens de `docs/brand/moraes-coding/tokens.json`, aplicados em `src/styles/token
 - **Branco** (`card`, #ffffff): botões, campos e emblemas sobre o Gelo.
 - **Linha** (`line`, #d6ded8): filetes, bordas e segmentos vazios do progresso. Decorativa (1,2:1): nunca a única pista de um controle.
 - **Apoio** (`stone` e `text-soft`, #5c625e, 5,6:1 no Gelo): texto secundário e borda de controle. No escuro, Apoio escuro #9db5a8 na borda e Apoio escuro 2 #b9ccc1 no texto.
-- **Véu da janela** (`--mcv-scrim`, Alta a 35% no claro, Noite a 60% no escuro): só no `::backdrop` da janela da demanda; verde de verdade, nunca cinza.
+- **Véu da janela** (`--mc-veu`, Alta a 35% no claro, Noite a 60% no escuro): só no `::backdrop` da janela da demanda; verde de verdade, nunca cinza.
 
 ### Named Rules
 
@@ -195,7 +195,7 @@ Casca em duas colunas no computador e no iPad: barra lateral fixa de 15rem e ár
 
 ## Elevation & Depth
 
-Plano. A marca Moraes Coding não usa sombras nem gradientes: o token `--mcv-shadow` vale `none`, e a profundidade vem da troca de superfície (Gelo, Névoa e branco; Mata e Noite na barra lateral) e de filetes. O item de navegação atual se destaca pela superfície e pelo peso 600; os avisos que flutuam e o botão flutuante de captura, pela borda. A janela da demanda se separa da página pelo véu `--mcv-scrim` com `backdrop-filter: blur(4px)`, que cumpre função (isola o foco modal), não enfeite.
+Plano. A marca Moraes Coding não usa sombras nem gradientes: não há token de sombra, e a profundidade vem da troca de superfície (Gelo, Névoa e branco; Mata e Noite na barra lateral) e de filetes. O item de navegação atual se destaca pela superfície e pelo peso 600; os avisos que flutuam e o botão flutuante de captura, pela borda. A janela da demanda se separa da página pelo véu `--mc-veu` com `backdrop-filter: blur(4px)`, que cumpre função (isola o foco modal), não enfeite.
 
 ### Named Rules
 
@@ -203,7 +203,7 @@ Plano. A marca Moraes Coding não usa sombras nem gradientes: o token `--mcv-sha
 
 ## Shapes
 
-Cantos discretos, raios da marca Moraes Coding: 10px em botões e itens, 14px na janela da demanda, 16px (`--mcv-radius-lg`) no botão flutuante de captura do celular e em painéis futuros, 999px em emblemas e nos segmentos de progresso. Bordas de 1px: Linha em divisores e na borda de contêineres e emblemas (janela, cartões, insígnias de estado), que se reconhecem pelo fundo e pelo texto; controles usam `--mcv-control-line`. No celular a janela ocupa a tela inteira, sem borda nem raio.
+Cantos discretos, raios da marca Moraes Coding: 10px em botões e itens, 14px na janela da demanda, 16px (`--mc-raio-16`) no botão flutuante de captura do celular e em painéis futuros, 999px em emblemas e nos segmentos de progresso. Bordas de 1px: Linha em divisores e na borda de contêineres e emblemas (janela, cartões, insígnias de estado), que se reconhecem pelo fundo e pelo texto; controles usam `--mc-borda-controle`. No celular a janela ocupa a tela inteira, sem borda nem raio.
 
 ## Components
 
@@ -250,7 +250,7 @@ Botão primário (Mata, texto Gelo, 44px) na barra do topo no computador, com o 
 
 ### Controles, véu e movimento
 
-Bordas de controles (selects, faixa de contagens, botões de ícone e secundário) usam `--mcv-control-line` (Apoio, 5,6:1 no Gelo, WCAG 1.4.11); a Linha, 1,2:1, fica para divisores e bordas de contêineres e emblemas, que não dependem dela para serem reconhecidos. O véu da janela é o token `--mcv-scrim`: Alta a 35% no claro e Noite a 60% no escuro, para escurecer nos dois temas. O token `--mcv-shadow` vale `none` (Elevation & Depth). Movimento: a janela entra em 180ms (esmaece e sobe 8px); com movimento reduzido só esmaece, em 120ms, e o estado continua legível. O estado pressionado da faixa de contagens usa fundo Névoa e peso 600, nunca verde.
+Bordas de controles (selects, faixa de contagens, botões de ícone e secundário) usam `--mc-borda-controle` (Apoio, 5,6:1 no Gelo, WCAG 1.4.11); a Linha, 1,2:1, fica para divisores e bordas de contêineres e emblemas, que não dependem dela para serem reconhecidos. O véu da janela é o token `--mc-veu`: Alta a 35% no claro e Noite a 60% no escuro, para escurecer nos dois temas. Não há sombra (Elevation & Depth). Movimento: a janela entra em 180ms (esmaece e sobe 8px); com movimento reduzido só esmaece, em 120ms, e o estado continua legível. O estado pressionado da faixa de contagens usa fundo Névoa e peso 600, nunca verde.
 
 ### Interruptor Foco/Completo
 
@@ -258,7 +258,7 @@ Botão de ícone (44px) no cabeçalho, ao lado do tema, com `aria-pressed`. No C
 
 ### Janela da demanda
 
-Janela centrada (máx. 40rem) sobre a página, fundo Gelo, borda Linha, raio 12px. O fundo da página atrás vira o véu `--mcv-scrim` com `backdrop-filter: blur(4px)`. No celular ocupa a tela inteira. Topo: título em Space Grotesk, botão Fechar, estado e, ao lado, o botão "Marcar como Agora" ou "Tirar de Agora" (oculto no Foco). Depois o **passo atual** (Step) entre filetes, com o filete de progresso e o botão "Concluir passo", que recebe o foco inicial. Abaixo, grupos recolhíveis (Subtarefas aberto; Comentários, Anexos e Histórico fechados), cada um com contagem e marcador Mata. Fecha com `Esc`, botão ou clique fora; o foco fica preso na janela e volta ao ponto de origem. **Endereço (T5b):** abrir a janela troca o endereço para `/demandas/{id}`; fechar, `Esc` ou Voltar do navegador volta ao endereço anterior, e Avançar reabre. No topo, entre o título e Fechar, o link "Abrir em página inteira" (0,875rem, sublinhado Alta, alvo de 44px; no celular desce para baixo do título). A página substitui a janela no histórico. Na lista de Subtarefas o passo atual diz "agora" em texto.
+Janela centrada (máx. 40rem) sobre a página, fundo Gelo, borda Linha, raio 12px. O fundo da página atrás vira o véu `--mc-veu` com `backdrop-filter: blur(4px)`. No celular ocupa a tela inteira. Topo: título em Space Grotesk, botão Fechar, estado e, ao lado, o botão "Marcar como Agora" ou "Tirar de Agora" (oculto no Foco). Depois o **passo atual** (Step) entre filetes, com o filete de progresso e o botão "Concluir passo", que recebe o foco inicial. Abaixo, grupos recolhíveis (Subtarefas aberto; Comentários, Anexos e Histórico fechados), cada um com contagem e marcador Mata. Fecha com `Esc`, botão ou clique fora; o foco fica preso na janela e volta ao ponto de origem. **Endereço (T5b):** abrir a janela troca o endereço para `/demandas/{id}`; fechar, `Esc` ou Voltar do navegador volta ao endereço anterior, e Avançar reabre. No topo, entre o título e Fechar, o link "Abrir em página inteira" (0,875rem, sublinhado Alta, alvo de 44px; no celular desce para baixo do título). A página substitui a janela no histórico. Na lista de Subtarefas o passo atual diz "agora" em texto.
 
 ### Demanda em página inteira (T5b)
 
@@ -288,10 +288,10 @@ Filetes de 1px, cabeçalho em `text-soft` 0.8125rem, primeira coluna como cabeç
 
 ### Do:
 
-- **Do** usar os tokens `--mcv-*` em vez de valores soltos.
+- **Do** usar os tokens `--mc-*` em vez de valores soltos.
 - **Do** escrever estado e prioridade por extenso, com cor só como reforço.
 - **Do** manter foco visível (3px no sinal, offset 3px) e alvos de 44px.
-- **Do** usar `--mcv-text-soft` para texto secundário pequeno.
+- **Do** usar `--mc-texto-apoio` para texto secundário pequeno.
 - **Do** repetir em texto o que o filete de progresso mostra.
 
 ### Don't:

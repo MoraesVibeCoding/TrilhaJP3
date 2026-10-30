@@ -14,9 +14,9 @@ test("the app loads Space Grotesk and IBM Plex Mono and no longer loads Geist", 
 });
 
 test("display and body fonts resolve to Space Grotesk, numbers to IBM Plex Mono", () => {
-  expect(globals).toMatch(/--mcv-font-display:\s*var\(--font-display\)/);
-  expect(globals).toMatch(/--mcv-font-body:\s*var\(--font-display\)/);
-  expect(globals).toMatch(/--mcv-font-mono:\s*var\(--font-mono\)/);
+  expect(globals).toMatch(/--mc-fonte-display:\s*var\(--font-display\)/);
+  expect(globals).toMatch(/--mc-fonte-texto:\s*var\(--font-display\)/);
+  expect(globals).toMatch(/--mc-fonte-mono:\s*var\(--font-mono\)/);
 });
 
 // A última font-family declarada para o seletor, em qualquer regra que o liste, é a que vale.
@@ -38,7 +38,7 @@ test("counts, dates and step numbers use the mono family", () => {
     ".board-column h2 b",
     ".detail-now-count",
   ]) {
-    expect(lastFontFamily(sel), sel).toBe("var(--mcv-font-mono)");
+    expect(lastFontFamily(sel), sel).toBe("var(--mc-fonte-mono)");
   }
 });
 

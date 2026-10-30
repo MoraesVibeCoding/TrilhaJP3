@@ -1,67 +1,64 @@
 /* Moraes Coding — Design Tokens, direção B · Gráfico (2026-10-27).
    Valores de docs/brand/moraes-coding/tokens.json; a marca V2 da Moraes CodeVibe fica em docs/brand/evolucao.
-   Os nomes --mcv-* vêm da marca anterior e continuam para não reescrever o CSS (tasks/marca-spec.md, item 2.2):
-   paper = fundo (Gelo / Mata), card = superfície (branco / Noite), mint = superfície suave (Névoa / Noite),
-   ink = texto, forest = títulos e marca (Mata / Névoa), leaf = Alta, stone = apoio, line = linha,
-   leaf-soft = seleção, gold = Mostarda, pulse = o sinal (Sinal escuro / Sinal).
-   O sinal aparece uma vez por tela, como preenchimento. Mostarda é só preenchimento, com texto Noite. */
+   Nomes semânticos da marca: fundo (Gelo / Mata), superficie (branco / Noite), superficie-suave (Névoa / Noite),
+   texto, texto-titulo (Mata / Névoa), alta, apoio, borda, selecao, atencao (Mostarda), destaque (Sinal escuro / Sinal).
+   O destaque aparece uma vez por tela, como preenchimento. Mostarda é só preenchimento, com texto Noite. */
 
 :root {
   /* Cores — Claro (Gelo), padrão */
-  --mcv-ink: #08180f;
-  --mcv-forest: #0c2a1e;
-  --mcv-leaf: #14704a;
-  --mcv-leaf-soft: #d6ded8;
-  --mcv-mint: #e6ece7;
-  --mcv-paper: #f2f2ee;
-  --mcv-gold: #e3b23c;
-  --mcv-stone: #5c625e;
-  --mcv-line: #d6ded8;
-  --mcv-card: #ffffff;
-  --mcv-pulse: #b83300;
+  --mc-texto: #08180f;
+  --mc-texto-titulo: #0c2a1e;
+  --mc-alta: #14704a;
+  --mc-selecao: #d6ded8;
+  --mc-superficie-suave: #e6ece7;
+  --mc-fundo: #f2f2ee;
+  --mc-atencao: #e3b23c;
+  --mc-apoio: #5c625e;
+  --mc-borda: #d6ded8;
+  --mc-superficie: #ffffff;
+  --mc-destaque: #b83300;
 
   /* Tipografia */
-  --mcv-font-display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
-  --mcv-font-body: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
-  --mcv-font-mono:
+  --mc-fonte-display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --mc-fonte-texto: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --mc-fonte-mono:
     "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 
   /* Raio e espaçamento base */
   /* Marca Moraes Coding: módulos 10, cartões 14, painéis 16 px */
-  --mcv-radius-sm: 10px;
-  --mcv-radius-md: 14px;
-  --mcv-radius-lg: 16px;
-  --mcv-space-unit: 8px;
+  --mc-raio-10: 10px;
+  --mc-raio-14: 14px;
+  --mc-raio-16: 16px;
 }
 
 /* Escuro (Mata) — segue a preferência do sistema */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --mcv-ink: #e6ece7;
-    --mcv-forest: #e6ece7;
-    --mcv-leaf: #9db5a8;
-    --mcv-leaf-soft: #24412f;
-    --mcv-mint: #08180f;
-    --mcv-paper: #0c2a1e;
-    --mcv-gold: #e3b23c;
-    --mcv-stone: #9db5a8;
-    --mcv-line: #24412f;
-    --mcv-card: #08180f;
-    --mcv-pulse: #ff5a1f;
+    --mc-texto: #e6ece7;
+    --mc-texto-titulo: #e6ece7;
+    --mc-alta: #9db5a8;
+    --mc-selecao: #24412f;
+    --mc-superficie-suave: #08180f;
+    --mc-fundo: #0c2a1e;
+    --mc-atencao: #e3b23c;
+    --mc-apoio: #9db5a8;
+    --mc-borda: #24412f;
+    --mc-superficie: #08180f;
+    --mc-destaque: #ff5a1f;
   }
 }
 
 /* Escuro forçado via atributo (toggle manual) */
 :root[data-theme="dark"] {
-  --mcv-ink: #e6ece7;
-  --mcv-forest: #e6ece7;
-  --mcv-leaf: #9db5a8;
-  --mcv-leaf-soft: #24412f;
-  --mcv-mint: #08180f;
-  --mcv-paper: #0c2a1e;
-  --mcv-gold: #e3b23c;
-  --mcv-stone: #9db5a8;
-  --mcv-line: #24412f;
-  --mcv-card: #08180f;
-  --mcv-pulse: #ff5a1f;
+  --mc-texto: #e6ece7;
+  --mc-texto-titulo: #e6ece7;
+  --mc-alta: #9db5a8;
+  --mc-selecao: #24412f;
+  --mc-superficie-suave: #08180f;
+  --mc-fundo: #0c2a1e;
+  --mc-atencao: #e3b23c;
+  --mc-apoio: #9db5a8;
+  --mc-borda: #24412f;
+  --mc-superficie: #08180f;
+  --mc-destaque: #ff5a1f;
 }
