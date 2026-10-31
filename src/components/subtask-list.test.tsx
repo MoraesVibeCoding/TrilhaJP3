@@ -131,3 +131,45 @@ test("with no steps yet, the editor still offers Adicionar subtarefa", () => {
     screen.getByRole("button", { name: "Adicionar subtarefa" }),
   ).toBeDefined();
 });
+
+test("Esc closes the options and returns focus, without reaching the window", () => {
+  setup();
+  const more = screen.getByRole("button", { name: "Mais opções para Contato" });
+  fireEvent.click(more);
+  // fireEvent devolve false quando o evento foi cancelado: o Esc não segue para a janela.
+  const reachedWindow = fireEvent.keyDown(
+    screen.getByRole("button", { name: "Remover" }),
+    { key: "Escape" },
+  );
+  expect(reachedWindow).toBe(false);
+  expect(screen.queryByRole("button", { name: "Remover" })).toBeNull();
+  expect(document.activeElement).toBe(more);
+});
+
+test("focus leaving the options closes them", () => {
+  setup();
+  fireEvent.click(
+    screen.getByRole("button", { name: "Mais opções para Contato" }),
+  );
+  fireEvent.blur(screen.getByRole("button", { name: "Remover" }), {
+    relatedTarget: screen.getByRole("button", { name: "Adicionar subtarefa" }),
+  });
+  expect(screen.queryByRole("button", { name: "Remover" })).toBeNull();
+});
+
+test("a done step is told by its checkbox, not by a 'feito' suffix", () => {
+  setup();
+  expect(screen.queryByText("feito", { exact: false })).toBeNull();
+});
+
+test("removing a step while the add field is open keeps focus in the field", () => {
+  setup();
+  fireEvent.click(screen.getByRole("button", { name: "Adicionar subtarefa" }));
+  fireEvent.click(
+    screen.getByRole("button", { name: "Mais opções para Contato" }),
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Remover" }));
+  expect(document.activeElement).toBe(
+    screen.getByRole("textbox", { name: "Nova subtarefa" }),
+  );
+});

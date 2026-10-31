@@ -14,7 +14,7 @@ O Pedro quebra uma demanda em passos dentro do próprio app: adiciona subtarefas
 
 ## 3. Requisitos funcionais
 
-1. **Criar:** na janela e na página da demanda, um campo "Nova subtarefa" adiciona um passo no fim da lista. Enter cria; título de 1 a 200 caracteres, com o mesmo erro da captura rápida para título vazio.
+1. **Criar:** na janela e na página da demanda, um campo "Nova subtarefa" adiciona um passo no fim da lista. Enter cria; título de 1 a 200 caracteres, com o erro "Escreva o título da subtarefa." para título vazio (o texto da maquete aprovada).
 2. **Marcar como feita:** cada subtarefa tem uma caixa de marcar. Marcar grava `state = 'done'`; desmarcar grava `state = 'todo'`. "Concluir passo" continua igual e conclui a próxima não feita.
 3. **Renomear:** editar o título no lugar, com as mesmas regras do item 1. Esc cancela.
 4. **Remover:** arquiva a subtarefa (`archived_at`), como as demandas. Ela some da lista e da contagem de passos. Sem desfazer nesta tarefa.

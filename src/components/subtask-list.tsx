@@ -38,6 +38,9 @@ export function SubtaskList({
   const [error, setError] = useState("");
   const moreRefs = useRef(new Map<string, HTMLButtonElement>());
   const addRef = useRef<HTMLButtonElement>(null);
+  const addFieldRef = useRef<HTMLInputElement>(null);
+  // Com o campo de adicionar aberto, o botão não existe: o foco vai para o campo.
+  const addTarget = () => addRef.current ?? addFieldRef.current;
   const nextIndex = subtasks.findIndex((s) => !s.done);
   // Quem recebe o foco depois que um campo some: decidido no evento, aplicado depois da renderização.
   const focusNext = useRef<(() => HTMLElement | null | undefined) | null>(null);
@@ -123,12 +126,28 @@ export function SubtaskList({
             ) : (
               <span className="step-title">
                 {s.title}
-                {s.done && <span className="detail-meta"> feito</span>}
+                {s.done && !editor && (
+                  <span className="detail-meta"> feito</span>
+                )}
                 {i === nextIndex && <span className="detail-meta"> agora</span>}
               </span>
             )}
             {editor && editing !== s.id && (
-              <span className="step-more">
+              <span
+                className="step-more"
+                onKeyDown={(e) => {
+                  if (e.key !== "Escape" || open !== s.id) return;
+                  // Senão o Esc chega à janela modal e fecha a demanda inteira.
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setOpen(null);
+                  focusNext.current = () => moreRefs.current.get(s.id);
+                }}
+                onBlur={(e) => {
+                  if (!e.currentTarget.contains(e.relatedTarget as Node | null))
+                    setOpen(null);
+                }}
+              >
                 <button
                   type="button"
                   className="step-button"
@@ -159,7 +178,7 @@ export function SubtaskList({
                       onClick={() => {
                         setOpen(null);
                         editor.remove(s.id);
-                        focusNext.current = () => addRef.current;
+                        focusNext.current = addTarget;
                       }}
                     >
                       <Icon name="excluir" size={18} />
@@ -182,6 +201,7 @@ export function SubtaskList({
         <form className="step-add" onSubmit={onAdd}>
           <input
             name="title"
+            ref={addFieldRef}
             className="step-field"
             placeholder="Nova subtarefa"
             aria-label="Nova subtarefa"
@@ -192,7 +212,7 @@ export function SubtaskList({
               e.preventDefault();
               setAdding(false);
               setError("");
-              focusNext.current = () => addRef.current;
+              focusNext.current = addTarget;
             }}
           />
           <button type="submit" className="secondary-button">

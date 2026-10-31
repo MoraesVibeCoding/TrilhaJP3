@@ -121,10 +121,12 @@ for (const theme of ["light", "dark"] as const) {
       theme,
     );
     await page.goto(pageUrl());
+    // O painel aberto cobre o botão de adicionar: abre o campo primeiro.
+    await page.getByRole("button", { name: "Adicionar subtarefa" }).click();
     await page
       .getByRole("button", { name: "Mais opções para Contato" })
       .click();
-    await page.getByRole("button", { name: "Adicionar subtarefa" }).click();
+    await expect(page.getByRole("button", { name: "Remover" })).toBeVisible();
     const { violations } = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
       .analyze();
@@ -160,3 +162,56 @@ test("group titles keep the space before the count", async ({ page }) => {
   expect(gaps).toHaveLength(4);
   for (const gap of gaps) expect(gap).toBeGreaterThan(2);
 });
+
+test("Esc with the step options open closes only the options", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: title }).click();
+  const more = dialog(page).getByRole("button", {
+    name: "Mais opções para Contato",
+  });
+  await more.click();
+  await page.keyboard.press("Escape");
+  await expect(dialog(page)).toBeVisible();
+  await expect(
+    dialog(page).getByRole("button", { name: "Remover" }),
+  ).toHaveCount(0);
+  await expect(more).toBeFocused();
+});
+
+test("on the full page, steps are 44px rows with a single rule between them", async ({
+  page,
+}) => {
+  await page.goto(pageUrl());
+  await expect(steps(page)).toHaveCount(3);
+  const rows = await steps(page).evaluateAll((all) =>
+    all.map((li) => {
+      const css = getComputedStyle(li);
+      return [
+        Math.round(li.getBoundingClientRect().height),
+        css.borderTopWidth,
+      ];
+    }),
+  );
+  for (const [height, top] of rows) {
+    expect(height).toBeLessThanOrEqual(46);
+    expect(top).toBe("0px");
+  }
+});
+
+test(
+  "removing a step with the add field open keeps focus in the field",
+  { tag: "@grava" },
+  async ({ page }) => {
+    await page.goto(pageUrl());
+    await page.getByRole("button", { name: "Adicionar subtarefa" }).click();
+    await page.getByRole("button", { name: "Mais opções para Home" }).click();
+    await save(page, () =>
+      page.getByRole("button", { name: "Remover" }).click(),
+    );
+    await expect(
+      page.getByRole("textbox", { name: "Nova subtarefa" }),
+    ).toBeFocused();
+  },
+);

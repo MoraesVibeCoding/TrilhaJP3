@@ -579,6 +579,10 @@ tbody th {
   min-height: 2.75rem;
   border-bottom: 1px solid var(--mc-borda);
 }
+.detail-list[data-editable] li[data-done="true"] .step-title {
+  text-decoration: line-through;
+  text-decoration-color: var(--mc-borda-controle);
+}
 .detail-list[data-editable] li:last-child {
   border-bottom: 0;
 }
@@ -1535,7 +1539,8 @@ th[aria-sort] .sort-button {
   padding-top: 0;
   border-top: 0;
 }
-.demand-page-steps li[aria-current="step"] {
+/* Só na lista sem edição: na editável o "agora" já marca o passo (T7) */
+.demand-page-steps .detail-list:not([data-editable]) li[aria-current="step"] {
   color: var(--mc-texto-titulo);
   font-weight: 600;
 }
@@ -1605,10 +1610,10 @@ th[aria-sort] .sort-button {
   padding-left: 0;
   gap: 0;
 }
-.demand-page ol.detail-list {
+.demand-page ol.detail-list:not([data-editable]) {
   list-style: decimal inside;
 }
-.demand-page .detail-list li {
+.demand-page .detail-list:not([data-editable]) li {
   padding: 0.5rem 0;
   border-top: 1px solid var(--mc-borda);
 }

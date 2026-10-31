@@ -52,7 +52,7 @@ TrilhaJp3 é o sistema de gestão da empresa (Moraes Coding). A v1 é o módulo 
 | Login e sessão (T3) | Pronto |
 | Projetos (T4) | Pronto, em `main` (PR #4) |
 | Demandas reais (T5) | Pronto, em `main` (PR #5) |
-| Subtarefas (T7) | Construída na branch `claude/t7-spec`; 350 testes unitários, E2E 124, banco 37 (2026-10-31) |
+| Subtarefas (T7) | Construída na branch `claude/t7-spec`; 354 testes unitários, E2E 127, banco 37 (2026-10-31) |
 | Marca Moraes Coding | Pronto, em `main` (PR #9); 333 testes unitários, E2E 117, banco 29, build, gitleaks, osv-scanner, semgrep e npm audit limpos (2026-10-30) |
 | CI | `check:floor` vermelho por asserções reescritas (aceito pelo Pedro na T4 e na T5); o resto verificado localmente |
 
