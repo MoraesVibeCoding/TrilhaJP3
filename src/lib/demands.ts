@@ -65,7 +65,7 @@ export async function listDemands(): Promise<Demand[]> {
         r,
         steps
           .filter((s) => s.parent_task_id === r.id)
-          .map((s) => ({ title: s.title, done: s.state === "done" })),
+          .map((s) => ({ id: s.id, title: s.title, done: s.state === "done" })),
       ),
     );
 }

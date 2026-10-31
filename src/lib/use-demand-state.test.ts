@@ -9,6 +9,10 @@ const actions = vi.hoisted(() => ({
   moveDemand: vi.fn(),
   concludeStep: vi.fn(),
   setNow: vi.fn(),
+  addSubtask: vi.fn(),
+  renameSubtask: vi.fn(),
+  toggleSubtask: vi.fn(),
+  archiveSubtask: vi.fn(),
 }));
 vi.mock("@/app/(app)/demandas/actions", () => actions);
 
@@ -21,7 +25,7 @@ type Demand = {
   state: string;
   lastActivityAt: string;
   doneAt?: string;
-  subtasks: readonly { title: string; done: boolean }[];
+  subtasks: readonly { id: string; title: string; done: boolean }[];
   isNow: boolean;
 };
 const demands: readonly Demand[] = [
@@ -30,8 +34,8 @@ const demands: readonly Demand[] = [
     state: "Fazendo",
     lastActivityAt: "2026-10-20T10:00:00",
     subtasks: [
-      { title: "Um", done: true },
-      { title: "Dois", done: false },
+      { id: "Um", title: "Um", done: true },
+      { id: "Dois", title: "Dois", done: false },
     ],
     isNow: true,
   },
@@ -121,4 +125,40 @@ test("toggling the marked demand takes it out of Agora", () => {
   act(() => r.result.current.toggleNow("a"));
   expect(get(r, "a").isNow).toBe(false);
   expect(actions.setNow).toHaveBeenCalledWith("a", false);
+});
+
+// T7: passos editáveis, com a mesma mudança otimista e a mesma volta quando não grava.
+test("steps.add puts the new step at the end at once and saves it", () => {
+  const r = setup();
+  act(() => r.result.current.steps("a").add("Três"));
+  expect(get(r, "a").subtasks.map((s) => s.title)).toEqual([
+    "Um",
+    "Dois",
+    "Três",
+  ]);
+  expect(get(r, "a").subtasks[2].done).toBe(false);
+  expect(actions.addSubtask).toHaveBeenCalledWith("a", "Três");
+});
+
+test("steps.rename, toggle and remove change only that step and save it", () => {
+  const r = setup();
+  act(() => r.result.current.steps("a").rename("Dois", "Dois e meio"));
+  act(() => r.result.current.steps("a").toggle("Um", false));
+  act(() => r.result.current.steps("a").remove("Dois"));
+  expect(get(r, "a").subtasks).toEqual([
+    { id: "Um", title: "Um", done: false },
+  ]);
+  expect(actions.renameSubtask).toHaveBeenCalledWith("Dois", "Dois e meio");
+  expect(actions.toggleSubtask).toHaveBeenCalledWith("Um", false);
+  expect(actions.archiveSubtask).toHaveBeenCalledWith("Dois");
+});
+
+test("a step that fails to save goes back and says so", async () => {
+  const r = setup();
+  act(() => r.result.current.steps("a").remove("Um"));
+  await settle(false);
+  expect(get(r, "a").subtasks).toHaveLength(2);
+  expect(r.result.current.failure).toBe(
+    "Não foi possível salvar. Tente de novo.",
+  );
 });

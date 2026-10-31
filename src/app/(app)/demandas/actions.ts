@@ -195,3 +195,66 @@ export async function importDemands(input: {
   revalidatePath("/", "layout");
   return { ok: true, count: rows.length };
 }
+
+// Subtarefas (T7). A regra de um nível mora no banco; aqui só a entrada é validada.
+export async function addSubtask(parentId: string, rawTitle: string) {
+  const user = await getCurrentUser();
+  const parent = id.safeParse(parentId);
+  const title = validateTitle(String(rawTitle));
+  if (!parent.success || !title.ok) return false;
+  const supabase = await createClient();
+  // A filha herda o projeto da mãe; a mãe precisa ser uma demanda ativa de primeiro nível.
+  const mother = await supabase
+    .from("tasks")
+    .select("project_id")
+    .eq("id", parent.data)
+    .is("parent_task_id", null)
+    .is("archived_at", null)
+    .single();
+  if (mother.error || !mother.data) return false;
+  const { error } = await supabase.from("tasks").insert({
+    organization_id: user.organizationId,
+    project_id: mother.data.project_id,
+    parent_task_id: parent.data,
+    title: title.title,
+    state: "todo",
+  });
+  return done(!error);
+}
+
+// Só linhas com mãe: estas ações nunca alteram uma demanda de primeiro nível.
+async function updateSubtask(taskId: string, change: object) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("tasks")
+    .update(change)
+    .eq("id", taskId)
+    .not("parent_task_id", "is", null)
+    .select("id");
+  return done(!error && !!data?.length);
+}
+
+export async function renameSubtask(taskId: string, rawTitle: string) {
+  await getCurrentUser();
+  const target = id.safeParse(taskId);
+  const title = validateTitle(String(rawTitle));
+  if (!target.success || !title.ok) return false;
+  return updateSubtask(target.data, { title: title.title });
+}
+
+export async function toggleSubtask(taskId: string, isDone: boolean) {
+  await getCurrentUser();
+  const input = z.tuple([id, z.boolean()]).safeParse([taskId, isDone]);
+  if (!input.success) return false;
+  return updateSubtask(input.data[0], {
+    state: input.data[1] ? "done" : "todo",
+  });
+}
+
+// Remover é arquivar, como as demandas: some da lista e da contagem de passos.
+export async function archiveSubtask(taskId: string) {
+  await getCurrentUser();
+  const target = id.safeParse(taskId);
+  if (!target.success) return false;
+  return updateSubtask(target.data, { archived_at: new Date().toISOString() });
+}

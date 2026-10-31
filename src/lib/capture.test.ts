@@ -117,7 +117,12 @@ test("sanitizeCaptured drops anything that is not a list or has bad fields", () 
 
 test("sanitizeCaptured forces the shape: no smuggled subtasks or extra fields", () => {
   const [d] = sanitizeCaptured([
-    { ...valid, subtasks: [{ title: "x", done: true }], isNow: true, extra: 1 },
+    {
+      ...valid,
+      subtasks: [{ id: "x", title: "x", done: true }],
+      isNow: true,
+      extra: 1,
+    },
   ]);
   expect(d).toEqual(valid);
 });

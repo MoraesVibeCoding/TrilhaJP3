@@ -1,14 +1,14 @@
 # STATUS — TrilhaJp3
 
-Atualizado em 2026-10-30 (T5 mesclada; troca de marca para Moraes Coding construída na branch `claude/marca-spec`). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
+Atualizado em 2026-10-30 (troca de marca mesclada, PR #9; T7 construída na branch `claude/t7-spec`). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
 
 ## Próxima ação
 
-Pedro: revisar a troca de marca (branch `claude/marca-spec`, spec `tasks/marca-spec.md`) e pedir a PR. O `check:floor` fica vermelho pelas 27 asserções da marca V2, do nome antigo da empresa e dos nomes `--mcv-*` trocadas pelas equivalentes da Moraes Coding, como na T4 e na T5. Depois: T7. As branches antigas `claude/t5-spec` e `claude/t5-demandas` podem ser apagadas.
+Pedro: revisar a PR da T7 (subtarefas de um nível, branch `claude/t7-spec`, spec `tasks/t7-spec.md`). Depois: T8 (etiquetas).
 
 ## Marca (2026-10-27)
 
-A empresa passou a se chamar **Moraes Coding** (direção visual B · Gráfico: Mata, Gelo, Sinal laranja; Space Grotesk e IBM Plex Mono; M em barras). A troca no app está construída (ADR 0007, `tasks/marca-spec.md`), com a casca na proposta A (barra lateral em Mata), escolhida pelo Pedro em 2026-10-28. Fonte: design system "Moraes Coding" no claude.ai; no repositório só entram tokens e SVGs (`docs/brand/moraes-coding/`), porque o manual traz o nome completo do Pedro. A empresa no banco de teste já se chama Moraes Coding (migração `20261029120000_moraes_coding`, reversível). Na mesma branch, a pedido do Pedro: os ícones de interface da marca (componente `Icon`) e os tokens renomeados para os nomes semânticos da marca (`--mc-*`).
+A empresa passou a se chamar **Moraes Coding** (direção visual B · Gráfico: Mata, Gelo, Sinal laranja; Space Grotesk e IBM Plex Mono; M em barras). A troca no app foi mesclada em 2026-10-30, PR #9 (ADR 0007, `tasks/marca-spec.md`), com a casca na proposta A (barra lateral em Mata), escolhida pelo Pedro em 2026-10-28. Fonte: design system "Moraes Coding" no claude.ai; no repositório só entram tokens e SVGs (`docs/brand/moraes-coding/`), porque o manual traz o nome completo do Pedro. A empresa no banco de teste já se chama Moraes Coding (migração `20261029120000_moraes_coding`, reversível). Na mesma branch, a pedido do Pedro: os ícones de interface da marca (componente `Icon`) e os tokens renomeados para os nomes semânticos da marca (`--mc-*`).
 
 ## Repositório e ambiente (2026-10-26)
 
@@ -31,7 +31,7 @@ Ver `docs/PRINCIPIOS-OBJETIVOS.md`, seção 5.
 
 ## Em uma frase
 
-TrilhaJp3 é o sistema de gestão da empresa (Moraes Coding). A v1 é o módulo Projetos e demandas. Prontas e em `main`: T0, T1-R, T2 (empresas e RLS), T3 (login), T4 (projetos), T12 (PWA) e as telas da T5b e T6a a T6d. A T5 (demandas reais) está em `main` (PR #5). A troca de marca para Moraes Coding está construída na branch `claude/marca-spec`. Próximas: T7 (subtarefas), T8 a T11, T13, T14.
+TrilhaJp3 é o sistema de gestão da empresa (Moraes Coding). A v1 é o módulo Projetos e demandas. Prontas e em `main`: T0, T1-R, T2 (empresas e RLS), T3 (login), T4 (projetos), T12 (PWA) e as telas da T5b e T6a a T6d. A T5 (demandas reais) está em `main` (PR #5). A troca de marca para Moraes Coding está em `main` (PR #9). A T7 (subtarefas de um nível: criar, renomear, remover e marcar, regra de um nível no banco) está construída na branch `claude/t7-spec`. Próximas: T8 a T11, T13, T14.
 
 ## Decisões fechadas (resumo)
 
@@ -52,7 +52,8 @@ TrilhaJp3 é o sistema de gestão da empresa (Moraes Coding). A v1 é o módulo 
 | Login e sessão (T3) | Pronto |
 | Projetos (T4) | Pronto, em `main` (PR #4) |
 | Demandas reais (T5) | Pronto, em `main` (PR #5) |
-| Marca Moraes Coding | Construída na branch `claude/marca-spec`; 333 testes unitários, E2E 117, banco 29, build, gitleaks, osv-scanner, semgrep e npm audit limpos (2026-10-30) |
+| Subtarefas (T7) | Construída na branch `claude/t7-spec`; 354 testes unitários, E2E 127, banco 37 (2026-10-31) |
+| Marca Moraes Coding | Pronto, em `main` (PR #9); 333 testes unitários, E2E 117, banco 29, build, gitleaks, osv-scanner, semgrep e npm audit limpos (2026-10-30) |
 | CI | `check:floor` vermelho por asserções reescritas (aceito pelo Pedro na T4 e na T5); o resto verificado localmente |
 
 Comandos: `npm run db:migrate` (aplica `supabase/migrations/` pela Management API; `--rollback <versão>` reverte), `npm run test:db`, `npm test`, `npm run test:e2e`, `npm run lint`, `npm run typecheck`, `npm run format:check`, `npm run build`.

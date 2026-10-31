@@ -61,8 +61,8 @@ test("rows carry the project name and subtask progress", () => {
       demand({
         id: "z",
         subtasks: [
-          { title: "1", done: true },
-          { title: "2", done: false },
+          { id: "1", title: "1", done: true },
+          { id: "2", title: "2", done: false },
         ],
       }),
     ],

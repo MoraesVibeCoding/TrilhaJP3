@@ -36,9 +36,9 @@ const raw: readonly (Omit<Demand, Lists> & Partial<Pick<Demand, Lists>>)[] = [
     ],
     lastActivityAt: "2026-10-21T17:00:00",
     subtasks: [
-      { title: "Home", done: true },
-      { title: "Contato", done: false },
-      { title: "Rodapé", done: false },
+      { id: "Home", title: "Home", done: true },
+      { id: "Contato", title: "Contato", done: false },
+      { id: "Rodapé", title: "Rodapé", done: false },
     ],
     projectId: "p1",
     title: "Revisar textos da página inicial",
@@ -65,8 +65,8 @@ const raw: readonly (Omit<Demand, Lists> & Partial<Pick<Demand, Lists>>)[] = [
     ],
     lastActivityAt: "2026-10-19T10:00:00",
     subtasks: [
-      { title: "Fluxo do carrinho", done: true },
-      { title: "Pagamento", done: false },
+      { id: "Fluxo do carrinho", title: "Fluxo do carrinho", done: true },
+      { id: "Pagamento", title: "Pagamento", done: false },
     ],
     projectId: "p2",
     title: "Definir fluxo de checkout",

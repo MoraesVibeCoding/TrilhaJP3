@@ -1,6 +1,6 @@
 import type { DemandState } from "./demand-labels";
 
-type Subtask = { title: string; done: boolean };
+type Subtask = { id: string; title: string; done: boolean };
 
 export type ResumeDemand = {
   id: string;
