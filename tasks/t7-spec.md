@@ -40,6 +40,8 @@ O Pedro quebra uma demanda em passos dentro do próprio app: adiciona subtarefas
 
 ## 6. Design (3 propostas, `impeccable`)
 
+**Escolhida pelo Pedro em 2026-10-31: C · Menu por passo** (maquete em `https://claude.ai/artifact/CqizyxHGgUKKQvCFEfwFit`): caixa de marcar e título na linha, botão "Mais opções" com Renomear e Remover, e "Adicionar subtarefa" que abre o campo só quando é preciso.
+
 O `impeccable` traz 3 propostas para a lista de subtarefas editável, na janela e na página da demanda, em HTML, nos dois temas. Só depois da escolha do Pedro a tela é construída. O que as propostas decidem: onde fica o campo de criar, como se renomeia (clique no título ou botão) e onde fica remover.
 
 ## 7. Fora do escopo

@@ -92,7 +92,7 @@ export function DemandsBoard({
   now: Date;
   storageName?: string;
 }) {
-  const { current, conclude, moveTo, toggleNow, failure } =
+  const { current, conclude, moveTo, toggleNow, steps, failure } =
     useDemandState(demands);
   const [stored, setStored] = useStoredState<Partial<ViewState>>(
     storageName,
@@ -377,6 +377,7 @@ export function DemandsBoard({
             isNow={Boolean(open.isNow)}
             onConclude={conclude}
             onToggleNow={toggleNow}
+            steps={steps(open.id)}
           />
         )}
       </DemandDialog>

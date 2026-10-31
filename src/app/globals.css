@@ -513,9 +513,9 @@ tbody th {
 .detail-group {
   border-bottom: 1px solid var(--mc-borda);
 }
+/* Bloco, não flex: no flex o espaço antes da contagem some ("Subtarefas(3)") */
 .detail-group summary {
-  display: flex;
-  align-items: center;
+  display: block;
   padding: 0.75rem 0;
   min-height: 2.75rem;
   font-weight: 600;
@@ -528,7 +528,8 @@ tbody th {
 /* Marcador no traço da marca (mc-avancar), no lugar do triângulo nativo; gira ao abrir */
 .detail-group summary::before {
   content: "";
-  flex: none;
+  display: inline-block;
+  vertical-align: -0.125rem;
   width: 1rem;
   /* o espaço do texto fica com o rótulo; o marcador traz a própria margem */
   margin-right: 0.5rem;
@@ -561,6 +562,148 @@ tbody th {
 }
 .detail-list li[data-done="true"] {
   color: var(--mc-texto-apoio);
+}
+
+/* T7, proposta C: passos editáveis. Número em mono, caixa de marcar, título e "Mais opções" na linha */
+.detail-list[data-editable] {
+  list-style: none;
+  padding: 0;
+  gap: 0;
+  counter-reset: passo;
+}
+.detail-list[data-editable] li {
+  counter-increment: passo;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-height: 2.75rem;
+  border-bottom: 1px solid var(--mc-borda);
+}
+.detail-list[data-editable] li:last-child {
+  border-bottom: 0;
+}
+.detail-list[data-editable] li::before {
+  content: counter(passo);
+  flex: none;
+  width: 1.5rem;
+  text-align: right;
+  font-family: var(--mc-fonte-mono);
+  font-size: 0.8125rem;
+  color: var(--mc-texto-apoio);
+}
+.step-check {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  cursor: pointer;
+}
+.step-check input {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0;
+  accent-color: var(--mc-texto-titulo);
+  cursor: pointer;
+}
+.step-title {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.step-field {
+  flex: 1;
+  min-width: 0;
+  min-height: 2.75rem;
+  padding: 0 0.625rem;
+  border: 1px solid var(--mc-borda-controle);
+  border-radius: var(--mc-raio-10);
+  background: var(--mc-superficie);
+  color: inherit;
+  font: inherit;
+}
+.step-more {
+  position: relative;
+  flex: none;
+}
+.step-button {
+  display: inline-grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: var(--mc-raio-10);
+  background: transparent;
+  color: var(--mc-texto-apoio);
+  cursor: pointer;
+}
+.step-button:hover,
+.step-button[aria-expanded="true"] {
+  background: var(--mc-superficie-suave);
+  color: var(--mc-texto);
+}
+.step-options {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 2;
+  display: grid;
+  min-width: 11rem;
+  padding: 0.25rem;
+  border: 1px solid var(--mc-borda-controle);
+  border-radius: var(--mc-raio-10);
+  background: var(--mc-superficie);
+}
+.step-options button {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-height: 2.75rem;
+  padding: 0 0.75rem;
+  border: 0;
+  border-radius: var(--mc-raio-10);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.step-options button:hover {
+  background: var(--mc-superficie-suave);
+}
+/* Na coluna estreita da página inteira o botão desce para baixo do campo */
+.step-add {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.step-add .step-field {
+  flex: 1 1 12rem;
+}
+.step-add .secondary-button,
+.secondary-button.step-add-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 0;
+}
+.step-add-button {
+  margin-top: 0.5rem;
+}
+/* Mesmo respiro que a lista tinha antes do próximo grupo */
+.step-add,
+.step-add-button {
+  margin-bottom: 0.75rem;
+}
+.step-error {
+  margin: 0.5rem 0 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.step-error:empty {
+  display: none;
 }
 .detail-meta {
   font-size: 0.875rem;

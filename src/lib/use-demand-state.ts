@@ -1,5 +1,13 @@
 import { startTransition, useOptimistic } from "react";
-import { concludeStep, moveDemand, setNow } from "@/app/(app)/demandas/actions";
+import {
+  addSubtask,
+  archiveSubtask,
+  concludeStep,
+  moveDemand,
+  renameSubtask,
+  setNow,
+  toggleSubtask,
+} from "@/app/(app)/demandas/actions";
 import { stateValue } from "./demand-labels";
 import { useFlashMessage } from "./use-flash-message";
 
@@ -7,7 +15,8 @@ type Subtask = { id: string; title: string; done: boolean };
 type Change =
   | { id: string; state: string; at: string }
   | { id: string; step: true }
-  | { id: string; now: boolean };
+  | { id: string; now: boolean }
+  | { id: string; steps: (list: readonly Subtask[]) => readonly Subtask[] };
 
 const FAILED = "Não foi possível salvar. Tente de novo.";
 
@@ -33,6 +42,7 @@ function applyChange<
         lastActivityAt: change.at,
         doneAt: change.state === "Feito" ? change.at : undefined,
       };
+    if ("steps" in change) return { ...d, subtasks: change.steps(d.subtasks) };
     const next = d.subtasks.findIndex((s) => !s.done);
     return {
       ...d,
@@ -84,5 +94,38 @@ export function useDemandState<
     run({ id, now }, () => setNow(id, now));
   }
 
-  return { current, conclude, moveTo, toggleNow, failure };
+  // T7: os passos de uma demanda. O id provisório do passo novo some quando as telas recarregam do banco.
+  function steps(parentId: string) {
+    const edit = (
+      steps: (list: readonly Subtask[]) => readonly Subtask[],
+      save: () => Promise<boolean>,
+    ) => run({ id: parentId, steps }, save);
+    return {
+      add: (title: string) =>
+        edit(
+          (list) => [
+            ...list,
+            { id: `novo-${list.length}`, title, done: false },
+          ],
+          () => addSubtask(parentId, title),
+        ),
+      rename: (stepId: string, title: string) =>
+        edit(
+          (list) => list.map((s) => (s.id === stepId ? { ...s, title } : s)),
+          () => renameSubtask(stepId, title),
+        ),
+      toggle: (stepId: string, done: boolean) =>
+        edit(
+          (list) => list.map((s) => (s.id === stepId ? { ...s, done } : s)),
+          () => toggleSubtask(stepId, done),
+        ),
+      remove: (stepId: string) =>
+        edit(
+          (list) => list.filter((s) => s.id !== stepId),
+          () => archiveSubtask(stepId),
+        ),
+    };
+  }
+
+  return { current, conclude, moveTo, toggleNow, steps, failure };
 }

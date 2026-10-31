@@ -1,5 +1,8 @@
 import type { DemandState } from "@/lib/demand-labels";
 import { StepProgress } from "./step-progress";
+import { SubtaskList, type SubtaskEditor } from "./subtask-list";
+
+export { SubtaskList };
 
 export type DetailData = {
   id: string;
@@ -18,12 +21,14 @@ export function DemandDetail({
   isNow,
   onConclude,
   onToggleNow,
+  steps,
 }: {
   data: DetailData;
   subtasks: readonly Subtask[];
   isNow: boolean;
   onConclude: (id: string) => void;
   onToggleNow: (id: string) => void;
+  steps?: SubtaskEditor;
 }) {
   return (
     <>
@@ -44,7 +49,7 @@ export function DemandDetail({
         <summary>
           Subtarefas <span className="count">({subtasks.length})</span>
         </summary>
-        <SubtaskList subtasks={subtasks} />
+        <SubtaskList subtasks={subtasks} editor={steps} />
       </details>
 
       <details className="detail-group">
@@ -120,32 +125,6 @@ export function DetailNow({
         Concluir passo
       </button>
     </>
-  );
-}
-
-export function SubtaskList({
-  subtasks,
-  label,
-}: {
-  subtasks: readonly Subtask[];
-  label?: string;
-}) {
-  if (subtasks.length === 0) return <p>Nenhuma subtarefa.</p>;
-  const nextIndex = subtasks.findIndex((s) => !s.done);
-  return (
-    <ol className="detail-list" aria-label={label}>
-      {subtasks.map((s, i) => (
-        <li
-          key={s.id}
-          data-done={s.done}
-          aria-current={i === nextIndex ? "step" : undefined}
-        >
-          {s.title}
-          {s.done && <span className="detail-meta"> feito</span>}
-          {i === nextIndex && <span className="detail-meta"> agora</span>}
-        </li>
-      ))}
-    </ol>
   );
 }
 

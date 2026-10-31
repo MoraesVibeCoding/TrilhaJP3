@@ -29,7 +29,8 @@ export function ResumeBoard({
   projects: readonly { id: string; name: string }[];
   now: Date;
 }) {
-  const { current, conclude, toggleNow, failure } = useDemandState(demands);
+  const { current, conclude, toggleNow, steps, failure } =
+    useDemandState(demands);
   const [openId, openDemand, closeDemand] = useOpenDemand();
 
   const nowPick = selectNow(current, projects);
@@ -73,6 +74,7 @@ export function ResumeBoard({
             isNow={Boolean(open.isNow)}
             onConclude={conclude}
             onToggleNow={toggleNow}
+            steps={steps(open.id)}
           />
         )}
       </DemandDialog>
