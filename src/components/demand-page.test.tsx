@@ -40,9 +40,9 @@ const demand: PageDemand = {
   priority: "Alta",
   lastActivityAt: "2026-10-21T17:00:00",
   subtasks: [
-    { title: "Home", done: true },
-    { title: "Contato", done: false },
-    { title: "Rodapé", done: false },
+    { id: "Home", title: "Home", done: true },
+    { id: "Contato", title: "Contato", done: false },
+    { id: "Rodapé", title: "Rodapé", done: false },
   ],
   comments: [
     { author: "Pedro", at: "ontem, 17h", text: "Falta revisar o contato." },

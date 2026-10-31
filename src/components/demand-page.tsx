@@ -31,7 +31,8 @@ export function DemandPage({
   projects: readonly { id: string; name: string }[];
   now: Date;
 }) {
-  const { current, conclude, toggleNow, failure } = useDemandState(demands);
+  const { current, conclude, toggleNow, steps, failure } =
+    useDemandState(demands);
   const demand = current.find((d) => d.id === id);
   const [message, setMessage] = useFlashMessage();
   const [editing, setEditing] = useState(false);
@@ -148,7 +149,11 @@ export function DemandPage({
       <div className="demand-page-cols">
         <section aria-labelledby="dp-subtasks" className="demand-page-steps">
           <h2 id="dp-subtasks">Subtarefas ({demand.subtasks.length})</h2>
-          <SubtaskList subtasks={demand.subtasks} label="Subtarefas" />
+          <SubtaskList
+            subtasks={demand.subtasks}
+            label="Subtarefas"
+            editor={steps(demand.id)}
+          />
         </section>
 
         <div className="demand-page-center">

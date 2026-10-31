@@ -39,8 +39,8 @@ const demands: BoardDemand[] = [
     title: "Revisar textos",
     isNow: true,
     subtasks: [
-      { title: "Home", done: true },
-      { title: "Contato", done: false },
+      { id: "Home", title: "Home", done: true },
+      { id: "Contato", title: "Contato", done: false },
     ],
   }),
   d({

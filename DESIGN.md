@@ -268,6 +268,24 @@ Rota `/demandas/{id}`, link permanente, para sessões longas (proposta A, escolh
 
 Propostas A e C, aprovadas pelo Pedro em 2026-10-27 (telas reais em HTML). **Editar:** botão secundário "Editar" na linha de metadados da página inteira, entre "Marcar como Agora" e "Copiar link". Abre o próprio cabeçalho (título e metadados) como formulário, no padrão de Projetos: Cartão com borda Linha e raio md; Título (1,25rem, peso 600) e Descrição na largura toda; Prioridade e Prazo (`input type="date"`) lado a lado; "Cancelar" e "Salvar" à direita. Erro por campo como em Projetos, com o foco no primeiro campo inválido; ao fechar, o foco volta a "Editar" e "Demanda salva." aparece na faixa de aviso. Fora da edição, o prazo entra nos metadados ("Prazo 30 de out.", com o ano só se for outro) e a descrição fica logo abaixo do filete, em medida de 65ch, respeitando as quebras de linha. **Importar:** enquanto houver demandas capturadas só no navegador (antes da T5), Demandas mostra no topo um aviso em Névoa com borda de controle: a frase "N demandas capturadas só neste navegador." em peso 600, a lista com caixas de marcar (todas marcadas, alvo de 44px, filete entre elas), o campo Projeto e "Importar N demandas" (primário); "Descartar as desmarcadas" (secundário) aparece quando alguma está desmarcada. Importadas, somem do navegador, e o aviso "N demandas importadas para {projeto}." fica na faixa de aviso. Sem projeto, aponta para Projetos.
 
+### Subtarefas editáveis (T7)
+
+Proposta C, escolhida pelo Pedro em 2026-10-31 (maquete em `.impeccable/mocks/t7/propostas.html`). Na janela e na coluna Subtarefas da página inteira, cada passo é uma linha de 44px com filete de 1px entre elas:
+
+- número do passo em IBM Plex Mono 0,8125rem, cor de apoio;
+- caixa de marcar de 20px dentro de um alvo de 44px, com nome "Marcar {título} como feita" (ou "não feita");
+- título, que fica em cor de apoio quando feito e diz "agora" no passo atual;
+- botão "Mais opções" de 44px com o ícone `mais-opcoes`.
+
+"Mais opções" é um disclosure (`aria-expanded`), não um menu ARIA: abre um painel na superfície, com borda de controle e raio 10px, com Renomear (ícone `editar`) e Remover (ícone `excluir`), cada um com 44px.
+
+- **Renomear** troca o título por um campo com foco. Enter salva; Esc cancela. Nos dois casos o foco volta a "Mais opções". Título igual não grava.
+- **Remover** arquiva o passo e leva o foco a "Adicionar subtarefa".
+- **"Adicionar subtarefa"** (botão secundário com o ícone `adicionar`) abre um campo "Nova subtarefa" com o botão "Adicionar". Enter adiciona no fim e limpa o campo, que continua aberto; Esc fecha. Na coluna estreita da página, o botão desce para baixo do campo.
+- **Título vazio** mostra "Escreva o título da subtarefa." em peso 600, numa região viva.
+
+Tudo aparece na hora e volta, com o aviso de falha das demandas, se não gravar. Sem laranja: o sinal continua só no passo atual do bloco Agora.
+
 ### App instalado (T12)
 
 O app se instala na tela inicial do iPad (Safari) e no computador (Chrome ou Edge) e abre em tela cheia (`display: standalone`), sem modo offline. Ícone: o `mc-app-icone.svg` da marca Moraes Coding (M de cinco barras em Névoa, barra de hoje no Sinal, sobre Mata `#0C2A1E`), o mesmo do favicon `public/icon.svg`. Os PNG saem dele: 192 e 512 com os cantos do desenho, o `maskable` de 512 e o `apple-icon` de 180 quadrados e opacos (o sistema recorta). O fundo de abertura é Gelo `#F2F2EE`. A barra do navegador segue o tema do sistema: Gelo no claro, Mata no escuro. A barra de status do iPad fica no padrão, e o conteúdo nunca passa por baixo dela.

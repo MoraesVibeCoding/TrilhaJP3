@@ -55,8 +55,8 @@ const demands: DemandsDemand[] = [
     priority: "Alta",
     lastActivityAt: "2026-10-21T10:00:00",
     subtasks: [
-      { title: "Fluxo", done: true },
-      { title: "Pagamento", done: false },
+      { id: "Fluxo", title: "Fluxo", done: true },
+      { id: "Pagamento", title: "Pagamento", done: false },
     ],
   }),
   d({

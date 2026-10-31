@@ -17,13 +17,13 @@ const data = (over: Partial<DetailData> = {}): DetailData => ({
 });
 
 const subs = [
-  { title: "Home", done: true },
-  { title: "Contato", done: false },
-  { title: "Rodapé", done: false },
+  { id: "Home", title: "Home", done: true },
+  { id: "Contato", title: "Contato", done: false },
+  { id: "Rodapé", title: "Rodapé", done: false },
 ];
 
 const setup = (
-  subtasks: readonly { title: string; done: boolean }[] = subs,
+  subtasks: readonly { id: string; title: string; done: boolean }[] = subs,
   isNow = false,
 ) => {
   const onConclude = vi.fn();
@@ -56,7 +56,7 @@ test("Concluir passo asks the parent to conclude this demand", () => {
 });
 
 test("says so and hides the button when every step is done", () => {
-  setup([{ title: "Home", done: true }]);
+  setup([{ id: "Home", title: "Home", done: true }]);
   expect(screen.getByText("Sem passos pendentes")).toBeDefined();
   expect(screen.queryByRole("button", { name: "Concluir passo" })).toBeNull();
 });
