@@ -1935,7 +1935,9 @@ ul.project-group {
 }
 
 /* T8, proposta B: etiquetas na demanda. Linha com as aplicadas e o painel de marcar */
+/* O painel se ancora na linha, não no botão: aberto a partir do botão ele passava da largura da janela */
 .label-row {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -1995,9 +1997,6 @@ ul.project-group {
 .label-dot[data-color="tijolo"] {
   background: var(--mc-etiqueta-tijolo);
   color: var(--mc-etiqueta-tijolo-texto);
-}
-.label-pop {
-  position: relative;
 }
 .secondary-button.label-button {
   display: inline-flex;

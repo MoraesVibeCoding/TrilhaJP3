@@ -135,3 +135,30 @@ for (const theme of ["light", "dark"] as const) {
     ).toEqual([]);
   });
 }
+
+test(
+  "the open panel fits inside the window, with no sideways scroll",
+  { tag: "@grava" },
+  async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(pageUrl());
+    // Estas três empurram o botão para perto da borda direita da janela, sem quebrar a linha
+    // (o caso que a revisão pegou). Nome repetido reaproveita a etiqueta, então dá para rodar de novo.
+    for (const name of ["Bug", "Cliente aguardando", "Financeiro"]) {
+      await create(page, name);
+      await page.keyboard.press("Escape");
+    }
+    await page.goto("/");
+    await page.getByRole("button", { name: title }).click();
+    await dialog(page)
+      .getByRole("button", { name: "Etiquetas", exact: true })
+      .click();
+    const [win, box] = await Promise.all([
+      dialog(page).boundingBox(),
+      page.locator(".label-panel").boundingBox(),
+    ]);
+    expect(box!.x + box!.width).toBeLessThanOrEqual(win!.x + win!.width);
+    const scrolled = await dialog(page).evaluate((d) => d.scrollLeft);
+    expect(scrolled).toBe(0);
+  },
+);
