@@ -87,3 +87,15 @@ export async function listDemands(): Promise<Demand[]> {
       ),
     );
 }
+
+// As etiquetas da empresa, para o painel e o filtro (a RLS só devolve as dela).
+export async function listLabels(): Promise<Label[]> {
+  await getCurrentUser();
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("labels")
+    .select("id, name, color")
+    .order("name");
+  if (error) throw error;
+  return data as Label[];
+}

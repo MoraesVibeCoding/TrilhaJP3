@@ -1,4 +1,6 @@
 import type { DemandState } from "@/lib/demand-labels";
+import type { Label } from "@/lib/labels";
+import { LabelPicker } from "./label-picker";
 import { StepProgress } from "./step-progress";
 import { SubtaskList, type SubtaskEditor } from "./subtask-list";
 
@@ -11,6 +13,7 @@ export type DetailData = {
   comments: readonly { author: string; at: string; text: string }[];
   attachments: readonly { name: string }[];
   history: readonly { at: string; text: string }[];
+  labels?: readonly Label[];
 };
 
 type Subtask = { id: string; title: string; done: boolean };
@@ -22,6 +25,7 @@ export function DemandDetail({
   onConclude,
   onToggleNow,
   steps,
+  allLabels,
 }: {
   data: DetailData;
   subtasks: readonly Subtask[];
@@ -29,6 +33,8 @@ export function DemandDetail({
   onConclude: (id: string) => void;
   onToggleNow: (id: string) => void;
   steps?: SubtaskEditor;
+  // T8: as etiquetas da empresa; sem elas, a janela não mostra o painel
+  allLabels?: readonly Label[];
 }) {
   return (
     <>
@@ -40,6 +46,14 @@ export function DemandDetail({
           <NowToggle isNow={isNow} onToggle={() => onToggleNow(data.id)} />
         )}
       </p>
+
+      {allLabels && (
+        <LabelPicker
+          taskId={data.id}
+          applied={data.labels ?? []}
+          all={allLabels}
+        />
+      )}
 
       <section aria-label="Agora" className="detail-now">
         <DetailNow subtasks={subtasks} onConclude={() => onConclude(data.id)} />

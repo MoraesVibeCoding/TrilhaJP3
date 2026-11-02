@@ -1,6 +1,5 @@
 // Etiquetas da empresa (T8). A paleta segue a migração 20261102120000_labels e os tokens da marca.
-import { getCurrentUser } from "@/lib/auth";
-import { createClient } from "@/lib/supabase/server";
+// Sem acesso ao banco: este arquivo também vai para o navegador (listLabels fica em demands.ts).
 
 export const LABEL_COLORS = [
   { value: "nevoa", label: "Névoa" },
@@ -29,15 +28,3 @@ export function validateLabelName(
 // A comparação do banco (índice único): sem diferença de maiúsculas nem de espaços nas pontas.
 export const sameName = (a: string, b: string) =>
   a.trim().toLowerCase() === b.trim().toLowerCase();
-
-// As etiquetas da empresa, para as sugestões e o filtro (a RLS só devolve as dela).
-export async function listLabels(): Promise<Label[]> {
-  await getCurrentUser();
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("labels")
-    .select("id, name, color")
-    .order("name");
-  if (error) throw error;
-  return data as Label[];
-}

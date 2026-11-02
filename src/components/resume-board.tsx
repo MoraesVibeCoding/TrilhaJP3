@@ -1,6 +1,7 @@
 "use client";
 
 import { useDemandState } from "@/lib/use-demand-state";
+import type { Label } from "@/lib/labels";
 import { DemandDetail } from "./demand-detail";
 import { DemandDialog } from "./demand-dialog";
 import { demandPath, useOpenDemand } from "@/lib/demand-url";
@@ -23,10 +24,12 @@ export type BoardDemand = ResumeDemand & {
 export function ResumeBoard({
   demands,
   projects,
+  labels = [],
   now,
 }: {
   demands: readonly BoardDemand[];
   projects: readonly { id: string; name: string }[];
+  labels?: readonly Label[];
   now: Date;
 }) {
   const { current, conclude, toggleNow, steps, failure } =
@@ -75,6 +78,7 @@ export function ResumeBoard({
             onConclude={conclude}
             onToggleNow={toggleNow}
             steps={steps(open.id)}
+            allLabels={labels}
           />
         )}
       </DemandDialog>

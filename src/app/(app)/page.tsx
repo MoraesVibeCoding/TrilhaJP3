@@ -2,7 +2,7 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { ResumeBoard } from "@/components/resume-board";
-import { listDemands } from "@/lib/demands";
+import { listDemands, listLabels } from "@/lib/demands";
 import { listProjects } from "@/lib/projects";
 
 function Head() {
@@ -35,14 +35,20 @@ export default function Page() {
 async function Resume() {
   // O cliente do Supabase lê o relógio, que não pode entrar na pré-renderização.
   await connection();
-  const [demands, projects] = await Promise.all([
+  const [demands, projects, labels] = await Promise.all([
     listDemands(),
     listProjects(),
+    listLabels(),
   ]);
   return (
     <>
       <Head />
-      <ResumeBoard demands={demands} projects={projects} now={new Date()} />
+      <ResumeBoard
+        demands={demands}
+        projects={projects}
+        labels={labels}
+        now={new Date()}
+      />
     </>
   );
 }

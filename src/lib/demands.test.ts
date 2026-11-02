@@ -49,7 +49,7 @@ const row = {
   due_date: null,
 };
 
-const { listDemands, toDemand } = await import("./demands");
+const { listDemands, listLabels, toDemand } = await import("./demands");
 
 test("converte a linha do banco para o formato das telas", () => {
   expect(toDemand(row)).toEqual({
@@ -147,4 +147,14 @@ test("cada demanda traz as etiquetas aplicadas, em ordem de nome", async () => {
   expect(demands.find((d) => d.id === "t2")!.labels).toEqual([]);
   db.labels = [];
   db.taskLabels = [];
+});
+
+test("listLabels reads the company labels, and a database error is not an empty list", async () => {
+  db.error = null;
+  db.labels = [{ id: "l1", name: "Bug", color: "tijolo" }];
+  await expect(listLabels()).resolves.toEqual(db.labels);
+  db.error = { message: "falhou" };
+  await expect(listLabels()).rejects.toEqual({ message: "falhou" });
+  db.error = null;
+  db.labels = [];
 });

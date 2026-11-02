@@ -157,3 +157,15 @@ test("Mostarda is a fill only: never text or border (1.8:1 on Gelo)", () => {
     /(^|[^-])(color|border[\w-]*|outline[\w-]*):[^;]*var\(--mc-atencao\)/m,
   );
 });
+
+test("each label color carries its text at 4.5:1 or more (T8)", () => {
+  for (const c of ["nevoa", "mata", "alta", "mostarda", "tijolo"]) {
+    expect(
+      ratio(
+        light(`mc-etiqueta-${c}`, tokens),
+        light(`mc-etiqueta-${c}-texto`, tokens),
+      ),
+      c,
+    ).toBeGreaterThanOrEqual(4.5);
+  }
+});

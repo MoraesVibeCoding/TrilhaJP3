@@ -13,6 +13,7 @@ const row = (over: Partial<DemandRow>): DemandRow => ({
   title: "T",
   projectId: "p1",
   projectName: "Site",
+  labelIds: [],
   state: "Fazendo",
   priority: "Média",
   lastActivityAt: "2026-10-20T10:00:00",

@@ -155,3 +155,37 @@ test("sorting does not mutate the input", () => {
   sortRows(rows, { key: "title", dir: "asc" });
   expect(rows).toEqual(copy);
 });
+
+// T8: filtro por etiqueta, combinado com os outros.
+test("filters by label, combined with the other filters", () => {
+  const labelled = buildRows(
+    [
+      demand({
+        id: "a",
+        labels: [
+          { id: "bug", name: "Bug", color: "tijolo" },
+          { id: "fin", name: "Financeiro", color: "alta" },
+        ],
+      }),
+      demand({
+        id: "b",
+        labels: [{ id: "fin", name: "Financeiro", color: "alta" }],
+        priority: "Alta",
+      }),
+      demand({ id: "c" }),
+    ],
+    projects,
+  );
+  expect(labelled[0].labelIds).toEqual(["bug", "fin"]);
+  expect(labelled[2].labelIds).toEqual([]);
+  const ids = (label: string, priority = "") =>
+    filterRows(labelled, {
+      project: "",
+      state: "",
+      priority: priority as never,
+      label,
+    }).map((r) => r.id);
+  expect(ids("fin")).toEqual(["a", "b"]);
+  expect(ids("fin", "Alta")).toEqual(["b"]);
+  expect(ids("")).toEqual(["a", "b", "c"]);
+});

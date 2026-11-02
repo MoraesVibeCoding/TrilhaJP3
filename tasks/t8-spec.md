@@ -39,6 +39,8 @@ Os pares valem nos dois temas: a pílula traz o próprio fundo. Ela tem uma bord
 
 ## 5. Design (3 propostas, `impeccable`)
 
+**Escolhida pelo Pedro em 2026-11-02: B · Painel de marcar** (maquete em `https://claude.ai/artifact/X5uLz53iyuwmmX1TsTYDGd`): a linha mostra as etiquetas aplicadas, e "Etiquetas" abre um painel com todas as da empresa em caixas de marcar, as 5 cores de cada uma ao lado e um campo no topo para buscar ou criar.
+
 O `impeccable` traz 3 propostas em HTML, nos dois temas, para o campo de etiquetas na janela e na página (aplicar, criar, tirar, trocar a cor) e para o filtro na Demandas. Só depois da escolha do Pedro a tela é construída.
 
 ## 6. Fora do escopo
