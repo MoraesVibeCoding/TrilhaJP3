@@ -2,6 +2,7 @@
 
 import {
   startTransition,
+  useCallback,
   useEffect,
   useId,
   useOptimistic,
@@ -20,6 +21,7 @@ import {
   type Label,
 } from "@/lib/labels";
 import { useFlashMessage } from "@/lib/use-flash-message";
+import { closeOnBlur, useOutsideClose } from "@/lib/use-outside-close";
 import { Icon } from "./icon";
 
 type View = { applied: readonly Label[]; all: readonly Label[] };
@@ -64,6 +66,9 @@ export function LabelPicker({
   const buttonRef = useRef<HTMLButtonElement>(null);
   const fieldRef = useRef<HTMLInputElement>(null);
   const panelId = useId();
+  const rowRef = useRef<HTMLDivElement>(null);
+  const dismiss = useCallback(() => setOpen(false), []);
+  useOutsideClose(rowRef, open, dismiss);
   // Foco depois de fechar o painel: decidido no evento, aplicado depois da renderização.
   const focusButton = useRef(false);
   useEffect(() => {
@@ -118,6 +123,7 @@ export function LabelPicker({
 
   return (
     <div
+      ref={rowRef}
       className="label-row"
       onKeyDown={(e) => {
         if (e.key !== "Escape" || !open) return;
@@ -126,10 +132,7 @@ export function LabelPicker({
         e.stopPropagation();
         close();
       }}
-      onBlur={(e) => {
-        if (open && !e.currentTarget.contains(e.relatedTarget as Node | null))
-          setOpen(false);
-      }}
+      onBlur={(e) => open && closeOnBlur(e, dismiss)}
     >
       <span className="label-row-title">Etiquetas</span>
       {view.applied.length === 0 ? (

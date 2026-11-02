@@ -2010,6 +2010,8 @@ ul.project-group {
   left: 0;
   z-index: 3;
   display: grid;
+  /* Sem trilha definida, a coluna cresce até o nome mais longo e passa da borda */
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.25rem;
   width: min(23rem, calc(100vw - 2rem));
   margin-top: 0.25rem;
@@ -2057,7 +2059,8 @@ ul.project-group {
 .label-check input:disabled {
   cursor: progress;
 }
-.label-dot[aria-pressed="true"] {
+/* Fora do foco: com foco, vale o anel laranja global (WCAG 2.4.7) */
+.label-dot[aria-pressed="true"]:not(:focus-visible) {
   outline: 2px solid var(--mc-texto);
   outline-offset: 2px;
 }
@@ -2076,4 +2079,14 @@ ul.project-group {
   font-weight: 600;
   text-align: left;
   cursor: pointer;
+}
+/* No painel o nome quebra a linha em vez de vazar; nunca reticências, porque a cor não é a única pista */
+.label-check .label-tag {
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+/* O anel global (3px, afastado 3px) cruzaria a borda do painel */
+.label-panel .step-field:focus-visible {
+  outline-offset: 0;
 }

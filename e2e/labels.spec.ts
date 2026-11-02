@@ -162,3 +162,40 @@ test(
     expect(scrolled).toBe(0);
   },
 );
+
+test(
+  "on a phone the panel keeps a 40-character name inside it",
+  { tag: "@grava" },
+  async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(pageUrl());
+    await create(page, "Aguardando aprovação do cliente no prazo");
+    const overflow = await page
+      .locator(".label-panel")
+      .evaluate((p) => p.scrollWidth - p.clientWidth);
+    expect(overflow).toBeLessThanOrEqual(0);
+  },
+);
+
+test(
+  "the pressed color shows the focus ring when reached by keyboard",
+  { tag: "@grava" },
+  async ({ page }) => {
+    await page.goto(pageUrl());
+    const name = `Foco ${Date.now()}`;
+    await create(page, name);
+    const pressed = panel(page)
+      .getByRole("group", { name: `Cor de ${name}` })
+      .getByRole("button", { name: "Névoa" });
+    await expect(pressed).toBeEnabled();
+    await pressed.focus();
+    await page.keyboard.press("Shift+Tab");
+    await page.keyboard.press("Tab");
+    const outline = await pressed.evaluate((b) => {
+      const s = getComputedStyle(b);
+      return [s.outlineWidth, s.outlineColor];
+    });
+    // Sinal escuro, no tema claro
+    expect(outline).toEqual(["3px", "rgb(184, 51, 0)"]);
+  },
+);

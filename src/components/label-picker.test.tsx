@@ -169,3 +169,17 @@ test("a label still being created cannot be colored or unchecked until it is sav
     ).disabled,
   ).toBe(true);
 });
+
+test("in Safari a click inside does not move focus: the panel stays open; a press outside closes it", () => {
+  const button = setup();
+  fireEvent.click(button);
+  fireEvent.blur(
+    screen.getByRole("textbox", { name: "Buscar ou criar etiqueta" }),
+    {
+      relatedTarget: null,
+    },
+  );
+  expect(button.getAttribute("aria-expanded")).toBe("true");
+  fireEvent.pointerDown(document.body);
+  expect(button.getAttribute("aria-expanded")).toBe("false");
+});
