@@ -1,6 +1,6 @@
 # T8: etiquetas
 
-Status: **rascunho, aguarda aprovação do Pedro.** Decisões do Pedro em 2026-10-31: etiqueta com cor de uma paleta curta da marca; criar e aplicar direto na demanda, sem tela própria; etiqueta filtra a página Demandas. Tarefa 🎨: a tela passa por 3 propostas do `impeccable` em HTML. Base: `docs/SPEC.md` (seção 4, `labels` e `task_labels`; seção 6, linha T8), ADR 0003, ADR 0007, `CONSTRAINTS.md`.
+Status: **aprovada pelo Pedro em 2026-11-02 ("De acordo").** Decisões do Pedro em 2026-10-31: etiqueta com cor de uma paleta curta da marca; criar e aplicar direto na demanda, sem tela própria; etiqueta filtra a página Demandas. Tarefa 🎨: a tela passa por 3 propostas do `impeccable` em HTML. Base: `docs/SPEC.md` (seção 4, `labels` e `task_labels`; seção 6, linha T8), ADR 0003, ADR 0007, `CONSTRAINTS.md`.
 
 ## 1. Objetivo
 
