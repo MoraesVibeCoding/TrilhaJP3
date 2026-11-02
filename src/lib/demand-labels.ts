@@ -12,6 +12,8 @@ export type Demand = {
   priority: Priority;
   lastActivityAt: string;
   subtasks: readonly { id: string; title: string; done: boolean }[];
+  // T8: etiquetas aplicadas (listDemands sempre preenche; os dados de teste podem omitir)
+  labels?: readonly { id: string; name: string; color: string }[];
   comments: readonly { author: string; at: string; text: string }[];
   attachments: readonly { name: string }[];
   history: readonly { at: string; text: string }[];

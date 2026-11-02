@@ -1,0 +1,43 @@
+// Etiquetas da empresa (T8). A paleta segue a migração 20261102120000_labels e os tokens da marca.
+import { getCurrentUser } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
+
+export const LABEL_COLORS = [
+  { value: "nevoa", label: "Névoa" },
+  { value: "mata", label: "Mata" },
+  { value: "alta", label: "Alta" },
+  { value: "mostarda", label: "Mostarda" },
+  { value: "tijolo", label: "Tijolo" },
+] as const;
+
+export type LabelColor = (typeof LABEL_COLORS)[number]["value"];
+export type Label = { id: string; name: string; color: LabelColor };
+
+const MAX_NAME = 40;
+
+export function validateLabelName(
+  raw: string,
+): { ok: true; name: string } | { ok: false; error: string } {
+  const name = raw.trim().replace(/\s+/g, " ");
+  if (!name) return { ok: false, error: "Escreva o nome da etiqueta." };
+  if (name.length > MAX_NAME) {
+    return { ok: false, error: `Nome com até ${MAX_NAME} caracteres.` };
+  }
+  return { ok: true, name };
+}
+
+// A comparação do banco (índice único): sem diferença de maiúsculas nem de espaços nas pontas.
+export const sameName = (a: string, b: string) =>
+  a.trim().toLowerCase() === b.trim().toLowerCase();
+
+// As etiquetas da empresa, para as sugestões e o filtro (a RLS só devolve as dela).
+export async function listLabels(): Promise<Label[]> {
+  await getCurrentUser();
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("labels")
+    .select("id, name, color")
+    .order("name");
+  if (error) throw error;
+  return data as Label[];
+}

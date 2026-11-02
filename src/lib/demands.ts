@@ -2,6 +2,7 @@
 import { getCurrentUser } from "@/lib/auth";
 import { PRIORITY_LABELS, STATE_LABELS } from "@/lib/demand-labels";
 import type { Demand } from "@/lib/demand-labels";
+import type { Label } from "@/lib/labels";
 import { createClient } from "@/lib/supabase/server";
 
 type TaskRow = {
@@ -23,6 +24,7 @@ type TaskRow = {
 export function toDemand(
   row: TaskRow,
   subtasks: Demand["subtasks"] = [],
+  labels: readonly Label[] = [],
 ): Demand {
   return {
     id: row.id,
@@ -36,6 +38,7 @@ export function toDemand(
     ...(row.description ? { description: row.description } : {}),
     ...(row.due_date ? { dueDate: row.due_date } : {}),
     subtasks,
+    labels,
     comments: [],
     attachments: [],
     history: [],
@@ -45,14 +48,28 @@ export function toDemand(
 export async function listDemands(): Promise<Demand[]> {
   await getCurrentUser();
   const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("tasks")
-    .select(
-      "id, project_id, title, state, priority, is_now, done_at, updated_at, parent_task_id, created_at, description, due_date",
-    )
-    .is("archived_at", null)
-    .order("updated_at", { ascending: false });
+  const [tasks, applied, labels] = await Promise.all([
+    supabase
+      .from("tasks")
+      .select(
+        "id, project_id, title, state, priority, is_now, done_at, updated_at, parent_task_id, created_at, description, due_date",
+      )
+      .is("archived_at", null)
+      .order("updated_at", { ascending: false }),
+    supabase.from("task_labels").select("task_id, label_id"),
+    supabase.from("labels").select("id, name, color"),
+  ]);
+  const error = tasks.error ?? applied.error ?? labels.error;
   if (error) throw error;
+  const data = tasks.data;
+  // T8: etiquetas aplicadas, por demanda, em ordem de nome.
+  const byId = new Map((labels.data as Label[]).map((l) => [l.id, l]));
+  const labelsOf = (taskId: string) =>
+    (applied.data as { task_id: string; label_id: string }[])
+      .filter((a) => a.task_id === taskId)
+      .map((a) => byId.get(a.label_id))
+      .filter((l): l is Label => !!l)
+      .sort((x, y) => x.name.localeCompare(y.name, "pt-BR"));
   const rows = data as TaskRow[];
   // Subtarefa é a demanda filha (parent_task_id); os passos seguem a ordem de criação.
   const steps = rows
@@ -66,6 +83,7 @@ export async function listDemands(): Promise<Demand[]> {
         steps
           .filter((s) => s.parent_task_id === r.id)
           .map((s) => ({ id: s.id, title: s.title, done: s.state === "done" })),
+        labelsOf(r.id),
       ),
     );
 }
