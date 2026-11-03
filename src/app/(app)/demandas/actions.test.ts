@@ -47,6 +47,9 @@ const {
   renameSubtask,
   toggleSubtask,
   archiveSubtask,
+  applyLabel,
+  removeLabel,
+  setLabelColor,
 } = await import("./actions");
 const { revalidatePath } = await import("next/cache");
 
@@ -423,5 +426,93 @@ describe("subtarefas (T7)", () => {
     expect(db.queries).toEqual([]);
     db.results = [{ data: [] }];
     await expect(archiveSubtask(STEP)).resolves.toBe(false);
+  });
+});
+
+describe("etiquetas (T8)", () => {
+  const LABEL = "22222222-3333-4444-8555-666666666666";
+
+  test("applyLabel reaproveita a etiqueta de mesmo nome e aplica na demanda", async () => {
+    db.results = [{ data: [{ id: LABEL, name: "Bug", color: "tijolo" }] }, {}];
+    await expect(applyLabel(ID, "  bug ")).resolves.toEqual({
+      id: LABEL,
+      name: "Bug",
+      color: "tijolo",
+    });
+    expect(db.queries).toEqual([
+      ["from(labels)", `select("id, name, color")`],
+      [
+        "from(task_labels)",
+        `insert({"organization_id":"org-1","task_id":"${ID}","label_id":"${LABEL}"})`,
+      ],
+    ]);
+    expect(revalidatePath).toHaveBeenCalledWith("/", "layout");
+  });
+
+  test("applyLabel cria a etiqueta em Névoa quando o nome é novo", async () => {
+    db.results = [
+      { data: [] },
+      { data: { id: LABEL, name: "Cliente aguardando", color: "nevoa" } },
+      {},
+    ];
+    await expect(applyLabel(ID, "Cliente   aguardando")).resolves.toMatchObject(
+      {
+        id: LABEL,
+        color: "nevoa",
+      },
+    );
+    expect(db.queries[1]).toEqual([
+      "from(labels)",
+      `insert({"organization_id":"org-1","name":"Cliente aguardando"})`,
+      `select("id, name, color")`,
+      "single()",
+    ]);
+  });
+
+  test("applyLabel trata a etiqueta já aplicada como sucesso", async () => {
+    db.results = [
+      { data: [{ id: LABEL, name: "Bug", color: "tijolo" }] },
+      { error: { code: "23505" } },
+    ];
+    await expect(applyLabel(ID, "Bug")).resolves.toMatchObject({ id: LABEL });
+  });
+
+  test("applyLabel recusa nome inválido e devolve null quando o banco recusa", async () => {
+    await expect(applyLabel(ID, "   ")).resolves.toBeNull();
+    await expect(applyLabel("x", "Bug")).resolves.toBeNull();
+    expect(db.queries).toEqual([]);
+    db.results = [
+      { data: [{ id: LABEL, name: "Bug", color: "tijolo" }] },
+      { error: { code: "23514" } },
+    ];
+    await expect(applyLabel(ID, "Bug")).resolves.toBeNull();
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
+  test("removeLabel tira só aquela etiqueta daquela demanda", async () => {
+    db.results = [{ data: [{ label_id: LABEL }] }];
+    await expect(removeLabel(ID, LABEL)).resolves.toBe(true);
+    expect(db.queries[0]).toEqual([
+      "from(task_labels)",
+      "delete()",
+      `eq("task_id","${ID}")`,
+      `eq("label_id","${LABEL}")`,
+      `select("label_id")`,
+    ]);
+    db.results = [{ data: [] }];
+    await expect(removeLabel(ID, LABEL)).resolves.toBe(false);
+  });
+
+  test("setLabelColor aceita só a paleta", async () => {
+    await expect(setLabelColor(LABEL, "azul")).resolves.toBe(false);
+    expect(db.queries).toEqual([]);
+    db.results = [{ data: [{ id: LABEL }] }];
+    await expect(setLabelColor(LABEL, "mostarda")).resolves.toBe(true);
+    expect(db.queries[0]).toEqual([
+      "from(labels)",
+      `update({"color":"mostarda"})`,
+      `eq("id","${LABEL}")`,
+      `select("id")`,
+    ]);
   });
 });

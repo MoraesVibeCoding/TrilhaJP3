@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { DemandPage } from "@/components/demand-page";
-import { listDemands } from "@/lib/demands";
+import { listDemands, listLabels } from "@/lib/demands";
 import { listProjects } from "@/lib/projects";
 
 export async function generateMetadata({
@@ -26,15 +26,17 @@ export default function Page({ params }: PageProps<"/demandas/[id]">) {
 async function Demand({ params }: Pick<PageProps<"/demandas/[id]">, "params">) {
   await connection();
   const { id } = await params;
-  const [demands, projects] = await Promise.all([
+  const [demands, projects, labels] = await Promise.all([
     listDemands(),
     listProjects(),
+    listLabels(),
   ]);
   return (
     <DemandPage
       id={id}
       demands={demands}
       projects={projects}
+      labels={labels}
       now={new Date()}
     />
   );

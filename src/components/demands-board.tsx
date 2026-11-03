@@ -3,6 +3,7 @@
 import { useDemandState } from "@/lib/use-demand-state";
 import { ImportCaptured } from "./import-captured";
 import { Icon } from "./icon";
+import type { Label } from "@/lib/labels";
 import { useStoredState } from "@/lib/use-stored-state";
 import {
   buildRows,
@@ -47,6 +48,7 @@ type ViewState = {
   project: string;
   state: string;
   priority: string;
+  label: string;
   sortKey: SortKey;
   sortDir: "asc" | "desc";
 };
@@ -55,6 +57,7 @@ const DEFAULT_VIEW: ViewState = {
   project: "",
   state: "",
   priority: "",
+  label: "",
   sortKey: "priority",
   sortDir: "desc",
 };
@@ -70,6 +73,7 @@ function sanitize(v: Partial<ViewState>): ViewState {
     priority: PRIORITIES.includes(v.priority as never)
       ? (v.priority as string)
       : "",
+    label: typeof v.label === "string" ? v.label : "",
     sortKey: SORT_KEYS.includes(v.sortKey as SortKey)
       ? (v.sortKey as SortKey)
       : DEFAULT_VIEW.sortKey,
@@ -84,11 +88,13 @@ function Caret({ dir }: { dir: "asc" | "desc" }) {
 export function DemandsBoard({
   demands,
   projects,
+  labels = [],
   now,
   storageName = "trilhajp3-demandas",
 }: {
   demands: readonly DemandsDemand[];
   projects: readonly { id: string; name: string }[];
+  labels?: readonly Label[];
   now: Date;
   storageName?: string;
 }) {
@@ -108,6 +114,7 @@ export function DemandsBoard({
       // no Quadro as colunas já são os estados; um estado salvo da Tabela não vale aqui
       state: view.layout === "board" ? "" : (view.state as never),
       priority: view.priority as never,
+      label: view.label,
     }),
     { key: view.sortKey, dir: view.sortDir },
   );
@@ -117,11 +124,15 @@ export function DemandsBoard({
     project: view.project,
     state: "",
     priority: view.priority as never,
+    label: view.label,
   });
   const countOf = (state: string) =>
     forCounts.filter((r) => r.state === state).length;
   const filtered = Boolean(
-    view.project || (view.layout !== "board" && view.state) || view.priority,
+    view.project ||
+    (view.layout !== "board" && view.state) ||
+    view.priority ||
+    view.label,
   );
 
   const update = (patch: Partial<ViewState>) =>
@@ -216,6 +227,20 @@ export function DemandsBoard({
               ))}
             </select>
           </label>
+          <label className="field">
+            Etiqueta
+            <select
+              value={view.label}
+              onChange={(e) => update({ label: e.target.value })}
+            >
+              <option value="">Todas</option>
+              {labels.map((l) => (
+                <option key={l.id} value={l.id}>
+                  {l.name}
+                </option>
+              ))}
+            </select>
+          </label>
           <label
             className={`field sort-field${view.layout === "table" ? "" : " sort-field--always"}`}
           >
@@ -241,7 +266,9 @@ export function DemandsBoard({
             <button
               type="button"
               className="secondary-button"
-              onClick={() => update({ project: "", state: "", priority: "" })}
+              onClick={() =>
+                update({ project: "", state: "", priority: "", label: "" })
+              }
             >
               Limpar filtros
             </button>
@@ -378,6 +405,7 @@ export function DemandsBoard({
             onConclude={conclude}
             onToggleNow={toggleNow}
             steps={steps(open.id)}
+            allLabels={labels}
           />
         )}
       </DemandDialog>

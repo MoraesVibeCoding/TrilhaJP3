@@ -560,3 +560,35 @@ test("the move confirmation is visible text, then goes away by itself", () => {
     vi.useRealTimers();
   }
 });
+
+// T8: filtro "Etiqueta" ao lado de Projeto e Prioridade.
+test("the Etiqueta filter lists the company labels and narrows the table and the counts", () => {
+  render(
+    <DemandsBoard
+      demands={[
+        { ...demands[0], labels: [{ id: "l1", name: "Bug", color: "tijolo" }] },
+        ...demands.slice(1),
+      ]}
+      projects={projects}
+      labels={[
+        { id: "l1", name: "Bug", color: "tijolo" },
+        { id: "l2", name: "Financeiro", color: "alta" },
+      ]}
+      now={now}
+      storageName={`test-${n++}`}
+    />,
+  );
+  const select = screen.getByRole("combobox", { name: "Etiqueta" });
+  expect(
+    within(select)
+      .getAllByRole("option")
+      .map((o) => o.textContent),
+  ).toEqual(["Todas", "Bug", "Financeiro"]);
+  fireEvent.change(select, { target: { value: "l1" } });
+  expect(bodyTitles()).toEqual(["Banner"]);
+  expect(screen.getByRole("button", { name: /Fazendo/ }).textContent).toContain(
+    "0",
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Limpar filtros" }));
+  expect((select as HTMLSelectElement).value).toBe("");
+});

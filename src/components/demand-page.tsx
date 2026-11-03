@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import type { Label } from "@/lib/labels";
+import { LabelPicker } from "./label-picker";
 import { useEffect, useRef, useState } from "react";
 import { formatDueDate } from "@/lib/demand-labels";
 import { demandPath } from "@/lib/demand-url";
@@ -24,11 +26,13 @@ export function DemandPage({
   id,
   demands,
   projects,
+  labels = [],
   now,
 }: {
   id: string;
   demands: readonly PageDemand[];
   projects: readonly { id: string; name: string }[];
+  labels?: readonly Label[];
   now: Date;
 }) {
   const { current, conclude, toggleNow, steps, failure } =
@@ -140,6 +144,11 @@ export function DemandPage({
               </button>
             </span>
           </div>
+          <LabelPicker
+            taskId={demand.id}
+            applied={demand.labels ?? []}
+            all={labels}
+          />
           {demand.description && (
             <p className="demand-page-description">{demand.description}</p>
           )}

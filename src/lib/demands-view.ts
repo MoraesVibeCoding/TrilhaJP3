@@ -1,4 +1,4 @@
-import type { DemandState, Priority } from "./demand-labels";
+import type { Demand, DemandState, Priority } from "./demand-labels";
 
 type Subtask = { id: string; title: string; done: boolean };
 
@@ -10,6 +10,7 @@ export type DemandInput = {
   priority: Priority;
   lastActivityAt: string;
   subtasks: readonly Subtask[];
+  labels?: Demand["labels"];
 };
 
 export type DemandRow = {
@@ -23,12 +24,15 @@ export type DemandRow = {
   nextSubtask: string | null;
   subtasksDone: number;
   subtasksTotal: number;
+  labelIds: string[];
 };
 
 export type Filters = {
   project: string;
   state: DemandState | "";
   priority: Priority | "";
+  // T8: id da etiqueta; vazio ou ausente, não filtra
+  label?: string;
 };
 export type SortKey = "title" | "project" | "state" | "priority" | "activity";
 export type Sort = { key: SortKey; dir: "asc" | "desc" };
@@ -56,6 +60,7 @@ export function buildRows(
     nextSubtask: d.subtasks.find((s) => !s.done)?.title ?? null,
     subtasksDone: d.subtasks.filter((s) => s.done).length,
     subtasksTotal: d.subtasks.length,
+    labelIds: (d.labels ?? []).map((l) => l.id),
   }));
 }
 
@@ -67,7 +72,8 @@ export function filterRows(
     (r) =>
       (!f.project || r.projectId === f.project) &&
       (!f.state || r.state === f.state) &&
-      (!f.priority || r.priority === f.priority),
+      (!f.priority || r.priority === f.priority) &&
+      (!f.label || r.labelIds.includes(f.label)),
   );
 }
 

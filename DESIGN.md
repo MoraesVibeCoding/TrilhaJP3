@@ -286,6 +286,23 @@ Proposta C, escolhida pelo Pedro em 2026-10-31 (maquete em `.impeccable/mocks/t7
 
 Tudo aparece na hora e volta, com o aviso de falha das demandas, se não gravar. Sem laranja: o sinal continua só no passo atual do bloco Agora.
 
+### Etiquetas (T8)
+
+Proposta B, escolhida pelo Pedro em 2026-11-02 (maquete em `.impeccable/mocks/t8/propostas.html`). Na janela e na página da demanda, uma linha "Etiquetas" mostra as aplicadas, ou "Nenhuma".
+
+- **Pílula da etiqueta:** 28px, raio 999px, peso 600, borda de 1px em borda de controle. A cor vem de uma paleta de 5 tons, `--mc-etiqueta-*`: Névoa (padrão), Mata, Alta, Mostarda e Tijolo, cada um com o texto do par, todos com 4,5:1 ou mais. A pílula traz o próprio fundo, então vale nos dois temas. O nome vai sempre escrito.
+- **Botão "Etiquetas":** secundário, com o ícone `etiqueta`, desenhado no traço da marca porque o conjunto não tem esse ícone. É um disclosure (`aria-expanded`).
+- **Painel:** abre ancorado na linha, não no botão, para nunca passar da largura da janela. Tem superfície, borda de controle e raio 10px, sem sombra, com até 23rem de largura. No topo, o campo "Buscar ou criar". Abaixo, cada etiqueta da empresa, em ordem de nome, numa linha de 44px com:
+  - caixa de marcar, cujo nome é o da etiqueta;
+  - a pílula;
+  - as 5 cores, em bolinhas de 32px com `aria-pressed`. São 32px, e não 44px, para caberem ao lado do nome; ficam acima do mínimo de 24px do WCAG 2.5.8.
+- **Criar:** digitar um nome que não existe mostra "Criar “nome”". Enter cria em Névoa e já aplica. Enquanto a etiqueta nova não tem id do banco, a caixa e as cores dela ficam desativadas.
+- **Fechar:** Esc fecha só o painel e devolve o foco ao botão. Sair do painel com o foco também o fecha.
+
+Tudo aparece na hora e volta, com "Não foi possível salvar. Tente de novo.", se não gravar.
+
+Na página Demandas, o filtro "Etiqueta" (um `select`, com "Todas" mais as etiquetas da empresa) fica ao lado de Projeto e Prioridade. Ele vale nas três visões, entra nas contagens por estado e fica salvo como os outros filtros. Tabela, cartões e Retomar não mostram etiquetas.
+
 ### App instalado (T12)
 
 O app se instala na tela inicial do iPad (Safari) e no computador (Chrome ou Edge) e abre em tela cheia (`display: standalone`), sem modo offline. Ícone: o `mc-app-icone.svg` da marca Moraes Coding (M de cinco barras em Névoa, barra de hoje no Sinal, sobre Mata `#0C2A1E`), o mesmo do favicon `public/icon.svg`. Os PNG saem dele: 192 e 512 com os cantos do desenho, o `maskable` de 512 e o `apple-icon` de 180 quadrados e opacos (o sistema recorta). O fundo de abertura é Gelo `#F2F2EE`. A barra do navegador segue o tema do sistema: Gelo no claro, Mata no escuro. A barra de status do iPad fica no padrão, e o conteúdo nunca passa por baixo dela.

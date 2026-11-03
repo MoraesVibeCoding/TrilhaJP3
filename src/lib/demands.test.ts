@@ -4,21 +4,30 @@ const db = vi.hoisted(() => ({
   error: null as object | null,
   calls: [] as string[],
   rows: [] as object[],
+  // T8: etiquetas aplicadas e etiquetas da empresa
+  taskLabels: [] as object[],
+  labels: [] as object[],
 }));
 vi.mock("@/lib/auth", () => ({ getCurrentUser: async () => ({}) }));
 vi.mock("@/lib/supabase/server", () => ({
   createClient: async () => ({
     from: (table: string) => {
+      const result = () => ({
+        data: db.error
+          ? null
+          : { tasks: db.rows, task_labels: db.taskLabels, labels: db.labels }[
+              table
+            ],
+        error: db.error,
+      });
       const chain = {
         select: () => chain,
         is: (column: string) => {
           db.calls.push(`${table}.is(${column})`);
           return chain;
         },
-        order: async () => ({
-          data: db.error ? null : db.rows,
-          error: db.error,
-        }),
+        order: async () => result(),
+        then: (resolve: (v: unknown) => void) => resolve(result()),
       };
       return chain;
     },
@@ -40,7 +49,7 @@ const row = {
   due_date: null,
 };
 
-const { listDemands, toDemand } = await import("./demands");
+const { listDemands, listLabels, toDemand } = await import("./demands");
 
 test("converte a linha do banco para o formato das telas", () => {
   expect(toDemand(row)).toEqual({
@@ -52,6 +61,7 @@ test("converte a linha do banco para o formato das telas", () => {
     isNow: true,
     lastActivityAt: "2026-10-27T10:00:00Z",
     subtasks: [],
+    labels: [],
     comments: [],
     attachments: [],
     history: [],
@@ -116,4 +126,35 @@ test("lê só demandas ativas; as filhas viram subtarefas, na ordem de criação
 test("erro do banco não vira lista vazia", async () => {
   db.error = { message: "falhou" };
   await expect(listDemands()).rejects.toEqual({ message: "falhou" });
+});
+
+test("cada demanda traz as etiquetas aplicadas, em ordem de nome", async () => {
+  db.error = null;
+  db.rows = [row, { ...row, id: "t2" }];
+  db.labels = [
+    { id: "l1", name: "Financeiro", color: "mostarda" },
+    { id: "l2", name: "Bug", color: "tijolo" },
+  ];
+  db.taskLabels = [
+    { task_id: "t1", label_id: "l1" },
+    { task_id: "t1", label_id: "l2" },
+  ];
+  const demands = await listDemands();
+  expect(demands.find((d) => d.id === "t1")!.labels).toEqual([
+    { id: "l2", name: "Bug", color: "tijolo" },
+    { id: "l1", name: "Financeiro", color: "mostarda" },
+  ]);
+  expect(demands.find((d) => d.id === "t2")!.labels).toEqual([]);
+  db.labels = [];
+  db.taskLabels = [];
+});
+
+test("listLabels reads the company labels, and a database error is not an empty list", async () => {
+  db.error = null;
+  db.labels = [{ id: "l1", name: "Bug", color: "tijolo" }];
+  await expect(listLabels()).resolves.toEqual(db.labels);
+  db.error = { message: "falhou" };
+  await expect(listLabels()).rejects.toEqual({ message: "falhou" });
+  db.error = null;
+  db.labels = [];
 });

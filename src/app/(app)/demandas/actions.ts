@@ -6,6 +6,12 @@ import { getCurrentUser } from "@/lib/auth";
 import { MAX_CAPTURED, validateTitle } from "@/lib/capture";
 import { parseDemand, type DemandField } from "@/lib/demand-input";
 import { priorityValue } from "@/lib/demand-labels";
+import {
+  LABEL_COLORS,
+  sameName,
+  validateLabelName,
+  type Label,
+} from "@/lib/labels";
 import { createClient } from "@/lib/supabase/server";
 
 const id = z.uuid();
@@ -257,4 +263,68 @@ export async function archiveSubtask(taskId: string) {
   const target = id.safeParse(taskId);
   if (!target.success) return false;
   return updateSubtask(target.data, { archived_at: new Date().toISOString() });
+}
+
+// Etiquetas (T8). Aplicar cria a etiqueta quando o nome é novo; o banco garante empresa, nome único e paleta.
+export async function applyLabel(
+  taskId: string,
+  rawName: string,
+): Promise<Label | null> {
+  const user = await getCurrentUser();
+  const task = id.safeParse(taskId);
+  const name = validateLabelName(String(rawName));
+  if (!task.success || !name.ok) return null;
+  const supabase = await createClient();
+  const existing = await supabase.from("labels").select("id, name, color");
+  if (existing.error) return null;
+  let label = (existing.data as Label[]).find((l) =>
+    sameName(l.name, name.name),
+  );
+  if (!label) {
+    const created = await supabase
+      .from("labels")
+      .insert({ organization_id: user.organizationId, name: name.name })
+      .select("id, name, color")
+      .single();
+    if (created.error || !created.data) return null;
+    label = created.data as Label;
+  }
+  const { error } = await supabase.from("task_labels").insert({
+    organization_id: user.organizationId,
+    task_id: task.data,
+    label_id: label.id,
+  });
+  // Já aplicada (chave primária repetida) é o resultado que se queria.
+  if (error && error.code !== "23505") return null;
+  done(true);
+  return label;
+}
+
+export async function removeLabel(taskId: string, labelId: string) {
+  await getCurrentUser();
+  const input = z.tuple([id, id]).safeParse([taskId, labelId]);
+  if (!input.success) return false;
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("task_labels")
+    .delete()
+    .eq("task_id", input.data[0])
+    .eq("label_id", input.data[1])
+    .select("label_id");
+  return done(!error && !!data?.length);
+}
+
+const labelColor = z.enum(LABEL_COLORS.map((c) => c.value));
+
+export async function setLabelColor(labelId: string, color: string) {
+  await getCurrentUser();
+  const input = z.tuple([id, labelColor]).safeParse([labelId, color]);
+  if (!input.success) return false;
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("labels")
+    .update({ color: input.data[1] })
+    .eq("id", input.data[0])
+    .select("id");
+  return done(!error && !!data?.length);
 }

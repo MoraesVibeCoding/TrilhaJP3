@@ -11,7 +11,10 @@ import { demoDemands, demoNow, demoProjects } from "@/test/demo-data";
 
 // A leitura do banco é simulada com os dados de exemplo, e o relógio fica no dia deles.
 vi.mock("next/server", () => ({ connection: async () => undefined }));
-vi.mock("@/lib/demands", () => ({ listDemands: async () => demoDemands }));
+vi.mock("@/lib/demands", () => ({
+  listDemands: async () => demoDemands,
+  listLabels: async () => [],
+}));
 vi.mock("@/lib/projects", () => ({ listProjects: async () => demoProjects }));
 beforeAll(() => {
   vi.useFakeTimers({ toFake: ["Date"] });

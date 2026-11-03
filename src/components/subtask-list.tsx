@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -8,6 +9,7 @@ import {
   type KeyboardEvent,
 } from "react";
 import { validateTitle } from "@/lib/capture";
+import { closeOnBlur, useOutsideClose } from "@/lib/use-outside-close";
 import { Icon } from "./icon";
 
 type Subtask = { id: string; title: string; done: boolean };
@@ -38,6 +40,10 @@ export function SubtaskList({
   const [error, setError] = useState("");
   const moreRefs = useRef(new Map<string, HTMLButtonElement>());
   const addRef = useRef<HTMLButtonElement>(null);
+  // O "Mais opções" aberto, para fechar com um toque fora dele.
+  const openRef = useRef<HTMLSpanElement>(null);
+  const dismiss = useCallback(() => setOpen(null), []);
+  useOutsideClose(openRef, open !== null, dismiss);
   const addFieldRef = useRef<HTMLInputElement>(null);
   // Com o campo de adicionar aberto, o botão não existe: o foco vai para o campo.
   const addTarget = () => addRef.current ?? addFieldRef.current;
@@ -135,6 +141,7 @@ export function SubtaskList({
             {editor && editing !== s.id && (
               <span
                 className="step-more"
+                ref={open === s.id ? openRef : undefined}
                 onKeyDown={(e) => {
                   if (e.key !== "Escape" || open !== s.id) return;
                   // Senão o Esc chega à janela modal e fecha a demanda inteira.
@@ -143,10 +150,7 @@ export function SubtaskList({
                   setOpen(null);
                   focusNext.current = () => moreRefs.current.get(s.id);
                 }}
-                onBlur={(e) => {
-                  if (!e.currentTarget.contains(e.relatedTarget as Node | null))
-                    setOpen(null);
-                }}
+                onBlur={(e) => closeOnBlur(e, dismiss)}
               >
                 <button
                   type="button"

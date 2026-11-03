@@ -173,3 +173,19 @@ test("removing a step while the add field is open keeps focus in the field", () 
     screen.getByRole("textbox", { name: "Nova subtarefa" }),
   );
 });
+
+test("in Safari a click inside does not move focus: the options stay open; a press outside closes them", () => {
+  setup();
+  fireEvent.click(
+    screen.getByRole("button", { name: "Mais opções para Contato" }),
+  );
+  fireEvent.blur(
+    screen.getByRole("button", { name: "Mais opções para Contato" }),
+    {
+      relatedTarget: null,
+    },
+  );
+  expect(screen.getByRole("button", { name: "Remover" })).toBeDefined();
+  fireEvent.pointerDown(document.body);
+  expect(screen.queryByRole("button", { name: "Remover" })).toBeNull();
+});

@@ -1,3 +1,5 @@
+import type { Label } from "./labels";
+
 export const DEMAND_STATES = ["A fazer", "Fazendo", "Feito"] as const;
 export const PRIORITIES = ["Alta", "Média", "Baixa"] as const;
 export type DemandState = (typeof DEMAND_STATES)[number];
@@ -12,6 +14,8 @@ export type Demand = {
   priority: Priority;
   lastActivityAt: string;
   subtasks: readonly { id: string; title: string; done: boolean }[];
+  // T8: etiquetas aplicadas (listDemands sempre preenche; os dados de teste podem omitir)
+  labels?: readonly Label[];
   comments: readonly { author: string; at: string; text: string }[];
   attachments: readonly { name: string }[];
   history: readonly { at: string; text: string }[];

@@ -18,6 +18,18 @@
   --mc-superficie: #ffffff;
   --mc-destaque: #b83300;
 
+  /* Etiquetas (T8): a pílula traz o próprio fundo, então vale igual nos dois temas */
+  --mc-etiqueta-nevoa: #e6ece7;
+  --mc-etiqueta-nevoa-texto: #08180f;
+  --mc-etiqueta-mata: #0c2a1e;
+  --mc-etiqueta-mata-texto: #e6ece7;
+  --mc-etiqueta-alta: #14704a;
+  --mc-etiqueta-alta-texto: #f2f2ee;
+  --mc-etiqueta-mostarda: #e3b23c;
+  --mc-etiqueta-mostarda-texto: #08180f;
+  --mc-etiqueta-tijolo: #9a3b2e;
+  --mc-etiqueta-tijolo-texto: #f2f2ee;
+
   /* Tipografia */
   --mc-fonte-display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
   --mc-fonte-texto: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
