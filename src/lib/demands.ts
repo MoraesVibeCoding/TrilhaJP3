@@ -25,6 +25,7 @@ export function toDemand(
   row: TaskRow,
   subtasks: Demand["subtasks"] = [],
   labels: readonly Label[] = [],
+  comments: Demand["comments"] = [],
 ): Demand {
   return {
     id: row.id,
@@ -39,16 +40,25 @@ export function toDemand(
     ...(row.due_date ? { dueDate: row.due_date } : {}),
     subtasks,
     labels,
-    comments: [],
+    comments,
     attachments: [],
     history: [],
   };
 }
 
+type CommentRow = {
+  id: string;
+  task_id: string;
+  body: string;
+  author_name: string;
+  created_by: string;
+  created_at: string;
+};
+
 export async function listDemands(): Promise<Demand[]> {
-  await getCurrentUser();
+  const user = await getCurrentUser();
   const supabase = await createClient();
-  const [tasks, applied, labels] = await Promise.all([
+  const [tasks, applied, labels, comments] = await Promise.all([
     supabase
       .from("tasks")
       .select(
@@ -58,8 +68,12 @@ export async function listDemands(): Promise<Demand[]> {
       .order("updated_at", { ascending: false }),
     supabase.from("task_labels").select("task_id, label_id"),
     supabase.from("labels").select("id, name, color"),
+    supabase
+      .from("task_comments")
+      .select("id, task_id, body, author_name, created_by, created_at")
+      .is("archived_at", null),
   ]);
-  const error = tasks.error ?? applied.error ?? labels.error;
+  const error = tasks.error ?? applied.error ?? labels.error ?? comments.error;
   if (error) throw error;
   const data = tasks.data;
   // T8: etiquetas aplicadas, por demanda, em ordem de nome.
@@ -70,6 +84,18 @@ export async function listDemands(): Promise<Demand[]> {
       .map((a) => byId.get(a.label_id))
       .filter((l): l is Label => !!l)
       .sort((x, y) => x.name.localeCompare(y.name, "pt-BR"));
+  // T9: comentários ativos, do mais antigo ao mais novo; "mine" é de quem está logado.
+  const commentsOf = (taskId: string) =>
+    (comments.data as CommentRow[])
+      .filter((c) => c.task_id === taskId)
+      .sort((x, y) => x.created_at.localeCompare(y.created_at))
+      .map((c) => ({
+        id: c.id,
+        author: c.author_name,
+        at: c.created_at,
+        text: c.body,
+        mine: c.created_by === user.id,
+      }));
   const rows = data as TaskRow[];
   // Subtarefa é a demanda filha (parent_task_id); os passos seguem a ordem de criação.
   const steps = rows
@@ -84,6 +110,7 @@ export async function listDemands(): Promise<Demand[]> {
           .filter((s) => s.parent_task_id === r.id)
           .map((s) => ({ id: s.id, title: s.title, done: s.state === "done" })),
         labelsOf(r.id),
+        commentsOf(r.id),
       ),
     );
 }

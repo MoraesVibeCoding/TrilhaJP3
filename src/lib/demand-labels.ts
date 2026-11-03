@@ -16,7 +16,14 @@ export type Demand = {
   subtasks: readonly { id: string; title: string; done: boolean }[];
   // T8: etiquetas aplicadas (listDemands sempre preenche; os dados de teste podem omitir)
   labels?: readonly Label[];
-  comments: readonly { author: string; at: string; text: string }[];
+  // T9: id e mine vêm de listDemands; "at" é a data ISO do banco (os dados de teste podem omitir id e mine)
+  comments: readonly {
+    author: string;
+    at: string;
+    text: string;
+    id?: string;
+    mine?: boolean;
+  }[];
   attachments: readonly { name: string }[];
   history: readonly { at: string; text: string }[];
   isNow?: boolean;

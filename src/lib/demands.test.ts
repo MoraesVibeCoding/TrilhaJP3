@@ -7,17 +7,22 @@ const db = vi.hoisted(() => ({
   // T8: etiquetas aplicadas e etiquetas da empresa
   taskLabels: [] as object[],
   labels: [] as object[],
+  // T9: comentários ativos
+  comments: [] as object[],
 }));
-vi.mock("@/lib/auth", () => ({ getCurrentUser: async () => ({}) }));
+vi.mock("@/lib/auth", () => ({ getCurrentUser: async () => ({ id: "u1" }) }));
 vi.mock("@/lib/supabase/server", () => ({
   createClient: async () => ({
     from: (table: string) => {
       const result = () => ({
         data: db.error
           ? null
-          : { tasks: db.rows, task_labels: db.taskLabels, labels: db.labels }[
-              table
-            ],
+          : {
+              tasks: db.rows,
+              task_labels: db.taskLabels,
+              labels: db.labels,
+              task_comments: db.comments,
+            }[table],
         error: db.error,
       });
       const chain = {
@@ -114,7 +119,10 @@ test("lê só demandas ativas; as filhas viram subtarefas, na ordem de criação
     step("Contato", "doing", "2026-10-21T10:00:00Z"),
   ];
   const demands = await listDemands();
-  expect(db.calls).toEqual(["tasks.is(archived_at)"]);
+  expect(db.calls).toEqual([
+    "tasks.is(archived_at)",
+    "task_comments.is(archived_at)",
+  ]);
   expect(demands.map((d) => d.id)).toEqual(["t1"]);
   expect(demands[0].subtasks).toEqual([
     { id: "Home", title: "Home", done: true },
@@ -157,4 +165,55 @@ test("listLabels reads the company labels, and a database error is not an empty 
   await expect(listLabels()).rejects.toEqual({ message: "falhou" });
   db.error = null;
   db.labels = [];
+});
+
+test("cada demanda traz os comentários ativos em ordem de criação, marcando os de quem está logado", async () => {
+  db.error = null;
+  db.calls = [];
+  db.rows = [row];
+  db.comments = [
+    {
+      id: "c2",
+      task_id: "t1",
+      body: "Segundo",
+      author_name: "ana",
+      created_by: "u2",
+      created_at: "2026-11-02T10:00:00Z",
+    },
+    {
+      id: "c1",
+      task_id: "t1",
+      body: "Primeiro",
+      author_name: "pedro",
+      created_by: "u1",
+      created_at: "2026-11-01T10:00:00Z",
+    },
+    {
+      id: "c3",
+      task_id: "outra",
+      body: "De outra",
+      author_name: "pedro",
+      created_by: "u1",
+      created_at: "2026-11-01T09:00:00Z",
+    },
+  ];
+  const [demand] = await listDemands();
+  expect(db.calls).toContain("task_comments.is(archived_at)");
+  expect(demand.comments).toEqual([
+    {
+      id: "c1",
+      author: "pedro",
+      at: "2026-11-01T10:00:00Z",
+      text: "Primeiro",
+      mine: true,
+    },
+    {
+      id: "c2",
+      author: "ana",
+      at: "2026-11-02T10:00:00Z",
+      text: "Segundo",
+      mine: false,
+    },
+  ]);
+  db.comments = [];
 });
