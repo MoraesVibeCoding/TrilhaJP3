@@ -45,7 +45,11 @@ const demand: PageDemand = {
     { id: "Rodapé", title: "Rodapé", done: false },
   ],
   comments: [
-    { author: "Pedro", at: "ontem, 17h", text: "Falta revisar o contato." },
+    {
+      author: "Pedro",
+      at: "2026-10-21T17:00:00",
+      text: "Falta revisar o contato.",
+    },
   ],
   attachments: [{ name: "textos-v2.pdf" }],
   history: [{ at: "20 de out.", text: "Demanda criada" }],

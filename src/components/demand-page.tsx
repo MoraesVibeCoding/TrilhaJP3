@@ -11,12 +11,12 @@ import { formatActivity } from "@/lib/resume";
 import { useDemandState } from "@/lib/use-demand-state";
 import {
   AttachmentList,
-  CommentList,
   DetailNow,
   HistoryList,
   NowToggle,
   SubtaskList,
 } from "./demand-detail";
+import { CommentThread } from "./comment-thread";
 import { DemandEditForm } from "./demand-edit-form";
 import { useFlashMessage } from "@/lib/use-flash-message";
 
@@ -76,7 +76,6 @@ export function DemandPage({
 
   const project =
     projects.find((p) => p.id === demand.projectId)?.name ?? "Sem projeto";
-  const comments = demand.comments;
   const attachments = demand.attachments;
   const history = demand.history;
 
@@ -177,8 +176,12 @@ export function DemandPage({
             />
           </section>
           <section aria-labelledby="dp-comments" className="demand-page-more">
-            <h2 id="dp-comments">Comentários ({comments.length})</h2>
-            <CommentList comments={comments} />
+            <CommentThread
+              taskId={demand.id}
+              comments={demand.comments}
+              now={now}
+              heading={(n) => <h2 id="dp-comments">Comentários ({n})</h2>}
+            />
           </section>
         </div>
 

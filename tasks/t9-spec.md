@@ -44,6 +44,8 @@ O Pedro registra o andamento de uma demanda em comentários: o que combinou com 
 
 ## 5. Design (3 propostas, `impeccable`)
 
+**Escolhida pelo Pedro em 2026-11-03: B · Campo no topo** (maquete em `https://claude.ai/artifact/SDLK2XLbTkmo38CwEo5HfL`): o campo e o botão "Comentar" ficam antes da lista, que vai do mais antigo ao mais novo; cada comentário seu tem uma lixeira, e a confirmação aparece na própria linha.
+
 O `impeccable` traz 3 propostas em HTML, nos dois temas, para a lista e o campo de comentário na janela e na página. Elas decidem:
 
 - se o campo fica antes ou depois da lista;

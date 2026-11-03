@@ -25,7 +25,7 @@ const raw: readonly (Omit<Demand, Lists> & Partial<Pick<Demand, Lists>>)[] = [
     comments: [
       {
         author: "Pedro",
-        at: "ontem, 17h",
+        at: "2026-10-21T17:00:00",
         text: "Falta revisar o texto de contato.",
       },
     ],
@@ -59,7 +59,7 @@ const raw: readonly (Omit<Demand, Lists> & Partial<Pick<Demand, Lists>>)[] = [
     comments: [
       {
         author: "Pedro",
-        at: "segunda, 10h",
+        at: "2026-10-19T10:00:00",
         text: "Definir antes o meio de pagamento.",
       },
     ],

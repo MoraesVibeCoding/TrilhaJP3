@@ -1,4 +1,5 @@
-import type { DemandState } from "@/lib/demand-labels";
+import type { Demand, DemandState } from "@/lib/demand-labels";
+import { CommentThread } from "./comment-thread";
 import type { Label } from "@/lib/labels";
 import { LabelPicker } from "./label-picker";
 import { StepProgress } from "./step-progress";
@@ -10,7 +11,7 @@ export type DetailData = {
   id: string;
   title: string;
   state: DemandState;
-  comments: readonly { author: string; at: string; text: string }[];
+  comments: Demand["comments"];
   attachments: readonly { name: string }[];
   history: readonly { at: string; text: string }[];
   labels?: readonly Label[];
@@ -26,6 +27,7 @@ export function DemandDetail({
   onToggleNow,
   steps,
   allLabels,
+  now = new Date(),
 }: {
   data: DetailData;
   subtasks: readonly Subtask[];
@@ -35,6 +37,8 @@ export function DemandDetail({
   steps?: SubtaskEditor;
   // T8: as etiquetas da empresa; sem elas, a janela não mostra o painel
   allLabels?: readonly Label[];
+  // A janela só abre no navegador: sem "agora" do servidor, vale o relógio de quem vê.
+  now?: Date;
 }) {
   return (
     <>
@@ -67,10 +71,16 @@ export function DemandDetail({
       </details>
 
       <details className="detail-group">
-        <summary>
-          Comentários <span className="count">({data.comments.length})</span>
-        </summary>
-        <CommentList comments={data.comments} />
+        <CommentThread
+          taskId={data.id}
+          comments={data.comments}
+          now={now}
+          heading={(n) => (
+            <summary>
+              Comentários <span className="count">({n})</span>
+            </summary>
+          )}
+        />
       </details>
 
       <details className="detail-group">
@@ -139,27 +149,6 @@ export function DetailNow({
         Concluir passo
       </button>
     </>
-  );
-}
-
-export function CommentList({
-  comments,
-}: {
-  comments: DetailData["comments"];
-}) {
-  if (comments.length === 0) return <p>Nenhum comentário.</p>;
-  return (
-    <ul className="detail-list">
-      {comments.map((c) => (
-        <li key={c.at + c.text}>
-          <span className="detail-meta">
-            {c.author}, {c.at}
-          </span>
-          <br />
-          {c.text}
-        </li>
-      ))}
-    </ul>
   );
 }
 
