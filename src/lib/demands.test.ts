@@ -3,6 +3,8 @@ import { expect, test, vi } from "vitest";
 const db = vi.hoisted(() => ({
   error: null as object | null,
   calls: [] as string[],
+  // T9: os filtros da consulta de comentários ficam à parte dos da de demandas
+  commentCalls: [] as string[],
   rows: [] as object[],
   // T8: etiquetas aplicadas e etiquetas da empresa
   taskLabels: [] as object[],
@@ -28,7 +30,9 @@ vi.mock("@/lib/supabase/server", () => ({
       const chain = {
         select: () => chain,
         is: (column: string) => {
-          db.calls.push(`${table}.is(${column})`);
+          (table === "task_comments" ? db.commentCalls : db.calls).push(
+            `${table}.is(${column})`,
+          );
           return chain;
         },
         order: async () => result(),
@@ -119,10 +123,7 @@ test("lê só demandas ativas; as filhas viram subtarefas, na ordem de criação
     step("Contato", "doing", "2026-10-21T10:00:00Z"),
   ];
   const demands = await listDemands();
-  expect(db.calls).toEqual([
-    "tasks.is(archived_at)",
-    "task_comments.is(archived_at)",
-  ]);
+  expect(db.calls).toEqual(["tasks.is(archived_at)"]);
   expect(demands.map((d) => d.id)).toEqual(["t1"]);
   expect(demands[0].subtasks).toEqual([
     { id: "Home", title: "Home", done: true },
@@ -170,6 +171,7 @@ test("listLabels reads the company labels, and a database error is not an empty 
 test("cada demanda traz os comentários ativos em ordem de criação, marcando os de quem está logado", async () => {
   db.error = null;
   db.calls = [];
+  db.commentCalls = [];
   db.rows = [row];
   db.comments = [
     {
@@ -198,7 +200,7 @@ test("cada demanda traz os comentários ativos em ordem de criação, marcando o
     },
   ];
   const [demand] = await listDemands();
-  expect(db.calls).toContain("task_comments.is(archived_at)");
+  expect(db.commentCalls).toEqual(["task_comments.is(archived_at)"]);
   expect(demand.comments).toEqual([
     {
       id: "c1",
