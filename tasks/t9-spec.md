@@ -1,6 +1,6 @@
 # T9: comentários
 
-Status: **rascunho, aguarda aprovação do Pedro.** Decisões do Pedro em 2026-11-03: escrever e apagar o próprio comentário (sem editar); texto puro com quebras de linha e links clicáveis; comentários na janela e na página da demanda. Tarefa 🎨: a tela passa por 3 propostas do `impeccable` em HTML. Base: `docs/SPEC.md` (seção 5, item 5: conteúdo sempre escapado; seção 6, linha T9), ADR 0003, ADR 0007, `CONSTRAINTS.md`.
+Status: **aprovada pelo Pedro em 2026-11-03 ("De acordo").** Decisões do Pedro em 2026-11-03: escrever e apagar o próprio comentário (sem editar); texto puro com quebras de linha e links clicáveis; comentários na janela e na página da demanda. Tarefa 🎨: a tela passa por 3 propostas do `impeccable` em HTML. Base: `docs/SPEC.md` (seção 5, item 5: conteúdo sempre escapado; seção 6, linha T9), ADR 0003, ADR 0007, `CONSTRAINTS.md`.
 
 ## 1. Objetivo
 
