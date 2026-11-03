@@ -140,7 +140,18 @@ export function CommentThread({
             {list.map((c, i) => {
               const time = formatCommentTime(c.at, now);
               return (
-                <li key={c.id ?? `novo-${i}`} data-comment={c.id}>
+                <li
+                  key={c.id ?? `novo-${i}`}
+                  data-comment={c.id}
+                  // Na linha toda, não só na confirmação: o foco pode ainda estar na lixeira.
+                  onKeyDown={(e) => {
+                    if (e.key !== "Escape" || confirming !== c.id) return;
+                    // Esc fecha só a confirmação, não a janela da demanda.
+                    e.preventDefault();
+                    e.stopPropagation();
+                    cancel(c.id!);
+                  }}
+                >
                   <p className="comment-meta">
                     <span className="comment-author">
                       {c.mine ? "Você" : c.author}
@@ -177,16 +188,7 @@ export function CommentThread({
                     )}
                   </p>
                   {confirming === c.id && (
-                    <div
-                      className="comment-confirm"
-                      onKeyDown={(e) => {
-                        if (e.key !== "Escape") return;
-                        // Esc fecha só a confirmação, não a janela da demanda.
-                        e.preventDefault();
-                        e.stopPropagation();
-                        cancel(c.id!);
-                      }}
-                    >
+                    <div className="comment-confirm">
                       Apagar este comentário?
                       <button
                         type="button"

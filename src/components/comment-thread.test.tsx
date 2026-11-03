@@ -181,6 +181,18 @@ test("Esc fecha a confirmação sem fechar a janela em volta", () => {
   document.removeEventListener("keydown", outer);
 });
 
+test("Esc com o foco ainda na lixeira também fecha só a confirmação", () => {
+  setup();
+  const outer = vi.fn();
+  document.addEventListener("keydown", outer);
+  const trash = screen.getByRole("button", { name: /^Apagar comentário/ });
+  fireEvent.click(trash);
+  fireEvent.keyDown(trash, { key: "Escape" });
+  expect(screen.queryByText("Apagar este comentário?")).toBeNull();
+  expect(outer).not.toHaveBeenCalled();
+  document.removeEventListener("keydown", outer);
+});
+
 test("se não apagar, o comentário volta e avisa", async () => {
   setup();
   fireEvent.click(screen.getByRole("button", { name: /^Apagar comentário/ }));
