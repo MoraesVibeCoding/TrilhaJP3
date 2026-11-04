@@ -1,6 +1,6 @@
 # Conserto: a janela da demanda não pode virar página inteira depois de gravar
 
-Status: **aguardando aprovação do Pedro.** Pedido do Pedro em 2026-11-03: consertar antes da T9, em tarefa e PR separadas. Base: `tasks/t5b-spec.md` (requisito 4 e risco 1), `CONSTRAINTS.md`.
+Status: **aprovada pelo Pedro em 2026-11-04 ("De acordo").** Pedido do Pedro em 2026-11-03: consertar antes da T9, em tarefa e PR separadas. Base: `tasks/t5b-spec.md` (requisito 4 e risco 1), `CONSTRAINTS.md`.
 
 ## 1. Problema
 
