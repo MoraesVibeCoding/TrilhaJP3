@@ -89,6 +89,37 @@ test.describe("página inteira", () => {
     },
   );
 
+  // Defeito de 2026-11-03: depois de gravar, o Next recarregava a rota do endereço da janela
+  // (/demandas/{id}) e a página inteira tomava o lugar da lista e da janela.
+  for (const [list, heading] of [
+    ["/", "Retomar"],
+    ["/demandas", "Demandas"],
+  ] as const) {
+    test(
+      `saving in the window from ${heading} keeps the window and the list`,
+      { tag: "@grava" },
+      async ({ page }) => {
+        await page.goto(list);
+        await page.getByRole("button", { name: title }).first().click();
+        const saved = actionSaved(page);
+        await dialog(page)
+          .getByRole("button", { name: "Concluir passo" })
+          .click();
+        await saved;
+        // a tela recarregada do servidor chega logo depois da resposta da ação
+        await page.waitForLoadState("networkidle");
+        await expect(dialog(page)).toBeVisible();
+        await expect(
+          page.getByRole("heading", { level: 1, name: heading }),
+        ).toBeVisible();
+        await expect(page).toHaveURL(`/demandas/${seed().demands.d1}`);
+        await expect(
+          dialog(page).getByRole("region", { name: "Agora" }),
+        ).toContainText("Passo 3 de 3");
+      },
+    );
+  }
+
   test("Foco shows only Subtarefas and Agora", async ({ page }) => {
     await page.goto(`/demandas/${seed().demands.d1}`);
     // o atalho só vale depois da hidratação: repete até o modo trocar, como em home.spec.ts

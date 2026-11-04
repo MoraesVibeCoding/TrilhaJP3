@@ -815,6 +815,8 @@ test("after back and forward the page is usable, with no modal left stuck", asyn
     .getByRole("button", { name: "Fotos da equipe" });
   await opener.click();
   await expect(page.getByRole("dialog")).toBeVisible();
+  // o endereço chega logo depois da janela (router.push busca a rota antes de trocá-lo)
+  await expect(page).toHaveURL(/\/demandas\/.+$/);
   // Voltar primeiro fecha a janela (T5b), depois volta para Retomar
   await page.goBack();
   await expect(page.getByRole("dialog")).toBeHidden();
