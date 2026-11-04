@@ -784,6 +784,14 @@ tbody th {
   text-decoration-color: var(--mc-alta);
   text-underline-offset: 3px;
 }
+/* Zera as margens das regras globais dos botões, como em .capture-actions */
+.comment-form-row .primary-button,
+.comment-confirm .primary-button {
+  margin-top: 0;
+}
+.comment-confirm .secondary-button {
+  margin-left: 0;
+}
 .comment-confirm {
   display: flex;
   flex-wrap: wrap;

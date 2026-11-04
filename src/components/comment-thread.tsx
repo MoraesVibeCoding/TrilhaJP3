@@ -188,7 +188,11 @@ export function CommentThread({
                     )}
                   </p>
                   {confirming === c.id && (
-                    <div className="comment-confirm">
+                    <div
+                      className="comment-confirm"
+                      role="group"
+                      aria-label="Apagar este comentário?"
+                    >
                       Apagar este comentário?
                       <button
                         type="button"

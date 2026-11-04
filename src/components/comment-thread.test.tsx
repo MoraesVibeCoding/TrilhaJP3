@@ -156,6 +156,10 @@ test("só os próprios comentários têm Apagar, e ele pede confirmação", asyn
 
   fireEvent.click(trash[0]);
   expect(within(items()[1]).getByText("Apagar este comentário?")).toBeTruthy();
+  // o leitor de tela anuncia a pergunta ao entrar nos botões
+  expect(
+    within(items()[1]).getByRole("group", { name: "Apagar este comentário?" }),
+  ).toBeTruthy();
   fireEvent.click(screen.getByRole("button", { name: "Cancelar" }));
   expect(screen.queryByText("Apagar este comentário?")).toBeNull();
   expect(document.activeElement).toBe(trash[0]);
