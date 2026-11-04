@@ -1,6 +1,6 @@
 # T10: histórico de alterações
 
-Status: **aguardando aprovação do Pedro.** Decisões do Pedro em 2026-11-04:
+Status: **aprovada pelo Pedro em 2026-11-04 ("De acordo").** Decisões do Pedro em 2026-11-04:
 
 - entram a demanda e o que ela tem: campos, subtarefas, etiquetas e comentários;
 - cada linha mostra quem fez e quando;
