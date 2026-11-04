@@ -162,3 +162,27 @@ test("membro de outra empresa não lê nem escreve", async () => {
   });
   expect(ownOrg.error?.code).toBe("23503");
 });
+
+test("apagar a conta de quem comentou mantém o comentário, com o nome, sem o vínculo", async () => {
+  const d = await createUser("d");
+  const member = await admin
+    .from("memberships")
+    .insert({ organization_id: orgA, user_id: d.id, role: "member" });
+  if (member.error) throw member.error;
+  const { data, error } = await comment(d, "Fica depois que eu sair");
+  if (error) throw error;
+
+  const removed = await admin.auth.admin.deleteUser(d.id);
+  expect(removed.error).toBeNull();
+
+  const kept = await admin
+    .from("task_comments")
+    .select("body, author_name, created_by")
+    .eq("id", data!.id)
+    .single();
+  expect(kept.data).toEqual({
+    body: "Fica depois que eu sair",
+    author_name: data!.author_name,
+    created_by: null,
+  });
+});

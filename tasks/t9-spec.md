@@ -88,3 +88,4 @@ Total estimado: cerca de 3h40.
 
 1. **Nome do autor sem e-mail:** se a sessão não tiver e-mail, o nome fica "Membro". Hoje todo usuário entra por e-mail e senha, então não acontece.
 2. **Link malicioso:** só `http://` e `https://` viram link. O `rel="noopener noreferrer"` impede que a página aberta controle o app.
+3. **Conta apagada:** decisão do Pedro em 2026-11-04. Apagar a conta de quem comentou mantém o comentário, com o nome em `author_name` e `created_by` nulo, como em projetos e demandas (migração `20261104120000_comment_author_kept`). Para tirar alguém da empresa, o caminho é remover o vínculo (`memberships`), não a conta.
