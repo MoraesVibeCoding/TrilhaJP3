@@ -150,6 +150,8 @@ test(
       .getByRole("table")
       .getByRole("button", { name: "Revisar contrato de hospedagem" })
       .click();
+    // o endereço chega logo depois da janela (router.push busca a rota antes de trocá-lo)
+    await expect(page).toHaveURL(/\/demandas\/[^/]+$/);
     const address = new URL(page.url()).pathname;
     expect(address).toMatch(/^\/demandas\/[^/]+$/);
     await page.goto(address);

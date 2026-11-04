@@ -41,6 +41,12 @@ Resultado na reprodução, partindo de `/` e de `/demandas`:
 
 **Risco de atraso:** o `router.push` só troca o endereço depois de buscar a rota no servidor. Para a janela não abrir atrasada, `useOpenDemand` marca o id aberto na hora (estado local) e o endereço vem logo depois. Esse é o mesmo motivo do comentário atual, que lê o endereço do navegador, e não o `usePathname`.
 
+### 3.1 Achados do CI (2026-11-04), reproduzidos e corrigidos
+
+1. **Server Actions na rota interceptada:** com a janela aberta, as gravações caíam em `Failed to find Server Action`. Isso só acontece quando a página inteira também usa as ações. A rota interceptada passou a importar `@/app/(app)/demandas/actions`. Reproduzido em dev e em produção (Turbopack) e corrigido nos dois.
+2. **"Abrir em página inteira":** o `Link` era interceptado, e a página inteira não abria. Ele virou um `<a>` com `location.replace`. Ctrl ou Cmd+clique continuam abrindo em outra aba.
+3. **Endereço chega logo depois:** fechar a janela antes de o endereço chegar cancela a abertura. Quando o endereço chega, ele é desfeito. Os E2E que leem o endereço logo depois de abrir passaram a esperá-lo.
+
 ## 4. Fora do escopo
 
 - Mover o conteúdo da janela para a rota `@modal`, com busca própria no servidor.

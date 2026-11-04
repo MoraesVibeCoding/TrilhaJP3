@@ -112,6 +112,27 @@ test("with a page address, offers Abrir em página inteira", () => {
   ).toBe("/demandas/d1");
 });
 
+test("Abrir em página inteira loads the page in place; a modified click is left to the browser", () => {
+  const replace = vi.fn();
+  vi.stubGlobal("location", { ...window.location, replace });
+  render(
+    <DemandDialog
+      open
+      onClose={() => {}}
+      title="Revisar textos"
+      pageHref="/demandas/d1"
+    >
+      <p>corpo</p>
+    </DemandDialog>,
+  );
+  const link = screen.getByRole("link", { name: "Abrir em página inteira" });
+  expect(fireEvent.click(link, { ctrlKey: true })).toBe(true);
+  expect(replace).not.toHaveBeenCalled();
+  expect(fireEvent.click(link)).toBe(false);
+  expect(replace).toHaveBeenCalledWith("/demandas/d1");
+  vi.unstubAllGlobals();
+});
+
 test("without a page address there is no full-page link", () => {
   setup();
   expect(screen.queryByRole("link")).toBeNull();
