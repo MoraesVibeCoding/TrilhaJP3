@@ -3,27 +3,36 @@ import { expect, test, vi } from "vitest";
 const db = vi.hoisted(() => ({
   error: null as object | null,
   calls: [] as string[],
+  // T9: os filtros da consulta de comentários ficam à parte dos da de demandas
+  commentCalls: [] as string[],
   rows: [] as object[],
   // T8: etiquetas aplicadas e etiquetas da empresa
   taskLabels: [] as object[],
   labels: [] as object[],
+  // T9: comentários ativos
+  comments: [] as object[],
 }));
-vi.mock("@/lib/auth", () => ({ getCurrentUser: async () => ({}) }));
+vi.mock("@/lib/auth", () => ({ getCurrentUser: async () => ({ id: "u1" }) }));
 vi.mock("@/lib/supabase/server", () => ({
   createClient: async () => ({
     from: (table: string) => {
       const result = () => ({
         data: db.error
           ? null
-          : { tasks: db.rows, task_labels: db.taskLabels, labels: db.labels }[
-              table
-            ],
+          : {
+              tasks: db.rows,
+              task_labels: db.taskLabels,
+              labels: db.labels,
+              task_comments: db.comments,
+            }[table],
         error: db.error,
       });
       const chain = {
         select: () => chain,
         is: (column: string) => {
-          db.calls.push(`${table}.is(${column})`);
+          (table === "task_comments" ? db.commentCalls : db.calls).push(
+            `${table}.is(${column})`,
+          );
           return chain;
         },
         order: async () => result(),
@@ -157,4 +166,56 @@ test("listLabels reads the company labels, and a database error is not an empty 
   await expect(listLabels()).rejects.toEqual({ message: "falhou" });
   db.error = null;
   db.labels = [];
+});
+
+test("cada demanda traz os comentários ativos em ordem de criação, marcando os de quem está logado", async () => {
+  db.error = null;
+  db.calls = [];
+  db.commentCalls = [];
+  db.rows = [row];
+  db.comments = [
+    {
+      id: "c2",
+      task_id: "t1",
+      body: "Segundo",
+      author_name: "ana",
+      created_by: "u2",
+      created_at: "2026-11-02T10:00:00Z",
+    },
+    {
+      id: "c1",
+      task_id: "t1",
+      body: "Primeiro",
+      author_name: "pedro",
+      created_by: "u1",
+      created_at: "2026-11-01T10:00:00Z",
+    },
+    {
+      id: "c3",
+      task_id: "outra",
+      body: "De outra",
+      author_name: "pedro",
+      created_by: "u1",
+      created_at: "2026-11-01T09:00:00Z",
+    },
+  ];
+  const [demand] = await listDemands();
+  expect(db.commentCalls).toEqual(["task_comments.is(archived_at)"]);
+  expect(demand.comments).toEqual([
+    {
+      id: "c1",
+      author: "pedro",
+      at: "2026-11-01T10:00:00Z",
+      text: "Primeiro",
+      mine: true,
+    },
+    {
+      id: "c2",
+      author: "ana",
+      at: "2026-11-02T10:00:00Z",
+      text: "Segundo",
+      mine: false,
+    },
+  ]);
+  db.comments = [];
 });

@@ -9,7 +9,11 @@ const data = (over: Partial<DetailData> = {}): DetailData => ({
   title: "Revisar textos",
   state: "Fazendo",
   comments: [
-    { author: "Pedro", at: "ontem, 17h", text: "Falta revisar o contato." },
+    {
+      author: "Pedro",
+      at: "2026-10-21T17:00:00",
+      text: "Falta revisar o contato.",
+    },
   ],
   attachments: [{ name: "layout.pdf" }],
   history: [{ at: "ontem, 17h", text: "Estado mudou para Fazendo" }],

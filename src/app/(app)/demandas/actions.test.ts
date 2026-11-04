@@ -50,6 +50,8 @@ const {
   applyLabel,
   removeLabel,
   setLabelColor,
+  addComment,
+  archiveComment,
 } = await import("./actions");
 const { revalidatePath } = await import("next/cache");
 
@@ -514,5 +516,47 @@ describe("etiquetas (T8)", () => {
       `eq("id","${LABEL}")`,
       `select("id")`,
     ]);
+  });
+});
+
+describe("comentários (T9)", () => {
+  const COMMENT = "33333333-4444-4555-8666-777777777777";
+
+  test("addComment grava o texto sem os espaços das pontas; o autor fica com o banco", async () => {
+    db.results = [{}];
+    await expect(
+      addComment(ID, "  Falta o rodapé.\nE o mapa.  "),
+    ).resolves.toBe(true);
+    expect(db.queries).toEqual([
+      [
+        "from(task_comments)",
+        `insert({"organization_id":"org-1","task_id":"${ID}","body":"Falta o rodapé.\\nE o mapa."})`,
+      ],
+    ]);
+    expect(revalidatePath).toHaveBeenCalledWith("/", "layout");
+  });
+
+  test("addComment recusa texto vazio, longo demais e id inválido sem consultar o banco", async () => {
+    await expect(addComment(ID, "   ")).resolves.toBe(false);
+    await expect(addComment(ID, "x".repeat(5001))).resolves.toBe(false);
+    await expect(addComment("x", "Oi")).resolves.toBe(false);
+    expect(db.queries).toEqual([]);
+    db.results = [{ error: { code: "42501" } }];
+    await expect(addComment(ID, "Oi")).resolves.toBe(false);
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
+  test("archiveComment arquiva; sem linha alterada (outro autor) é false", async () => {
+    db.results = [{ data: [{ id: COMMENT }] }];
+    await expect(archiveComment(COMMENT)).resolves.toBe(true);
+    expect(db.queries[0][0]).toBe("from(task_comments)");
+    expect(db.queries[0][1]).toMatch(/^update\(\{"archived_at":"\d{4}-/);
+    expect(db.queries[0].slice(2)).toEqual([
+      `eq("id","${COMMENT}")`,
+      `select("id")`,
+    ]);
+    db.results = [{ data: [] }];
+    await expect(archiveComment(COMMENT)).resolves.toBe(false);
+    await expect(archiveComment("x")).resolves.toBe(false);
   });
 });

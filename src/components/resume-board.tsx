@@ -79,6 +79,7 @@ export function ResumeBoard({
             onToggleNow={toggleNow}
             steps={steps(open.id)}
             allLabels={labels}
+            now={now}
           />
         )}
       </DemandDialog>

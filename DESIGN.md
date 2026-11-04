@@ -303,6 +303,16 @@ Tudo aparece na hora e volta, com "Não foi possível salvar. Tente de novo.", s
 
 Na página Demandas, o filtro "Etiqueta" (um `select`, com "Todas" mais as etiquetas da empresa) fica ao lado de Projeto e Prioridade. Ele vale nas três visões, entra nas contagens por estado e fica salvo como os outros filtros. Tabela, cartões e Retomar não mostram etiquetas.
 
+### Comentários (T9)
+
+Proposta B, escolhida pelo Pedro em 2026-11-03 (maquete em `.impeccable/mocks/t9/propostas.html`). O mesmo componente (`CommentThread`) aparece no grupo "Comentários" da janela e na coluna Comentários da página inteira. A contagem do título acompanha a lista na hora.
+
+- **Campo no topo:** área de texto de várias linhas, com borda de controle, raio 10px e até 5.000 caracteres. Abaixo dela vêm o botão primário "Comentar" e a dica "Ctrl+Enter ou ⌘+Enter publica", em mono 0,75rem. Enter quebra a linha. Depois de publicar, o campo esvazia e o foco fica nele. Campo vazio avisa "Escreva o comentário antes de publicar.".
+- **Lista:** `<ol>`, do mais antigo ao mais novo, com filete de 1px entre os comentários. A linha de cima mostra o autor em Space Grotesk 600 ("Você" nos seus) e a hora em IBM Plex Mono 0,8125rem: "hoje, 15h", "ontem, 9h", "30 de out., 9h" (o ano só aparece quando não é o atual). O texto mantém as quebras (`pre-wrap`). Só `http://` e `https://` viram link, sublinhado em Alta, abrindo em outra aba com `rel="noopener noreferrer"`. O resto aparece sempre como texto.
+- **Apagar:** só nos seus, uma lixeira de 44px à direita da linha do autor, com margem negativa para não aumentar a linha. Ela abre na própria linha a confirmação "Apagar este comentário?", um `role="group"` com Apagar (primário, com o foco) e Cancelar (secundário). Esc ou Cancelar fecham só a confirmação e devolvem o foco à lixeira. Um comentário recém-publicado só ganha a lixeira quando o banco devolve o id dele.
+
+Tudo aparece na hora e volta, com "Não foi possível salvar. Tente de novo.", se não gravar. Se a publicação falhar, o texto volta ao campo.
+
 ### App instalado (T12)
 
 O app se instala na tela inicial do iPad (Safari) e no computador (Chrome ou Edge) e abre em tela cheia (`display: standalone`), sem modo offline. Ícone: o `mc-app-icone.svg` da marca Moraes Coding (M de cinco barras em Névoa, barra de hoje no Sinal, sobre Mata `#0C2A1E`), o mesmo do favicon `public/icon.svg`. Os PNG saem dele: 192 e 512 com os cantos do desenho, o `maskable` de 512 e o `apple-icon` de 180 quadrados e opacos (o sistema recorta). O fundo de abertura é Gelo `#F2F2EE`. A barra do navegador segue o tema do sistema: Gelo no claro, Mata no escuro. A barra de status do iPad fica no padrão, e o conteúdo nunca passa por baixo dela.

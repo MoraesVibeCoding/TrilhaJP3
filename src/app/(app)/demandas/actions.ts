@@ -328,3 +328,33 @@ export async function setLabelColor(labelId: string, color: string) {
     .select("id");
   return done(!error && !!data?.length);
 }
+
+// Comentários (T9). O texto é guardado como veio (sem as pontas); quem escreveu fica com o banco.
+const commentBody = z.string().trim().min(1).max(5000);
+
+export async function addComment(taskId: string, body: string) {
+  const user = await getCurrentUser();
+  const input = z.tuple([id, commentBody]).safeParse([taskId, body]);
+  if (!input.success) return false;
+  const supabase = await createClient();
+  const { error } = await supabase.from("task_comments").insert({
+    organization_id: user.organizationId,
+    task_id: input.data[0],
+    body: input.data[1],
+  });
+  return done(!error);
+}
+
+// Arquivar é o "apagar" do autor; a RLS só deixa o próprio, então nenhuma linha = não era dele.
+export async function archiveComment(commentId: string) {
+  await getCurrentUser();
+  const target = id.safeParse(commentId);
+  if (!target.success) return false;
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("task_comments")
+    .update({ archived_at: new Date().toISOString() })
+    .eq("id", target.data)
+    .select("id");
+  return done(!error && !!data?.length);
+}

@@ -1,12 +1,12 @@
 # STATUS — TrilhaJp3
 
-Atualizado em 2026-11-04 (T8 mesclada, PR #11; conserto da janela na branch `claude/janela-rota`; T9 construída na branch `claude/t9-spec`). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
+Atualizado em 2026-11-04 (conserto da janela mesclado, PR #12; T9 construída na branch `claude/t9-spec`). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
 
 ## Próxima ação
 
-Pedro: revisar a PR do conserto da janela (branch `claude/janela-rota`, spec `tasks/janela-rota-spec.md`). Depois: a T9 (comentários) recebe a `main` e segue para a revisão final.
+Pedro: revisar a PR da T9 (comentários, branch `claude/t9-spec`, spec `tasks/t9-spec.md`). Depois: T10 (histórico).
 
-## Conserto da janela (2026-11-04)
+## Conserto da janela (2026-11-04, PR #12)
 
 Desde a T5b, gravar na janela da demanda (concluir passo, subtarefa, etiqueta) trocava a janela pela página inteira um instante depois: a janela mudava o endereço com `pushState`, e o `revalidatePath` das Server Actions fazia o Next carregar a rota `/demandas/[id]`. O E2E da T9 pegou. Agora a janela abre por `router.push` e uma rota interceptada vazia (`src/app/(app)/@modal/(.)demandas/[id]`) mantém a lista na tela; ela importa as ações da Demandas (sem isso, "Failed to find Server Action"). "Abrir em página inteira" virou carga de página. O endereço passa a chegar logo depois de a janela abrir.
 
@@ -35,7 +35,7 @@ Ver `docs/PRINCIPIOS-OBJETIVOS.md`, seção 5.
 
 ## Em uma frase
 
-TrilhaJp3 é o sistema de gestão da empresa (Moraes Coding). A v1 é o módulo Projetos e demandas. Prontas e em `main`: T0, T1-R, T2 (empresas e RLS), T3 (login), T4 (projetos), T12 (PWA) e as telas da T5b e T6a a T6d. A T5 (demandas reais) está em `main` (PR #5). A troca de marca para Moraes Coding está em `main` (PR #9). A T7 (subtarefas) está em `main` (PR #10). A T8 (etiquetas) está em `main` (PR #11). A T9 (comentários) está construída na branch `claude/t9-spec`, esperando o conserto da janela. Próximas: T10, T11, T13, T14.
+TrilhaJp3 é o sistema de gestão da empresa (Moraes Coding). A v1 é o módulo Projetos e demandas. Prontas e em `main`: T0, T1-R, T2 (empresas e RLS), T3 (login), T4 (projetos), T12 (PWA) e as telas da T5b e T6a a T6d. A T5 (demandas reais) está em `main` (PR #5). A troca de marca para Moraes Coding está em `main` (PR #9). A T7 (subtarefas) está em `main` (PR #10). A T8 (etiquetas) está em `main` (PR #11). O conserto da janela está em `main` (PR #12). A T9 (comentários: campo no topo, lixeira nos próprios, texto sempre escapado) está construída na branch `claude/t9-spec`. Próximas: T10, T11, T13, T14.
 
 ## Decisões fechadas (resumo)
 
