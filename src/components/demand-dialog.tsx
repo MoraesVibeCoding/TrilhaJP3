@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import {
   useEffect,
   useId,
@@ -70,10 +69,25 @@ export function DemandDialog({
         <header className="demand-dialog-head">
           <h2 id={titleId}>{title}</h2>
           {pageHref && (
-            // replace: Voltar a partir da página leva à lista, não à janela de novo
-            <Link className="dialog-page-link" href={pageHref} replace>
+            // Carga de página, não Link: a rota interceptada (@modal) seguraria a navegação e a página
+            // inteira não abriria. replace: Voltar a partir da página leva à lista, não à janela de novo.
+            <a
+              className="dialog-page-link"
+              href={pageHref}
+              onClick={(event) => {
+                if (
+                  event.metaKey ||
+                  event.ctrlKey ||
+                  event.shiftKey ||
+                  event.altKey
+                )
+                  return;
+                event.preventDefault();
+                window.location.replace(pageHref);
+              }}
+            >
               Abrir em página inteira
-            </Link>
+            </a>
           )}
           <button
             type="button"

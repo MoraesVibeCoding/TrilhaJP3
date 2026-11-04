@@ -10,7 +10,7 @@ afterEach(cleanup);
 
 test("as páginas do app ficam dentro da casca", () => {
   render(
-    <AppLayout params={Promise.resolve({})}>
+    <AppLayout params={Promise.resolve({})} modal={<p>janela</p>}>
       <h1>Retomar</h1>
     </AppLayout>,
   );
@@ -18,4 +18,14 @@ test("as páginas do app ficam dentro da casca", () => {
     "Retomar",
   );
   expect(screen.getByRole("navigation", { name: "Principal" })).toBeDefined();
+});
+
+test("o espaço da janela interceptada fica dentro da casca, depois da página", () => {
+  render(
+    <AppLayout params={Promise.resolve({})} modal={<p>janela</p>}>
+      <h1>Retomar</h1>
+    </AppLayout>,
+  );
+  const main = screen.getByRole("main");
+  expect(main.lastElementChild?.textContent).toBe("janela");
 });
