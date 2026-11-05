@@ -25,7 +25,14 @@ export type Demand = {
     mine?: boolean;
   }[];
   attachments: readonly { name: string }[];
-  history: readonly { at: string; text: string }[];
+  // T10: id, author e mine vêm de listDemands, do mais novo ao mais antigo; "at" é a data ISO do banco
+  history: readonly {
+    at: string;
+    text: string;
+    id?: number;
+    author?: string;
+    mine?: boolean;
+  }[];
   isNow?: boolean;
   doneAt?: string;
   description?: string;
