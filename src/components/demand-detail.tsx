@@ -1,3 +1,4 @@
+import { dayLabel } from "@/lib/comments";
 import type { Demand, DemandState } from "@/lib/demand-labels";
 import { CommentThread } from "./comment-thread";
 import type { Label } from "@/lib/labels";
@@ -13,7 +14,7 @@ export type DetailData = {
   state: DemandState;
   comments: Demand["comments"];
   attachments: readonly { name: string }[];
-  history: readonly { at: string; text: string }[];
+  history: Demand["history"];
   labels?: readonly Label[];
 };
 
@@ -94,7 +95,7 @@ export function DemandDetail({
         <summary>
           Histórico <span className="count">({data.history.length})</span>
         </summary>
-        <HistoryList history={data.history} />
+        <HistoryList history={data.history} now={now} />
       </details>
     </>
   );
@@ -167,17 +168,48 @@ export function AttachmentList({
   );
 }
 
-export function HistoryList({ history }: { history: DetailData["history"] }) {
+// T10, proposta A: agrupado por dia, do mais novo ao mais antigo; hora à esquerda, autor e o que mudou.
+export function HistoryList({
+  history,
+  now,
+}: {
+  history: DetailData["history"];
+  now: Date;
+}) {
   if (history.length === 0) return <p>Sem alterações.</p>;
+  const days: { day: string; items: DetailData["history"][number][] }[] = [];
+  for (const h of history) {
+    const day = dayLabel(h.at, now);
+    if (days.at(-1)?.day === day) days.at(-1)!.items.push(h);
+    else days.push({ day, items: [h] });
+  }
   return (
-    <ul className="detail-list">
-      {history.map((h) => (
-        <li key={h.at + h.text}>
-          <span className="detail-meta">{h.at}</span>
-          <br />
-          {h.text}
-        </li>
+    <div className="history">
+      {days.map(({ day, items }) => (
+        <section key={day}>
+          <h3 className="history-day">{day}</h3>
+          <ol className="history-list">
+            {items.map((h, i) => (
+              <li key={h.id ?? `${h.at}-${i}`}>
+                {/* A hora sai do fuso de quem vê: no servidor pode ser outro */}
+                <time
+                  className="history-hour"
+                  dateTime={h.at}
+                  suppressHydrationWarning
+                >
+                  {new Date(h.at).getHours()}h
+                </time>
+                <div>
+                  <span className="history-who">
+                    {h.mine ? "Você" : h.author}
+                  </span>
+                  <p className="history-text">{h.text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
       ))}
-    </ul>
+    </div>
   );
 }

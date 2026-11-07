@@ -67,6 +67,8 @@ O Pedro abre uma demanda e vê o que aconteceu com ela, do mais novo ao mais ant
 
 ## 5. Design (3 propostas, `impeccable`)
 
+**Escolhida pelo Pedro em 2026-11-06: A · Agrupado por dia** (maquete em `https://claude.ai/artifact/ME6wTyBi4XecLTUUC8gfmT`): um título por dia ("hoje", "ontem", "30 de out.") em mono, e em cada linha a hora à esquerda, o autor e, embaixo, o que mudou.
+
 O `impeccable` traz 3 propostas em HTML, nos dois temas, para a lista do histórico na janela e na página, por exemplo:
 
 - agrupado por dia;

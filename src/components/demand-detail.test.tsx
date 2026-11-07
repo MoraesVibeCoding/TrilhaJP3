@@ -16,7 +16,7 @@ const data = (over: Partial<DetailData> = {}): DetailData => ({
     },
   ],
   attachments: [{ name: "layout.pdf" }],
-  history: [{ at: "ontem, 17h", text: "Estado mudou para Fazendo" }],
+  history: [{ at: "2026-10-21T17:00:00", text: "Estado: A fazer → Fazendo" }],
   ...over,
 });
 

@@ -31,8 +31,8 @@ const raw: readonly (Omit<Demand, Lists> & Partial<Pick<Demand, Lists>>)[] = [
     ],
     attachments: [{ name: "textos-v2.pdf" }],
     history: [
-      { at: "ontem, 17h", text: "Estado mudou para Fazendo" },
-      { at: "20 de out.", text: "Demanda criada" },
+      { at: "2026-10-21T17:00:00", text: "Estado: A fazer → Fazendo" },
+      { at: "2026-10-20T09:00:00", text: "Criou a demanda" },
     ],
     lastActivityAt: "2026-10-21T17:00:00",
     subtasks: [

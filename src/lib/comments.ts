@@ -1,19 +1,22 @@
 const startOfDay = (date: Date) =>
   new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
 
-// "hoje, 15h", "ontem, 9h", "30 de out., 9h"; o ano só aparece quando não é o atual.
-export function formatCommentTime(iso: string, now: Date): string {
+// "hoje", "ontem", "30 de out."; o ano só aparece quando não é o atual.
+export function dayLabel(iso: string, now: Date): string {
   const when = new Date(iso);
-  const hour = `${when.getHours()}h`;
   const days = Math.round((startOfDay(now) - startOfDay(when)) / 86_400_000);
-  if (days <= 0) return `hoje, ${hour}`;
-  if (days === 1) return `ontem, ${hour}`;
-  const day = new Intl.DateTimeFormat("pt-BR", {
+  if (days <= 0) return "hoje";
+  if (days === 1) return "ontem";
+  return new Intl.DateTimeFormat("pt-BR", {
     day: "numeric",
     month: "short",
     ...(when.getFullYear() !== now.getFullYear() && { year: "numeric" }),
   }).format(when);
-  return `${day}, ${hour}`;
+}
+
+// "hoje, 15h", "ontem, 9h", "30 de out., 9h".
+export function formatCommentTime(iso: string, now: Date): string {
+  return `${dayLabel(iso, now)}, ${new Date(iso).getHours()}h`;
 }
 
 export type CommentPart = { text: string } | { href: string };
