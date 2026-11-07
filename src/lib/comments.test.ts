@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { formatCommentTime, linkParts } from "./comments";
+import { dayLabel, formatCommentTime, linkParts } from "./comments";
 
 const now = new Date(2026, 10, 3, 16, 0);
 
@@ -37,4 +37,14 @@ test("pontuação no fim da frase não entra no link", () => {
     { href: "http://a.com/x" },
     { text: "." },
   ]);
+});
+
+test("rótulo do dia, usado nos títulos do histórico", () => {
+  expect(dayLabel(new Date(2026, 10, 3, 1, 0).toISOString(), now)).toBe("hoje");
+  expect(dayLabel(new Date(2026, 10, 2, 23, 0).toISOString(), now)).toBe(
+    "ontem",
+  );
+  expect(dayLabel(new Date(2026, 9, 30, 9, 0).toISOString(), now)).toBe(
+    "30 de out.",
+  );
 });

@@ -1,10 +1,10 @@
 # STATUS — TrilhaJp3
 
-Atualizado em 2026-11-04 (conserto da janela mesclado, PR #12; T9 construída na branch `claude/t9-spec`). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
+Atualizado em 2026-11-07 (T9 e conserto da janela mesclados, PRs #12 a #14; T10 construída na branch `claude/t10-spec`). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
 
 ## Próxima ação
 
-Pedro: revisar a PR da T9 (comentários, branch `claude/t9-spec`, spec `tasks/t9-spec.md`). Depois: T10 (histórico).
+Pedro: revisar a PR da T10 (histórico, branch `claude/t10-spec`, spec `tasks/t10-spec.md`). Depois: T11 (anexos).
 
 ## Conserto da janela (2026-11-04, PR #12)
 
@@ -35,7 +35,7 @@ Ver `docs/PRINCIPIOS-OBJETIVOS.md`, seção 5.
 
 ## Em uma frase
 
-TrilhaJp3 é o sistema de gestão da empresa (Moraes Coding). A v1 é o módulo Projetos e demandas. Prontas e em `main`: T0, T1-R, T2 (empresas e RLS), T3 (login), T4 (projetos), T12 (PWA) e as telas da T5b e T6a a T6d. A T5 (demandas reais) está em `main` (PR #5). A troca de marca para Moraes Coding está em `main` (PR #9). A T7 (subtarefas) está em `main` (PR #10). A T8 (etiquetas) está em `main` (PR #11). O conserto da janela está em `main` (PR #12). A T9 (comentários: campo no topo, lixeira nos próprios, texto sempre escapado) está construída na branch `claude/t9-spec`. Próximas: T10, T11, T13, T14.
+TrilhaJp3 é o sistema de gestão da empresa (Moraes Coding). A v1 é o módulo Projetos e demandas. Prontas e em `main`: T0, T1-R, T2 (empresas e RLS), T3 (login), T4 (projetos), T12 (PWA) e as telas da T5b e T6a a T6d. A T5 (demandas reais) está em `main` (PR #5). A troca de marca para Moraes Coding está em `main` (PR #9). A T7 (subtarefas) está em `main` (PR #10). A T8 (etiquetas) está em `main` (PR #11). O conserto da janela está em `main` (PR #12). A T9 (comentários) está em `main` (PRs #13 e #14). A T10 (histórico por gatilhos no banco, agrupado por dia na tela) está construída na branch `claude/t10-spec`. Próximas: T11, T13, T14.
 
 ## Decisões fechadas (resumo)
 

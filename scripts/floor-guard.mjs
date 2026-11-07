@@ -3,6 +3,7 @@
 // Referência da skill constraint-driven-development; só o filtro de arquivos foi adaptado ao TrilhaJp3.
 // Usage: node floor-guard.mjs [--base <ref>]   (default base: origin/main)
 import { execFileSync } from "node:child_process";
+import { existsSync, readFileSync } from "node:fs";
 
 const base = (() => {
   const i = process.argv.indexOf("--base");
@@ -221,6 +222,52 @@ for (const [key, was] of coverage(removed)) {
   if (!now) flag("threshold-removed", was.file, `${key}: ${was.n}`);
   else if (now.n < was.n)
     flag("threshold-loosened", was.file, `${key}: ${was.n}  ->  ${now.n}`);
+}
+
+// Exceções registradas na tabela "Exceções" do CONSTRAINTS.md (decisão do Pedro em 2026-11-07). Uma linha
+// só vale com regra, caminho, o trecho da linha acusada entre crases no motivo, dono e validade futura
+// (AAAA-MM-DD). Ela libera só o achado daquele arquivo cuja linha contém o trecho, e aparece no log; a
+// própria linha da exceção deixa de reprovar. Sem algum desses campos, ou vencida, nada é liberado e a
+// linha nova continua acusada como new-exception.
+const today = new Date().toISOString().slice(0, 10);
+const exceptions = (
+  existsSync("CONSTRAINTS.md") ? readFileSync("CONSTRAINTS.md", "utf8") : ""
+)
+  .split("\n")
+  .map((l) => l.trim())
+  .filter((l) => /^\| *E\d+ *\|/.test(l))
+  .map((row) => {
+    const [id, rule, path, why = "", owner, until = ""] = row
+      .split("|")
+      .slice(1, -1)
+      .map((c) => c.trim());
+    const quoted = why
+      .match(/`([^`]+)`/)?.[1]
+      ?.trim()
+      .slice(0, 120);
+    return { row: row.slice(0, 120), id, rule, path, quoted, owner, until };
+  })
+  .filter(
+    (e) =>
+      e.quoted &&
+      e.owner &&
+      /^\d{4}-\d{2}-\d{2}$/.test(e.until) &&
+      e.until >= today,
+  );
+const excepted = (f) =>
+  exceptions.find(
+    (e) =>
+      (e.rule === f.rule && e.path === f.file && f.text.includes(e.quoted)) ||
+      (f.rule === "new-exception" && e.row === f.text),
+  );
+for (const f of [...findings]) {
+  const e = excepted(f);
+  if (!e) continue;
+  findings.splice(findings.indexOf(f), 1);
+  if (f.rule !== "new-exception")
+    console.log(
+      `floor-guard: exceção ${e.id} até ${e.until} (${e.owner}): [${f.rule}] ${f.file}: ${f.text}`,
+    );
 }
 
 if (findings.length === 0) {

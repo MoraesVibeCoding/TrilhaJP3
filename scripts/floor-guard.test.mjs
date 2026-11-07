@@ -126,3 +126,82 @@ test("deleting a coverage threshold in vitest.config.mts is caught", () => {
   expect(r.status).toBe(1);
   expect(r.stderr).toContain("threshold-removed");
 });
+
+// Exceções registradas na tabela do CONSTRAINTS.md (decisão do Pedro em 2026-11-07).
+function repoWithAssertion() {
+  const dir = repo();
+  mkdirSync(join(dir, "e2e"));
+  writeFileSync(
+    join(dir, "e2e/x.spec.ts"),
+    "test('x', () => { expect(page.getByText(name)).toHaveCount(0); });\n",
+  );
+  writeFileSync(
+    join(dir, "CONSTRAINTS.md"),
+    "- Coverage: changed lines >= 80% covered\n\n## Exceções\n\n| ID | Regra | Caminho | Motivo | Dono | Expira |\n| --- | --- | --- | --- | --- | --- |\n",
+  );
+  git(dir, "add", "-A");
+  git(dir, "commit", "-qm", "assertion");
+  writeFileSync(
+    join(dir, "e2e/x.spec.ts"),
+    "test('x', () => { expect(list.getByText(name)).toHaveCount(0); });\n",
+  );
+  return dir;
+}
+const exception = (dir, row) =>
+  writeFileSync(
+    join(dir, "CONSTRAINTS.md"),
+    `- Coverage: changed lines >= 80% covered\n\n## Exceções\n\n| ID | Regra | Caminho | Motivo | Dono | Expira |\n| --- | --- | --- | --- | --- | --- |\n${row}\n`,
+  );
+const future = new Date(Date.now() + 10 * 86_400_000)
+  .toISOString()
+  .slice(0, 10);
+const past = new Date(Date.now() - 86_400_000).toISOString().slice(0, 10);
+const trecho = "`expect(page.getByText(name)).toHaveCount(0);`";
+
+test("without an exception, the changed assertion fails", () => {
+  const r = run(repoWithAssertion());
+  expect(r.status).toBe(1);
+  expect(r.stderr).toContain("assertion-removed");
+});
+
+test("a valid exception lets only that line through, and says so", () => {
+  const dir = repoWithAssertion();
+  exception(
+    dir,
+    `| E1 | assertion-removed | e2e/x.spec.ts | O histórico mostra o nome: ${trecho} | Pedro | ${future} |`,
+  );
+  const r = run(dir);
+  expect(r.status).toBe(0);
+  expect(r.stdout).toContain("E1");
+});
+
+test("an expired exception does not count", () => {
+  const dir = repoWithAssertion();
+  exception(
+    dir,
+    `| E1 | assertion-removed | e2e/x.spec.ts | ${trecho} | Pedro | ${past} |`,
+  );
+  expect(run(dir).status).toBe(1);
+});
+
+test("an exception for another line or file does not count", () => {
+  const dir = repoWithAssertion();
+  exception(
+    dir,
+    `| E1 | assertion-removed | e2e/x.spec.ts | \`expect(outra).toBe(1);\` | Pedro | ${future} |`,
+  );
+  expect(run(dir).status).toBe(1);
+  exception(
+    dir,
+    `| E1 | assertion-removed | e2e/y.spec.ts | ${trecho} | Pedro | ${future} |`,
+  );
+  expect(run(dir).status).toBe(1);
+});
+
+test("an exception row without owner, quoted line or date still fails as new-exception", () => {
+  const dir = repoWithAssertion();
+  exception(dir, "| E1 | assertion-removed | e2e/x.spec.ts | sem trecho | | |");
+  const r = run(dir);
+  expect(r.status).toBe(1);
+  expect(r.stderr).toContain("new-exception");
+});

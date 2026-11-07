@@ -3,6 +3,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { PRIORITY_LABELS, STATE_LABELS } from "@/lib/demand-labels";
 import type { Demand } from "@/lib/demand-labels";
 import type { Label } from "@/lib/labels";
+import { describeEvent } from "@/lib/history";
 import { createClient } from "@/lib/supabase/server";
 
 type TaskRow = {
@@ -20,12 +21,13 @@ type TaskRow = {
   due_date: string | null;
 };
 
-// Comentários, anexos e histórico chegam na T9, T11 e T10: por ora, listas vazias.
+// Anexos chegam na T11: por ora, lista vazia.
 export function toDemand(
   row: TaskRow,
   subtasks: Demand["subtasks"] = [],
   labels: readonly Label[] = [],
   comments: Demand["comments"] = [],
+  history: Demand["history"] = [],
 ): Demand {
   return {
     id: row.id,
@@ -42,7 +44,7 @@ export function toDemand(
     labels,
     comments,
     attachments: [],
-    history: [],
+    history,
   };
 }
 
@@ -55,10 +57,23 @@ type CommentRow = {
   created_at: string;
 };
 
+type EventRow = {
+  id: number;
+  task_id: string;
+  type: string;
+  changes: Record<string, unknown>;
+  actor_id: string | null;
+  actor_name: string;
+  created_at: string;
+};
+
+// T10: a tela mostra só os mais recentes de cada demanda.
+const HISTORY_LIMIT = 50;
+
 export async function listDemands(): Promise<Demand[]> {
   const user = await getCurrentUser();
   const supabase = await createClient();
-  const [tasks, applied, labels, comments] = await Promise.all([
+  const [tasks, applied, labels, comments, events] = await Promise.all([
     supabase
       .from("tasks")
       .select(
@@ -72,8 +87,19 @@ export async function listDemands(): Promise<Demand[]> {
       .from("task_comments")
       .select("id, task_id, body, author_name, created_by, created_at")
       .is("archived_at", null),
+    // shortcut: lê o histórico da empresa inteira e corta 50 por demanda aqui; trocar por uma consulta
+    // por demanda (ou uma view com row_number) se o histórico passar de alguns milhares de eventos.
+    supabase
+      .from("task_events")
+      .select("id, task_id, type, changes, actor_id, actor_name, created_at")
+      .order("id", { ascending: false }),
   ]);
-  const error = tasks.error ?? applied.error ?? labels.error ?? comments.error;
+  const error =
+    tasks.error ??
+    applied.error ??
+    labels.error ??
+    comments.error ??
+    events.error;
   if (error) throw error;
   const data = tasks.data;
   // T8: etiquetas aplicadas, por demanda, em ordem de nome.
@@ -96,6 +122,19 @@ export async function listDemands(): Promise<Demand[]> {
         text: c.body,
         mine: c.created_by === user.id,
       }));
+  // T10: do mais novo ao mais antigo (id em sequência), com o texto pronto para a tela.
+  const now = new Date();
+  const historyOf = (taskId: string) =>
+    (events.data as EventRow[])
+      .filter((e) => e.task_id === taskId)
+      .slice(0, HISTORY_LIMIT)
+      .map((e) => ({
+        id: e.id,
+        at: e.created_at,
+        author: e.actor_name,
+        text: describeEvent(e.type, e.changes, now),
+        mine: e.actor_id === user.id,
+      }));
   const rows = data as TaskRow[];
   // Subtarefa é a demanda filha (parent_task_id); os passos seguem a ordem de criação.
   const steps = rows
@@ -111,6 +150,7 @@ export async function listDemands(): Promise<Demand[]> {
           .map((s) => ({ id: s.id, title: s.title, done: s.state === "done" })),
         labelsOf(r.id),
         commentsOf(r.id),
+        historyOf(r.id),
       ),
     );
 }

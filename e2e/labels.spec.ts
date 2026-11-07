@@ -68,7 +68,11 @@ test(
       panel(page).getByRole("checkbox", { name }).uncheck(),
     );
     await page.reload();
-    await expect(page.getByText(name)).toHaveCount(0);
+    // T10: o histórico mostra o nome ("Tirou a etiqueta …"); a etiqueta só não pode estar aplicada
+    await expect(
+      page.getByRole("button", { name: "Etiquetas", exact: true }),
+    ).toBeVisible();
+    await expect(applied(page).getByText(name)).toHaveCount(0);
   },
 );
 

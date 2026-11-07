@@ -62,5 +62,8 @@ Cada linha tem o comando que dá o veredito. Orçamento de tempo: o que roda a c
 
 ## Exceções
 
-| ID  | Regra | Caminho | Motivo | Dono | Expira |
-| --- | ----- | ------- | ------ | ---- | ------ |
+Uma exceção libera uma única linha acusada pelo `floor-guard`. Ela precisa de regra, caminho, o trecho da linha acusada entre crases no motivo, dono e validade (AAAA-MM-DD). Fora disso, ou vencida, não vale. O guard mostra no log cada achado liberado. Mecanismo pedido pelo Pedro em 2026-11-07.
+
+| ID  | Regra             | Caminho            | Motivo                                                                                                                                                                                                                                             | Dono  | Expira     |
+| --- | ----------------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- | ---------- |
+| E1  | assertion-removed | e2e/labels.spec.ts | T10: o histórico mostra o nome da etiqueta tirada ("Tirou a etiqueta …"), então ela aparece na página de propósito. A asserção passa a olhar só a lista "Etiquetas aplicadas". Linha trocada: `await expect(page.getByText(name)).toHaveCount(0);` | Pedro | 2026-12-07 |
