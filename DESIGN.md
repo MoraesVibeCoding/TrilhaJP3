@@ -313,6 +313,15 @@ Proposta B, escolhida pelo Pedro em 2026-11-03 (maquete em `.impeccable/mocks/t9
 
 Tudo aparece na hora e volta, com "Não foi possível salvar. Tente de novo.", se não gravar. Se a publicação falhar, o texto volta ao campo.
 
+### Histórico (T10)
+
+Proposta A, escolhida pelo Pedro em 2026-11-06 (maquete em `.impeccable/mocks/t10/propostas.html`). O `HistoryList` aparece no grupo "Histórico" da janela e na coluna Histórico da página inteira, com os 50 eventos mais recentes, do mais novo ao mais antigo. É só leitura: não tem botões.
+
+- **Dia:** um `<h3>` por dia ("hoje", "ontem", "30 de out."; o ano só aparece quando não é o atual), em IBM Plex Mono 0,75rem, peso 600, caixa alta, com espaçamento de 0,04em, em texto de apoio.
+- **Linha:** grade com a hora numa coluna fixa de 3,25rem (mono 0,8125rem, em `<time>`), o autor em cima (Space Grotesk 600, "Você" nos seus, "Sistema" quando não há sessão) e o que mudou embaixo. Há filete de 1px só entre as linhas do mesmo dia.
+- **Texto:** montado por `describeEvent` a partir do tipo e das mudanças, com os rótulos da tela, por exemplo "Estado: A fazer → Fazendo" ou "Prazo: sem prazo → 7 de nov.". A descrição e os comentários aparecem sem o texto.
+- **Vazio:** "Sem alterações.". O histórico começa vazio, porque o passado não é reconstruído.
+
 ### App instalado (T12)
 
 O app se instala na tela inicial do iPad (Safari) e no computador (Chrome ou Edge) e abre em tela cheia (`display: standalone`), sem modo offline. Ícone: o `mc-app-icone.svg` da marca Moraes Coding (M de cinco barras em Névoa, barra de hoje no Sinal, sobre Mata `#0C2A1E`), o mesmo do favicon `public/icon.svg`. Os PNG saem dele: 192 e 512 com os cantos do desenho, o `maskable` de 512 e o `apple-icon` de 180 quadrados e opacos (o sistema recorta). O fundo de abertura é Gelo `#F2F2EE`. A barra do navegador segue o tema do sistema: Gelo no claro, Mata no escuro. A barra de status do iPad fica no padrão, e o conteúdo nunca passa por baixo dela.
