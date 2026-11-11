@@ -2,6 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import {
+  checkFile,
+  contentTypeOf,
+  opensInBrowser,
+  safeName,
+} from "@/lib/attachments";
 import { getCurrentUser } from "@/lib/auth";
 import { MAX_CAPTURED, validateTitle } from "@/lib/capture";
 import { parseDemand, type DemandField } from "@/lib/demand-input";
@@ -357,4 +363,117 @@ export async function archiveComment(commentId: string) {
     .eq("id", target.data)
     .select("id");
   return done(!error && !!data?.length);
+}
+
+// T11: anexos. O arquivo vai do navegador direto para o Storage (a Server Action aceita só 1 MB);
+// aqui ficam o caminho, o registro, a remoção e os links assinados. O banco confere tudo de novo.
+const BUCKET = "attachments";
+// Links assinados valem 5 minutos.
+const LINK_SECONDS = 300;
+
+export async function prepareAttachment(
+  taskId: string,
+  fileName: string,
+  size: number,
+) {
+  const user = await getCurrentUser();
+  if (!id.safeParse(taskId).success) return null;
+  if (checkFile({ name: fileName, size })) return null;
+  return {
+    path: `${user.organizationId}/${taskId}/${crypto.randomUUID()}-${safeName(fileName)}`,
+    contentType: contentTypeOf(fileName)!,
+  };
+}
+
+const attachmentName = z
+  .string()
+  .trim()
+  .min(1)
+  .max(255)
+  .refine((name) => !!contentTypeOf(name));
+
+export async function addAttachment(
+  taskId: string,
+  storagePath: string,
+  fileName: string,
+) {
+  const user = await getCurrentUser();
+  const input = z
+    .tuple([id, z.string(), attachmentName])
+    .safeParse([taskId, storagePath, fileName]);
+  if (!input.success) return false;
+  const [task, path, name] = input.data;
+  if (!path.startsWith(`${user.organizationId}/${task}/`)) return false;
+  const supabase = await createClient();
+  const { error } = await supabase.from("attachments").insert({
+    organization_id: user.organizationId,
+    task_id: task,
+    storage_path: path,
+    file_name: name,
+  });
+  return done(!error);
+}
+
+// A RLS só deixa quem enviou apagar a linha; só então o arquivo sai (a política do Storage pede o dono).
+export async function removeAttachment(attachmentId: string) {
+  await getCurrentUser();
+  const target = id.safeParse(attachmentId);
+  if (!target.success) return false;
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("attachments")
+    .delete()
+    .eq("id", target.data)
+    .select("storage_path");
+  if (error || !data?.length) return false;
+  // Se o arquivo não sair, sobra um órfão no Storage, sem registro e sem link (tasks/t11-spec.md, risco 2).
+  await supabase.storage.from(BUCKET).remove([data[0].storage_path]);
+  return done(true);
+}
+
+export async function attachmentUrl(attachmentId: string) {
+  await getCurrentUser();
+  const target = id.safeParse(attachmentId);
+  if (!target.success) return null;
+  const supabase = await createClient();
+  const { data: file, error } = await supabase
+    .from("attachments")
+    .select("storage_path, mime_type, file_name")
+    .eq("id", target.data)
+    .single();
+  if (error || !file) return null;
+  const { data } = await supabase.storage
+    .from(BUCKET)
+    .createSignedUrl(
+      file.storage_path,
+      LINK_SECONDS,
+      opensInBrowser(file.mime_type) ? {} : { download: file.file_name },
+    );
+  return data?.signedUrl ?? null;
+}
+
+// As miniaturas das imagens de uma demanda, num pedido só: id do anexo → link.
+export async function thumbnailUrls(
+  taskId: string,
+): Promise<Record<string, string>> {
+  await getCurrentUser();
+  const task = id.safeParse(taskId);
+  if (!task.success) return {};
+  const supabase = await createClient();
+  const { data: images } = await supabase
+    .from("attachments")
+    .select("id, storage_path")
+    .eq("task_id", task.data)
+    .like("mime_type", "image/%");
+  if (!images?.length) return {};
+  const { data } = await supabase.storage.from(BUCKET).createSignedUrls(
+    images.map((i) => i.storage_path),
+    LINK_SECONDS,
+  );
+  const byPath = new Map((data ?? []).map((d) => [d.path, d.signedUrl]));
+  return Object.fromEntries(
+    images
+      .filter((i) => byPath.get(i.storage_path))
+      .map((i) => [i.id, byPath.get(i.storage_path)!]),
+  );
 }

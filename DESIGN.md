@@ -322,6 +322,19 @@ Proposta A, escolhida pelo Pedro em 2026-11-06 (maquete em `.impeccable/mocks/t1
 - **Texto:** montado por `describeEvent` a partir do tipo e das mudanças, com os rótulos da tela, por exemplo "Estado: A fazer → Fazendo" ou "Prazo: sem prazo → 7 de nov.". A descrição e os comentários aparecem sem o texto.
 - **Vazio:** "Sem alterações.". O histórico começa vazio, porque o passado não é reconstruído.
 
+### Anexos (T11)
+
+Proposta A, escolhida pelo Pedro em 2026-11-11 (maquete em `.impeccable/mocks/t11/propostas.html`). O `AttachmentList` aparece no grupo "Anexos" da janela e na coluna Anexos da página inteira, do mais novo ao mais antigo.
+
+- **Enviar:** botão secundário "Anexar arquivos", com o ícone `anexo` (clipe, desenhado no traço da marca). Ao lado vai a regra "Imagens, PDF e documentos, até 10 MB", em mono 0,75rem. Enquanto envia, aparece "Enviando nome…" com uma barra indeterminada (o envio pelo Supabase não informa quanto já foi). Arquivo recusado mostra o motivo e não sai do navegador.
+- **Linha:**
+  - miniatura de 48px, com raio 8px e borda, para imagens; os outros arquivos mostram o tipo ("PDF", "DOCX") em mono;
+  - o nome é sublinhado em Alta e abre o arquivo em outra aba, por um link assinado de 5 minutos;
+  - a linha toda é o alvo do clique, como em `.resume-open`;
+  - embaixo do nome vêm tamanho · autor ("Você" nos seus) · data, em mono, com espaço inseparável entre número e unidade.
+- **Remover:** só nos seus, em texto pequeno sublinhado, com alvo de 44px. Abre na linha a confirmação "Remover este anexo?" (`role="group"`), com Remover primário e Cancelar secundário. Esc fecha só a confirmação.
+- **Coluna estreita (até 20rem, por container query):** o nome ganha a linha toda, "Remover" desce para baixo dele, e a pergunta fica numa linha, com os botões juntos na de baixo.
+
 ### App instalado (T12)
 
 O app se instala na tela inicial do iPad (Safari) e no computador (Chrome ou Edge) e abre em tela cheia (`display: standalone`), sem modo offline. Ícone: o `mc-app-icone.svg` da marca Moraes Coding (M de cinco barras em Névoa, barra de hoje no Sinal, sobre Mata `#0C2A1E`), o mesmo do favicon `public/icon.svg`. Os PNG saem dele: 192 e 512 com os cantos do desenho, o `maskable` de 512 e o `apple-icon` de 180 quadrados e opacos (o sistema recorta). O fundo de abertura é Gelo `#F2F2EE`. A barra do navegador segue o tema do sistema: Gelo no claro, Mata no escuro. A barra de status do iPad fica no padrão, e o conteúdo nunca passa por baixo dela.

@@ -19,11 +19,15 @@ import { BoardColumns } from "./board-columns";
 import { DemandDetail } from "./demand-detail";
 import { DemandDialog } from "./demand-dialog";
 import { demandPath, useOpenDemand } from "@/lib/demand-url";
-import { DEMAND_STATES as STATES, PRIORITIES } from "@/lib/demand-labels";
+import {
+  DEMAND_STATES as STATES,
+  PRIORITIES,
+  type Demand,
+} from "@/lib/demand-labels";
 
 export type DemandsDemand = DemandInput & {
   comments: readonly { author: string; at: string; text: string }[];
-  attachments: readonly { name: string }[];
+  attachments: Demand["attachments"];
   history: readonly { at: string; text: string }[];
   isNow?: boolean;
 };

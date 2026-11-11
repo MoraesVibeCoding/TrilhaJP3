@@ -13,6 +13,8 @@ const db = vi.hoisted(() => ({
   comments: [] as object[],
   // T10: eventos do histórico e a ordem pedida a cada tabela
   events: [] as object[],
+  // T11: anexos
+  attachments: [] as object[],
   orders: [] as string[],
 }));
 vi.mock("@/lib/auth", () => ({ getCurrentUser: async () => ({ id: "u1" }) }));
@@ -28,6 +30,7 @@ vi.mock("@/lib/supabase/server", () => ({
               labels: db.labels,
               task_comments: db.comments,
               task_events: db.events,
+              attachments: db.attachments,
             }[table],
         error: db.error,
       });
@@ -279,4 +282,65 @@ test("cada demanda traz os 50 eventos mais recentes, com o texto, o autor e mine
     mine: false,
   });
   db.events = [];
+});
+
+test("cada demanda traz os anexos, do mais novo ao mais antigo, com tipo, tamanho, autor e mine", async () => {
+  db.error = null;
+  db.rows = [row];
+  db.orders = [];
+  db.attachments = [
+    {
+      id: "a2",
+      task_id: "t1",
+      file_name: "print.png",
+      mime_type: "image/png",
+      size_bytes: 2048,
+      uploaded_by: "u2",
+      uploader_name: "ana",
+      created_at: "2026-11-11T15:00:00Z",
+    },
+    {
+      id: "a1",
+      task_id: "t1",
+      file_name: "contrato.pdf",
+      mime_type: "application/pdf",
+      size_bytes: 4096,
+      uploaded_by: "u1",
+      uploader_name: "pedro",
+      created_at: "2026-11-10T09:00:00Z",
+    },
+    {
+      id: "a3",
+      task_id: "outra",
+      file_name: "de-outra.pdf",
+      mime_type: "application/pdf",
+      size_bytes: 1,
+      uploaded_by: "u1",
+      uploader_name: "pedro",
+      created_at: "2026-11-11T16:00:00Z",
+    },
+  ];
+  const [demand] = await listDemands();
+  expect(db.orders).toContain("attachments.created_at false");
+  expect(demand.attachments).toEqual([
+    {
+      id: "a2",
+      name: "print.png",
+      mime: "image/png",
+      size: 2048,
+      author: "ana",
+      at: "2026-11-11T15:00:00Z",
+      mine: false,
+    },
+    {
+      id: "a1",
+      name: "contrato.pdf",
+      mime: "application/pdf",
+      size: 4096,
+      author: "pedro",
+      at: "2026-11-10T09:00:00Z",
+      mine: true,
+    },
+  ]);
+  db.attachments = [];
 });

@@ -1,6 +1,7 @@
 import { dayLabel } from "@/lib/comments";
 import { zoned } from "@/lib/zone";
 import type { Demand, DemandState } from "@/lib/demand-labels";
+import { AttachmentList } from "./attachment-list";
 import { CommentThread } from "./comment-thread";
 import type { Label } from "@/lib/labels";
 import { LabelPicker } from "./label-picker";
@@ -14,7 +15,7 @@ export type DetailData = {
   title: string;
   state: DemandState;
   comments: Demand["comments"];
-  attachments: readonly { name: string }[];
+  attachments: Demand["attachments"];
   history: Demand["history"];
   labels?: readonly Label[];
 };
@@ -86,10 +87,16 @@ export function DemandDetail({
       </details>
 
       <details className="detail-group">
-        <summary>
-          Anexos <span className="count">({data.attachments.length})</span>
-        </summary>
-        <AttachmentList attachments={data.attachments} />
+        <AttachmentList
+          taskId={data.id}
+          attachments={data.attachments}
+          now={now}
+          heading={(n) => (
+            <summary>
+              Anexos <span className="count">({n})</span>
+            </summary>
+          )}
+        />
       </details>
 
       <details className="detail-group">
@@ -151,21 +158,6 @@ export function DetailNow({
         Concluir passo
       </button>
     </>
-  );
-}
-
-export function AttachmentList({
-  attachments,
-}: {
-  attachments: DetailData["attachments"];
-}) {
-  if (attachments.length === 0) return <p>Nenhum anexo.</p>;
-  return (
-    <ul className="detail-list">
-      {attachments.map((a) => (
-        <li key={a.name}>{a.name}</li>
-      ))}
-    </ul>
   );
 }
 
