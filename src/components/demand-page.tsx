@@ -192,7 +192,7 @@ export function DemandPage({
           </section>
           <section aria-labelledby="dp-history">
             <h2 id="dp-history">Histórico ({history.length})</h2>
-            <HistoryList history={history} />
+            <HistoryList history={history} now={now} />
           </section>
         </div>
       </div>

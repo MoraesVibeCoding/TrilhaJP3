@@ -801,6 +801,52 @@ tbody th {
   font-size: 0.875rem;
   font-weight: 600;
 }
+/* T10, proposta A: histórico agrupado por dia; hora à esquerda em mono, autor em cima do que mudou */
+.history {
+  padding-bottom: 0.75rem;
+}
+.history-day {
+  margin: 0.75rem 0 0.25rem;
+  font-family: var(--mc-fonte-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--mc-texto-apoio);
+}
+.history section:first-child .history-day {
+  margin-top: 0;
+}
+.history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.history-list li {
+  display: grid;
+  grid-template-columns: 3.25rem 1fr;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--mc-borda);
+}
+.history-list li:last-child {
+  border-bottom: 0;
+}
+.history-hour {
+  padding-top: 0.125rem;
+  font-family: var(--mc-fonte-mono);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--mc-texto-apoio);
+}
+.history-who {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.history-text {
+  margin: 0.125rem 0 0;
+  overflow-wrap: anywhere;
+}
 .detail-meta {
   font-size: 0.875rem;
   color: var(--mc-texto-apoio);

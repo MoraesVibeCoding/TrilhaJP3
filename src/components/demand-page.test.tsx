@@ -52,7 +52,7 @@ const demand: PageDemand = {
     },
   ],
   attachments: [{ name: "textos-v2.pdf" }],
-  history: [{ at: "20 de out.", text: "Demanda criada" }],
+  history: [{ at: "2026-10-20T09:00:00", text: "Demanda criada" }],
 };
 
 const setup = (id = "d1") =>

@@ -11,6 +11,9 @@ const db = vi.hoisted(() => ({
   labels: [] as object[],
   // T9: comentários ativos
   comments: [] as object[],
+  // T10: eventos do histórico e a ordem pedida a cada tabela
+  events: [] as object[],
+  orders: [] as string[],
 }));
 vi.mock("@/lib/auth", () => ({ getCurrentUser: async () => ({ id: "u1" }) }));
 vi.mock("@/lib/supabase/server", () => ({
@@ -24,6 +27,7 @@ vi.mock("@/lib/supabase/server", () => ({
               task_labels: db.taskLabels,
               labels: db.labels,
               task_comments: db.comments,
+              task_events: db.events,
             }[table],
         error: db.error,
       });
@@ -35,7 +39,10 @@ vi.mock("@/lib/supabase/server", () => ({
           );
           return chain;
         },
-        order: async () => result(),
+        order: async (column: string, options?: { ascending?: boolean }) => {
+          db.orders.push(`${table}.${column} ${options?.ascending ?? true}`);
+          return result();
+        },
         then: (resolve: (v: unknown) => void) => resolve(result()),
       };
       return chain;
@@ -218,4 +225,58 @@ test("cada demanda traz os comentários ativos em ordem de criação, marcando o
     },
   ]);
   db.comments = [];
+});
+
+test("cada demanda traz os 50 eventos mais recentes, com o texto, o autor e mine", async () => {
+  db.error = null;
+  db.rows = [row];
+  db.orders = [];
+  // O banco devolve do mais novo ao mais antigo (id desc); 52 eventos, 2 a mais que o limite.
+  db.events = [
+    {
+      id: 52,
+      task_id: "t1",
+      type: "field_changed",
+      changes: { field: "state", from: "todo", to: "doing" },
+      actor_id: "u1",
+      actor_name: "pedro",
+      created_at: "2026-11-04T15:00:00Z",
+    },
+    {
+      id: 51,
+      task_id: "outra",
+      type: "task_created",
+      changes: {},
+      actor_id: "u1",
+      actor_name: "pedro",
+      created_at: "2026-11-04T14:00:00Z",
+    },
+    ...Array.from({ length: 51 }, (_, i) => ({
+      id: 50 - i,
+      task_id: "t1",
+      type: "label_applied",
+      changes: { name: `E${i}` },
+      actor_id: null,
+      actor_name: "Sistema",
+      created_at: "2026-11-03T10:00:00Z",
+    })),
+  ];
+  const [demand] = await listDemands();
+  expect(db.orders).toContain("task_events.id false");
+  expect(demand.history).toHaveLength(50);
+  expect(demand.history[0]).toEqual({
+    id: 52,
+    at: "2026-11-04T15:00:00Z",
+    author: "pedro",
+    text: "Estado: A fazer → Fazendo",
+    mine: true,
+  });
+  expect(demand.history[1]).toEqual({
+    id: 50,
+    at: "2026-11-03T10:00:00Z",
+    author: "Sistema",
+    text: "Aplicou a etiqueta E0",
+    mine: false,
+  });
+  db.events = [];
 });
