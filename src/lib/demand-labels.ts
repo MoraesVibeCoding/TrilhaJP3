@@ -1,3 +1,4 @@
+import { zoned } from "./zone";
 import type { Label } from "./labels";
 
 export const DEMAND_STATES = ["A fazer", "Fazendo", "Feito"] as const;
@@ -64,6 +65,6 @@ export function formatDueDate(value: string, now: Date) {
     day: "numeric",
     month: "short",
     timeZone: "UTC",
-    ...(date.getUTCFullYear() !== now.getFullYear() && { year: "numeric" }),
+    ...(date.getUTCFullYear() !== zoned(now).year && { year: "numeric" }),
   }).format(date);
 }

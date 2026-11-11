@@ -1,3 +1,4 @@
+import { dayNumber, zoned } from "./zone";
 import type { DemandState } from "./demand-labels";
 
 type Subtask = { id: string; title: string; done: boolean };
@@ -75,26 +76,24 @@ export function selectDoneToday(
   now: Date,
 ): ResumeItem[] {
   const names = nameMap(projects);
-  const today = startOfDay(now);
+  const today = dayNumber(now);
   return demands
     .filter(
       (d) =>
         d.state === "Feito" &&
         d.doneAt !== undefined &&
         // >=: depois do dia de referência também é hoje, como em formatActivity
-        startOfDay(new Date(d.doneAt)) >= today,
+        dayNumber(new Date(d.doneAt)) >= today,
     )
     .toSorted((a, b) => b.doneAt!.localeCompare(a.doneAt!))
     .map((d) => ({ ...toItem(d, names), lastActivityAt: d.doneAt! }));
 }
 
-const startOfDay = (date: Date) =>
-  new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
-
 export function formatActivity(iso: string, now: Date): string {
   const when = new Date(iso);
-  const days = Math.round((startOfDay(now) - startOfDay(when)) / 86_400_000);
-  if (days <= 0) return `hoje, ${when.getHours()}h`;
-  if (days === 1) return `ontem, ${when.getHours()}h`;
+  const days = dayNumber(now) - dayNumber(when);
+  const hour = zoned(when).hour;
+  if (days <= 0) return `hoje, ${hour}h`;
+  if (days === 1) return `ontem, ${hour}h`;
   return `há ${days} dias`;
 }

@@ -8,6 +8,9 @@ export default defineConfig({
     exclude: ["e2e/**", "node_modules/**", "supabase/**"],
     environment: "jsdom",
     setupFiles: ["src/test/setup.ts"],
+    // As datas dos testes são horas de São Paulo, no Mac do Pedro e no CI (que roda em UTC).
+    // src/lib/zone.test.ts troca para UTC e prova que a tela não depende do fuso do servidor.
+    env: { TZ: "America/Sao_Paulo" },
     coverage: {
       provider: "v8",
       include: ["src/**/*.{ts,tsx}"],
