@@ -19,7 +19,7 @@ O Pedro anexa à demanda o que ela precisa: o print, o PDF do contrato, a planil
 
 ## 2. Requisitos funcionais
 
-1. **Enviar:** na janela (grupo "Anexos") e na coluna Anexos da página inteira, o Pedro escolhe um ou mais arquivos. O jeito de escolher (botão, arrastar e soltar) é decidido pelas propostas da seção 5. Cada arquivo mostra o andamento e entra na lista quando termina.
+1. **Enviar:** na janela (grupo "Anexos") e na coluna Anexos da página inteira, o Pedro escolhe um ou mais arquivos. O jeito de escolher (botão, arrastar e soltar) é decidido pelas propostas da seção 5. Cada arquivo mostra o andamento e entra na lista quando termina. O andamento é uma barra indeterminada com o nome do arquivo, porque o envio pelo Supabase não informa a porcentagem (revisão final, 2026-11-11).
 2. **Tipos aceitos:**
    - imagens: JPG, PNG, WebP, GIF e HEIC;
    - PDF;

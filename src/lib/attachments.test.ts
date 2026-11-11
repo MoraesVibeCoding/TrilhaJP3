@@ -72,10 +72,10 @@ test("o nome no caminho só usa caracteres que o Storage aceita", () => {
 });
 
 test("tamanho legível em pt-BR", () => {
-  expect(formatSize(800)).toBe("800 B");
-  expect(formatSize(1536)).toBe("2 KB");
-  expect(formatSize(2.44 * MB)).toBe("2,4 MB");
-  expect(formatSize(10 * MB)).toBe("10 MB");
+  expect(formatSize(800)).toBe("800\u00a0B");
+  expect(formatSize(1536)).toBe("2\u00a0KB");
+  expect(formatSize(2.44 * MB)).toBe("2,4\u00a0MB");
+  expect(formatSize(10 * MB)).toBe("10\u00a0MB");
 });
 
 test("imagem tem miniatura; imagem e PDF abrem no navegador, o resto é baixado", () => {

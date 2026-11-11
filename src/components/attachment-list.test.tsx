@@ -94,10 +94,10 @@ test("lista do mais novo ao mais antigo, com miniatura nas imagens, o tipo nos o
       .getByRole("img", { name: "print-topo.png" })
       .getAttribute("src"),
   ).toBe("https://x/miniatura");
-  expect(image.textContent).toContain("242 KB · Você · hoje, 10h");
+  expect(image.textContent).toContain("242\u00a0KB · Você · hoje, 10h");
   expect(within(pdf).queryByRole("img")).toBeNull();
   expect(pdf.textContent).toContain("PDF");
-  expect(pdf.textContent).toContain("2,4 MB · ana · ontem, 17h");
+  expect(pdf.textContent).toContain("2,4\u00a0MB · ana · ontem, 17h");
 });
 
 test("sem anexos, diz que não há; a regra de tipos fica ao lado do botão", () => {

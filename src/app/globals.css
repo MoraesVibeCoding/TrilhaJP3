@@ -804,6 +804,8 @@ tbody th {
 /* T11, proposta A: botão no topo com a regra ao lado; linha com miniatura de 48px, nome, detalhes em mono e Remover */
 .attachments {
   padding-bottom: 0.75rem;
+  /* A página inteira põe os anexos numa coluna estreita: a linha se ajusta pela largura dela */
+  container-type: inline-size;
 }
 .attachment-pick {
   display: flex;
@@ -831,6 +833,36 @@ tbody th {
 .attachment-sending:empty {
   display: none;
 }
+.attachment-progress {
+  display: block;
+  position: relative;
+  height: 6px;
+  margin-top: 0.375rem;
+  overflow: hidden;
+  border: 1px solid var(--mc-borda);
+  border-radius: 999px;
+  background: var(--mc-superficie-suave);
+}
+.attachment-progress::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 40%;
+  background: var(--mc-alta);
+  animation: attachment-progress 1.2s ease-in-out infinite alternate;
+}
+@keyframes attachment-progress {
+  to {
+    transform: translateX(150%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .attachment-progress::before {
+    animation: none;
+    width: 100%;
+    opacity: 0.5;
+  }
+}
 .attachment-empty {
   margin: 0.75rem 0 0;
 }
@@ -840,6 +872,7 @@ tbody th {
   padding: 0;
 }
 .attachment-list li {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -892,6 +925,16 @@ tbody th {
   text-underline-offset: 3px;
   cursor: pointer;
 }
+/* A linha toda abre o arquivo (alvo de 44px), como em .resume-open; Remover e a confirmação ficam por cima */
+.attachment-name::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+.attachment-remove,
+.attachment-confirm {
+  position: relative;
+}
 .attachment-meta {
   font-family: var(--mc-fonte-mono);
   font-size: 0.8125rem;
@@ -926,6 +969,18 @@ tbody th {
 }
 .attachment-confirm .secondary-button {
   margin-left: 0;
+}
+/* Coluna estreita: o nome ganha a linha toda, Remover desce para baixo dele, e a pergunta fica numa linha */
+@container (max-width: 20rem) {
+  .attachment-body {
+    flex-basis: calc(100% - 48px - 0.75rem);
+  }
+  .attachment-remove {
+    margin: -0.5rem 0 -0.5rem calc(48px + 0.75rem);
+  }
+  .attachment-confirm-text {
+    flex-basis: 100%;
+  }
 }
 
 /* T10, proposta A: histórico agrupado por dia; hora à esquerda em mono, autor em cima do que mudou */

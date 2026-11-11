@@ -57,11 +57,12 @@ export function safeName(name: string) {
   return plain.slice(0, MAX_NAME - ext.length) + ext;
 }
 
+// Espaço inseparável: o número não fica numa linha e a unidade em outra.
 const decimal = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 1 });
 export function formatSize(bytes: number) {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
-  return `${decimal.format(bytes / (1024 * 1024))} MB`;
+  if (bytes < 1024) return `${bytes}\u00a0B`;
+  if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)}\u00a0KB`;
+  return `${decimal.format(bytes / (1024 * 1024))}\u00a0MB`;
 }
 
 export const isImage = (mime: string) => mime.startsWith("image/");

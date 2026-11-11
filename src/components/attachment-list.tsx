@@ -156,7 +156,7 @@ export function AttachmentList({
             Anexar arquivos
           </button>
           <span id={hintId} className="attachment-hint">
-            Imagens, PDF e documentos, até 10 MB
+            Imagens, PDF e documentos, até 10&nbsp;MB
           </span>
           <input
             id={inputId}
@@ -176,6 +176,14 @@ export function AttachmentList({
         {/* aria-live sem role="status": a página já tem o status dela (board-message) */}
         <p aria-live="polite" className="attachment-sending">
           {sending}
+          {sending && (
+            // Indeterminada: o envio pelo supabase-js não informa quanto já foi.
+            <span
+              className="attachment-progress"
+              role="progressbar"
+              aria-label={sending}
+            />
+          )}
         </p>
         <p role="alert" className="step-error">
           {message}
@@ -245,7 +253,9 @@ export function AttachmentList({
                       role="group"
                       aria-label="Remover este anexo?"
                     >
-                      Remover este anexo?
+                      <span className="attachment-confirm-text">
+                        Remover este anexo?
+                      </span>
                       <button
                         type="button"
                         className="primary-button"

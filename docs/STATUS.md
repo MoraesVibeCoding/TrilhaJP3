@@ -1,10 +1,10 @@
 # STATUS — TrilhaJp3
 
-Atualizado em 2026-11-07 (T9 e conserto da janela mesclados, PRs #12 a #14; T10 construída na branch `claude/t10-spec`). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
+Atualizado em 2026-11-11 (T10 e fuso mesclados, PRs #15 e #16; T11 construída na branch `claude/t11-spec`). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
 
 ## Próxima ação
 
-Pedro: revisar a PR da T10 (histórico, branch `claude/t10-spec`, spec `tasks/t10-spec.md`). Depois: T11 (anexos).
+Pedro: revisar a PR da T11 (anexos, branch `claude/t11-spec`, spec `tasks/t11-spec.md`). Depois: T13 (endurecimento e observabilidade).
 
 ## Conserto da janela (2026-11-04, PR #12)
 
@@ -35,7 +35,7 @@ Ver `docs/PRINCIPIOS-OBJETIVOS.md`, seção 5.
 
 ## Em uma frase
 
-TrilhaJp3 é o sistema de gestão da empresa (Moraes Coding). A v1 é o módulo Projetos e demandas. Prontas e em `main`: T0, T1-R, T2 (empresas e RLS), T3 (login), T4 (projetos), T12 (PWA) e as telas da T5b e T6a a T6d. A T5 (demandas reais) está em `main` (PR #5). A troca de marca para Moraes Coding está em `main` (PR #9). A T7 (subtarefas) está em `main` (PR #10). A T8 (etiquetas) está em `main` (PR #11). O conserto da janela está em `main` (PR #12). A T9 (comentários) está em `main` (PRs #13 e #14). A T10 (histórico por gatilhos no banco, agrupado por dia na tela) está construída na branch `claude/t10-spec`. Próximas: T11, T13, T14.
+TrilhaJp3 é o sistema de gestão da empresa (Moraes Coding). A v1 é o módulo Projetos e demandas. Prontas e em `main`: T0, T1-R, T2 (empresas e RLS), T3 (login), T4 (projetos), T12 (PWA) e as telas da T5b e T6a a T6d. A T5 (demandas reais) está em `main` (PR #5). A troca de marca para Moraes Coding está em `main` (PR #9). A T7 (subtarefas) está em `main` (PR #10). A T8 (etiquetas) está em `main` (PR #11). O conserto da janela está em `main` (PR #12). A T9 (comentários) está em `main` (PRs #13 e #14). A T10 (histórico) está em `main` (PR #15), e as datas saem sempre no fuso de São Paulo (PR #16). A T11 (anexos: bucket privado, miniaturas, só quem enviou remove) está construída na branch `claude/t11-spec`. Próximas: T13, T14.
 
 ## Decisões fechadas (resumo)
 
