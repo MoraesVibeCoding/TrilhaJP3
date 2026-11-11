@@ -64,16 +64,14 @@ test(
     await expect(item(page, doc)).toContainText("PDF");
     await expect(item(page, doc)).toContainText("Você");
 
-    // abre em outra aba, por um link assinado e temporário do Storage
+    // abre em outra aba, por um link assinado e temporário do Storage. Abre a imagem:
+    // o Chromium sem janela do CI não tem leitor de PDF e baixa o PDF, sem mudar a aba.
     const popup = page.waitForEvent("popup");
-    await item(page, doc)
-      .getByRole("button", { name: doc, exact: true })
+    await item(page, image)
+      .getByRole("button", { name: image, exact: true })
       .click();
     const tab = await popup;
-    // o link assinado vem de uma Server Action, que no servidor frio passa de 5 s
-    await expect(tab).toHaveURL(/\/storage\/v1\/object\/sign\/attachments\//, {
-      timeout: 15_000,
-    });
+    await expect(tab).toHaveURL(/\/storage\/v1\/object\/sign\/attachments\//);
     await tab.close();
 
     for (const name of [image, doc]) {
