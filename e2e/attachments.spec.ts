@@ -17,6 +17,12 @@ async function save(page: Page, act: () => Promise<void>) {
   await saved;
 }
 
+// No servidor de desenvolvimento frio, o campo de arquivo aparece antes do React ligar o onChange.
+async function openPage(page: Page) {
+  await page.goto(pageUrl());
+  await page.waitForLoadState("networkidle");
+}
+
 const item = (page: Page, name: string) =>
   page.locator(".attachment-list li").filter({ hasText: name });
 
@@ -64,7 +70,10 @@ test(
       .getByRole("button", { name: doc, exact: true })
       .click();
     const tab = await popup;
-    await expect(tab).toHaveURL(/\/storage\/v1\/object\/sign\/attachments\//);
+    // o link assinado vem de uma Server Action, que no servidor frio passa de 5 s
+    await expect(tab).toHaveURL(/\/storage\/v1\/object\/sign\/attachments\//, {
+      timeout: 15_000,
+    });
     await tab.close();
 
     for (const name of [image, doc]) {
@@ -88,7 +97,7 @@ test(
 );
 
 test("a refused file says why and is not sent", async ({ page }) => {
-  await page.goto(pageUrl());
+  await openPage(page);
   await page.getByLabel("Escolher arquivos").setInputFiles([
     {
       name: "virus.exe",
@@ -112,7 +121,7 @@ for (const theme of ["light", "dark"] as const) {
         theme,
       );
       const name = `axe-${theme}-${Date.now()}.png`;
-      await page.goto(pageUrl());
+      await openPage(page);
       await page.getByLabel("Escolher arquivos").setInputFiles([png(name)]);
       await expect(item(page, name)).toBeVisible({ timeout: 15_000 });
       await item(page, name)
