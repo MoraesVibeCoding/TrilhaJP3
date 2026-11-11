@@ -70,6 +70,8 @@ O Pedro anexa à demanda o que ela precisa: o print, o PDF do contrato, a planil
 
 ## 5. Design (3 propostas, `impeccable`)
 
+**Escolhida pelo Pedro em 2026-11-11: A · Lista com miniatura** (maquete em `https://claude.ai/artifact/6EJKNBYtyjXdhoeq7AkVSX`): botão "Anexar arquivos" no topo, com a regra de tipos e tamanho ao lado em mono; cada anexo numa linha com miniatura de 48px (ou o tipo), o nome como link, tamanho, autor e data em mono, e "Remover" pequeno nos seus, com a confirmação na linha.
+
 O `impeccable` traz 3 propostas em HTML, nos dois temas, para enviar (botão, arrastar e soltar, andamento) e para a lista (miniaturas, ícones, remover com confirmação) na janela e na página. Só depois da escolha do Pedro a tela é construída.
 
 ## 6. Fora do escopo

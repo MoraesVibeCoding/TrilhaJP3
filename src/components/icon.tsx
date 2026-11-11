@@ -9,6 +9,9 @@ const PATHS = {
   sair: "M10 4H4V20H10M14 8L18 12L14 16M18 12H9",
   fechar: "M5 5L19 19M19 5L5 19",
   adicionar: "M12 4V20M4 12H20",
+  // T11: clipe no traço da marca, porque o conjunto não tem ícone de anexo
+  anexo:
+    "M15 7L8.5 13.5A2.12 2.12 0 0 0 11.5 16.5L18 10A4.24 4.24 0 0 0 12 4L5.5 10.5A6.36 6.36 0 0 0 14.5 19.5L20 14",
   "mais-opcoes": "M5 12H5.01M12 12H12.01M19 12H19.01",
   editar: "M4 20V16L15 5L19 9L8 20ZM12 8L16 12",
   excluir: "M4 7H20M9 7V4H15V7M6 7L7 20H17L18 7M10 11V16M14 11V16",

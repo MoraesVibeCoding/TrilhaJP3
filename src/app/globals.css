@@ -801,6 +801,133 @@ tbody th {
   font-size: 0.875rem;
   font-weight: 600;
 }
+/* T11, proposta A: botão no topo com a regra ao lado; linha com miniatura de 48px, nome, detalhes em mono e Remover */
+.attachments {
+  padding-bottom: 0.75rem;
+}
+.attachment-pick {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+.secondary-button.attachment-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 0;
+}
+.attachment-hint {
+  font-family: var(--mc-fonte-mono);
+  font-size: 0.75rem;
+  color: var(--mc-texto-apoio);
+}
+.attachment-sending {
+  margin: 0.5rem 0 0;
+  font-family: var(--mc-fonte-mono);
+  font-size: 0.8125rem;
+  color: var(--mc-texto-apoio);
+}
+.attachment-sending:empty {
+  display: none;
+}
+.attachment-empty {
+  margin: 0.75rem 0 0;
+}
+.attachment-list {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+}
+.attachment-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 0;
+  border-bottom: 1px solid var(--mc-borda);
+}
+.attachment-list li:last-child {
+  border-bottom: 0;
+}
+.attachment-thumb {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  overflow: hidden;
+  border: 1px solid var(--mc-borda);
+  border-radius: 8px;
+  background: var(--mc-superficie-suave);
+  color: var(--mc-texto-apoio);
+  font-family: var(--mc-fonte-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+.attachment-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.attachment-body {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 0.125rem;
+}
+.attachment-name {
+  justify-self: start;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  overflow-wrap: anywhere;
+  text-decoration: underline;
+  text-decoration-color: var(--mc-alta);
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.attachment-meta {
+  font-family: var(--mc-fonte-mono);
+  font-size: 0.8125rem;
+  color: var(--mc-texto-apoio);
+}
+/* Alvo de 44px sem aumentar a linha */
+.attachment-remove {
+  min-height: 44px;
+  margin-block: -0.5rem;
+  padding: 0 0.25rem;
+  border: 0;
+  background: none;
+  color: var(--mc-texto-apoio);
+  font: inherit;
+  font-size: 0.875rem;
+  text-decoration: underline;
+  text-decoration-color: var(--mc-alta);
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.attachment-confirm {
+  flex-basis: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.attachment-confirm .primary-button {
+  margin-top: 0;
+}
+.attachment-confirm .secondary-button {
+  margin-left: 0;
+}
+
 /* T10, proposta A: histórico agrupado por dia; hora à esquerda em mono, autor em cima do que mudou */
 .history {
   padding-bottom: 0.75rem;

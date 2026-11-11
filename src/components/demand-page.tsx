@@ -10,12 +10,12 @@ import type { Demand } from "@/lib/demand-labels";
 import { formatActivity } from "@/lib/resume";
 import { useDemandState } from "@/lib/use-demand-state";
 import {
-  AttachmentList,
   DetailNow,
   HistoryList,
   NowToggle,
   SubtaskList,
 } from "./demand-detail";
+import { AttachmentList } from "./attachment-list";
 import { CommentThread } from "./comment-thread";
 import { DemandEditForm } from "./demand-edit-form";
 import { useFlashMessage } from "@/lib/use-flash-message";
@@ -187,8 +187,12 @@ export function DemandPage({
 
         <div className="demand-page-side demand-page-more">
           <section aria-labelledby="dp-attachments">
-            <h2 id="dp-attachments">Anexos ({attachments.length})</h2>
-            <AttachmentList attachments={attachments} />
+            <AttachmentList
+              taskId={demand.id}
+              attachments={attachments}
+              now={now}
+              heading={(n) => <h2 id="dp-attachments">Anexos ({n})</h2>}
+            />
           </section>
           <section aria-labelledby="dp-history">
             <h2 id="dp-history">Histórico ({history.length})</h2>

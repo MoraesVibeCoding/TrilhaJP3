@@ -1,6 +1,7 @@
 "use client";
 
 import { useDemandState } from "@/lib/use-demand-state";
+import type { Demand } from "@/lib/demand-labels";
 import type { Label } from "@/lib/labels";
 import { DemandDetail } from "./demand-detail";
 import { DemandDialog } from "./demand-dialog";
@@ -17,7 +18,7 @@ import {
 
 export type BoardDemand = ResumeDemand & {
   comments: readonly { author: string; at: string; text: string }[];
-  attachments: readonly { name: string }[];
+  attachments: Demand["attachments"];
   history: readonly { at: string; text: string }[];
 };
 
