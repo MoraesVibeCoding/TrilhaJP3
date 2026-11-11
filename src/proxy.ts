@@ -1,7 +1,10 @@
 import type { NextRequest } from "next/server";
+import { stampRequestId } from "@/lib/request-id";
 import { updateSession } from "@/lib/supabase/proxy";
 
 export function proxy(request: NextRequest) {
+  // updateSession repassa os cabeçalhos da requisição (NextResponse.next({ request })).
+  stampRequestId(request.headers);
   return updateSession(request);
 }
 

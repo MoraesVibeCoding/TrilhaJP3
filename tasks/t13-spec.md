@@ -50,8 +50,8 @@ Antes de entrar dado real:
    O host do Supabase vem de `NEXT_PUBLIC_SUPABASE_URL`. Sem essa variável, o build falha com uma mensagem clara.
 
 2. **Logs estruturados:**
-   - cada falha de Server Action e cada erro inesperado do servidor gera uma linha JSON com `level`, `event`, `requestId`, `action`, `durationMs` e `error`;
-   - o `requestId` vem do id que a Vercel põe na requisição (cabeçalho `x-vercel-id`, a confirmar na documentação da Vercel na fatia 2). Fora dela, o Proxy gera um;
+   - cada falha de Server Action e cada erro inesperado do servidor gera uma linha JSON com `level`, `event` e `requestId`, mais, conforme o caso, o alvo (`target`), o `status`, a duração (`durationMs`), a rota e a mensagem de erro;
+   - o `requestId` vem do id que a Vercel põe na requisição (cabeçalho `x-vercel-id`, confirmado em [Request headers](https://vercel.com/docs/headers/request-headers) em 2026-11-11). Fora dela, o Proxy gera um;
    - os logs nunca levam senha, token, chave, conteúdo de comentário ou nome de arquivo do usuário. Levam só ids e mensagens de erro.
 3. **Arquivos órfãos:** o comando `npm run storage:orphans` lista os objetos do bucket `attachments` que não têm linha em `attachments` e foram criados há mais de 24 horas. As 24 horas evitam apagar um envio em andamento. A lista sai na tela. Com `--apply`, o script mostra a lista, pede que o Pedro digite `apagar` e só então remove. Ele roda no computador do Pedro, com a chave de serviço numa variável de ambiente, nunca no repositório.
 4. **Backup dos anexos:**
@@ -70,8 +70,14 @@ Antes de entrar dado real:
 ## 4. Contratos afetados
 
 1. `next.config.ts` ganha `headers()`, montado por uma função pura (`src/lib/security-headers.ts`) que dá para testar.
-2. `src/lib/log.ts`: `logError(event, fields)` escreve uma linha JSON em `console.error`. As ações chamam essa função no caminho de falha, sem mudar o que devolvem (`true`/`false`).
-3. `src/proxy.ts` repassa o `requestId` num cabeçalho da requisição para o servidor. A sessão do Supabase não muda.
+2. `src/lib/log.ts`: `logError(event, fields)` escreve uma linha JSON em `console.error`, só com os campos de uma lista fechada. Ela é chamada em 3 pontos centrais, sem mudar o que as ações devolvem (`true`/`false`). Isso decidi na fatia 2, no lugar de editar as cerca de 20 saídas de erro das ações:
+   - o cliente do Supabase no servidor (`global.fetch`): toda resposta de erro do banco, do Storage ou do Auth vira `supabase.error`, com alvo, status e duração. O alvo não leva ids, filtros nem nomes de arquivo, e o corpo da resposta não entra no log;
+   - `update()` das demandas: a recusa silenciosa da RLS (nenhuma linha alterada) vira `tasks.update.no_rows`;
+   - `src/instrumentation.ts` (`onRequestError`): todo erro que o Next captura no servidor vira `request.error`, com rota, tipo (`render` ou `action`) e caminho sem a query.
+
+   Entrada inválida recusada pelo `zod` não é logada: é defeito do cliente, e não do servidor.
+
+3. `src/proxy.ts` grava o `requestId` no cabeçalho `x-request-id` da requisição, sobrescrevendo o que o cliente mandar. A sessão do Supabase não muda.
 4. `scripts/storage-orphans.mjs` e `scripts/storage-backup.mjs`, com o código comum num módulo do próprio `scripts/`.
 5. Banco: nenhuma migração.
 

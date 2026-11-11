@@ -12,6 +12,14 @@ test("cada requisição passa pela renovação de sessão", async () => {
   expect(updateSession).toHaveBeenCalledWith(request);
 });
 
+test("T13: cada requisição ganha um id para os logs, o da Vercel quando houver", async () => {
+  const request = new NextRequest("http://localhost:3000/demandas", {
+    headers: { "x-vercel-id": "gru1::abc", "x-request-id": "forjado" },
+  });
+  await proxy(request);
+  expect(request.headers.get("x-request-id")).toBe("gru1::abc");
+});
+
 test("manifest, ícones e arquivos do Next ficam fora do Proxy; páginas entram", () => {
   const matcher = new RegExp(`^${config.matcher[0]}$`);
   for (const path of [
