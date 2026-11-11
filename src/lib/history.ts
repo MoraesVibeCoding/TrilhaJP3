@@ -31,6 +31,8 @@ const SIMPLE: Record<string, (c: Changes) => string> = {
   label_removed: (c) => `Tirou a etiqueta ${text(c.name)}`,
   comment_added: () => "Comentou",
   comment_removed: () => "Apagou um comentário",
+  attachment_added: (c) => `Anexou ${text(c.name)}`,
+  attachment_removed: (c) => `Removeu o anexo ${text(c.name)}`,
 };
 
 // Tipo ou campo que a tela ainda não conhece vira um texto genérico, sem quebrar a lista.

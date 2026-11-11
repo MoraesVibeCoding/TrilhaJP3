@@ -10,30 +10,35 @@ vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
 vi.mock("@/lib/auth", () => ({
   getCurrentUser: async () => ({ id: "u1", organizationId: "org-1" }),
 }));
-vi.mock("@/lib/supabase/server", () => ({
-  createClient: async () => ({
-    from: (table: string) => {
-      const calls = [`from(${table})`];
-      db.queries.push(calls);
-      const chain: object = new Proxy(
-        {},
-        {
-          get: (_target, method: string) =>
-            method === "then"
-              ? (resolve: (v: unknown) => void) =>
-                  resolve({ data: null, error: null, ...db.results.shift() })
-              : (...args: unknown[]) => {
-                  calls.push(
-                    `${method}(${args.map((a) => JSON.stringify(a)).join(",")})`,
-                  );
-                  return chain;
-                },
-        },
-      );
-      return chain;
-    },
-  }),
-}));
+vi.mock("@/lib/supabase/server", () => {
+  const record = (first: string) => {
+    const calls = [first];
+    db.queries.push(calls);
+    const chain: object = new Proxy(
+      {},
+      {
+        get: (_target, method: string) =>
+          method === "then"
+            ? (resolve: (v: unknown) => void) =>
+                resolve({ data: null, error: null, ...db.results.shift() })
+            : (...args: unknown[]) => {
+                calls.push(
+                  `${method}(${args.map((a) => JSON.stringify(a)).join(",")})`,
+                );
+                return chain;
+              },
+      },
+    );
+    return chain;
+  };
+  return {
+    createClient: async () => ({
+      from: (table: string) => record(`from(${table})`),
+      // T11: o Storage grava as chamadas do mesmo jeito.
+      storage: { from: (bucket: string) => record(`storage(${bucket})`) },
+    }),
+  };
+});
 
 const {
   moveDemand,
@@ -52,6 +57,11 @@ const {
   setLabelColor,
   addComment,
   archiveComment,
+  prepareAttachment,
+  addAttachment,
+  removeAttachment,
+  attachmentUrl,
+  thumbnailUrls,
 } = await import("./actions");
 const { revalidatePath } = await import("next/cache");
 
@@ -558,5 +568,147 @@ describe("comentários (T9)", () => {
     db.results = [{ data: [] }];
     await expect(archiveComment(COMMENT)).resolves.toBe(false);
     await expect(archiveComment("x")).resolves.toBe(false);
+  });
+});
+
+describe("anexos (T11)", () => {
+  const FILE = "44444444-5555-4666-8777-888888888888";
+  const PATH = `org-1/${ID}/0f0e0d0c-0b0a-4908-8706-050403020100-contrato.pdf`;
+
+  test("prepareAttachment monta o caminho na pasta da empresa e da demanda, com o tipo da extensão", async () => {
+    const ready = await prepareAttachment(ID, "Orçamento final.PDF", 2048);
+    expect(ready).toMatchObject({ contentType: "application/pdf" });
+    expect(ready!.path).toMatch(
+      new RegExp(`^org-1/${ID}/[0-9a-f-]{36}-Orcamento final\\.PDF$`),
+    );
+    expect(db.queries).toEqual([]);
+  });
+
+  test("prepareAttachment recusa tipo, tamanho e id inválidos", async () => {
+    await expect(prepareAttachment(ID, "virus.exe", 10)).resolves.toBeNull();
+    await expect(
+      prepareAttachment(ID, "a.pdf", 10 * 1024 * 1024 + 1),
+    ).resolves.toBeNull();
+    await expect(prepareAttachment("x", "a.pdf", 10)).resolves.toBeNull();
+  });
+
+  test("addAttachment grava só empresa, demanda, caminho e nome; tamanho e tipo ficam com o banco", async () => {
+    db.results = [{}];
+    await expect(addAttachment(ID, PATH, "contrato.pdf")).resolves.toBe(true);
+    expect(db.queries).toEqual([
+      [
+        "from(attachments)",
+        `insert(${JSON.stringify({ organization_id: "org-1", task_id: ID, storage_path: PATH, file_name: "contrato.pdf" })})`,
+      ],
+    ]);
+    expect(revalidatePath).toHaveBeenCalledWith("/", "layout");
+  });
+
+  test("addAttachment recusa caminho de outra pasta, nome inválido e erro do banco", async () => {
+    await expect(
+      addAttachment(ID, `org-2/${ID}/x-contrato.pdf`, "contrato.pdf"),
+    ).resolves.toBe(false);
+    await expect(addAttachment(ID, PATH, "virus.exe")).resolves.toBe(false);
+    await expect(addAttachment(ID, PATH, "   ")).resolves.toBe(false);
+    expect(db.queries).toEqual([]);
+    db.results = [{ error: { code: "23514" } }];
+    await expect(addAttachment(ID, PATH, "contrato.pdf")).resolves.toBe(false);
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
+  test("removeAttachment apaga a linha (só a de quem enviou) e depois o arquivo", async () => {
+    db.results = [{ data: [{ storage_path: PATH }] }, {}];
+    await expect(removeAttachment(FILE)).resolves.toBe(true);
+    expect(db.queries).toEqual([
+      [
+        "from(attachments)",
+        "delete()",
+        `eq("id","${FILE}")`,
+        `select("storage_path")`,
+      ],
+      ["storage(attachments)", `remove([${JSON.stringify(PATH)}])`],
+    ]);
+  });
+
+  test("removeAttachment sem linha devolvida não toca no arquivo", async () => {
+    db.results = [{ data: [] }];
+    await expect(removeAttachment(FILE)).resolves.toBe(false);
+    expect(db.queries).toHaveLength(1);
+    await expect(removeAttachment("x")).resolves.toBe(false);
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
+  test("attachmentUrl dá um link de 5 minutos; documento é baixado com o nome original", async () => {
+    db.results = [
+      {
+        data: {
+          storage_path: PATH,
+          mime_type: "application/vnd.ms-excel",
+          file_name: "planilha.xls",
+        },
+      },
+      { data: { signedUrl: "https://x/assinado" } },
+    ];
+    await expect(attachmentUrl(FILE)).resolves.toBe("https://x/assinado");
+    expect(db.queries[1]).toEqual([
+      "storage(attachments)",
+      `createSignedUrl(${JSON.stringify(PATH)},300,{"download":"planilha.xls"})`,
+    ]);
+
+    db.queries = [];
+    db.results = [
+      {
+        data: {
+          storage_path: PATH,
+          mime_type: "application/pdf",
+          file_name: "a.pdf",
+        },
+      },
+      { data: { signedUrl: "https://x/pdf" } },
+    ];
+    await expect(attachmentUrl(FILE)).resolves.toBe("https://x/pdf");
+    expect(db.queries[1][1]).toBe(
+      `createSignedUrl(${JSON.stringify(PATH)},300,{})`,
+    );
+  });
+
+  test("attachmentUrl de anexo inexistente ou de outra empresa é null", async () => {
+    db.results = [{ data: null, error: { code: "PGRST116" } }];
+    await expect(attachmentUrl(FILE)).resolves.toBeNull();
+    await expect(attachmentUrl("x")).resolves.toBeNull();
+  });
+
+  test("thumbnailUrls pede de uma vez os links das imagens da demanda", async () => {
+    db.results = [
+      {
+        data: [
+          { id: "f1", storage_path: "p1" },
+          { id: "f2", storage_path: "p2" },
+        ],
+      },
+      {
+        data: [
+          { path: "p1", signedUrl: "u1" },
+          { path: "p2", signedUrl: "u2" },
+        ],
+      },
+    ];
+    await expect(thumbnailUrls(ID)).resolves.toEqual({ f1: "u1", f2: "u2" });
+    expect(db.queries).toEqual([
+      [
+        "from(attachments)",
+        `select("id, storage_path")`,
+        `eq("task_id","${ID}")`,
+        `like("mime_type","image/%")`,
+      ],
+      ["storage(attachments)", `createSignedUrls(["p1","p2"],300)`],
+    ]);
+  });
+
+  test("thumbnailUrls sem imagens não pede links", async () => {
+    db.results = [{ data: [] }];
+    await expect(thumbnailUrls(ID)).resolves.toEqual({});
+    expect(db.queries).toHaveLength(1);
+    await expect(thumbnailUrls("x")).resolves.toEqual({});
   });
 });

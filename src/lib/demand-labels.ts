@@ -25,7 +25,16 @@ export type Demand = {
     id?: string;
     mine?: boolean;
   }[];
-  attachments: readonly { name: string }[];
+  // T11: id, mime, size, author, at e mine vêm de listDemands, do mais novo ao mais antigo
+  attachments: readonly {
+    name: string;
+    id?: string;
+    mime?: string;
+    size?: number;
+    author?: string;
+    at?: string;
+    mine?: boolean;
+  }[];
   // T10: id, author e mine vêm de listDemands, do mais novo ao mais antigo; "at" é a data ISO do banco
   history: readonly {
     at: string;

@@ -60,3 +60,12 @@ test("tipo ou campo desconhecido não quebra a tela", () => {
   expect(describeEvent("algo_novo", {}, now)).toBe("Alterou a demanda");
   expect(field("cor", "a", "b")).toBe("Alterou a demanda");
 });
+
+test("anexos", () => {
+  expect(describeEvent("attachment_added", { name: "contrato.pdf" }, now)).toBe(
+    "Anexou contrato.pdf",
+  );
+  expect(
+    describeEvent("attachment_removed", { name: "contrato.pdf" }, now),
+  ).toBe("Removeu o anexo contrato.pdf");
+});

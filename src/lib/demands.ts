@@ -21,13 +21,13 @@ type TaskRow = {
   due_date: string | null;
 };
 
-// Anexos chegam na T11: por ora, lista vazia.
 export function toDemand(
   row: TaskRow,
   subtasks: Demand["subtasks"] = [],
   labels: readonly Label[] = [],
   comments: Demand["comments"] = [],
   history: Demand["history"] = [],
+  attachments: Demand["attachments"] = [],
 ): Demand {
   return {
     id: row.id,
@@ -43,7 +43,7 @@ export function toDemand(
     subtasks,
     labels,
     comments,
-    attachments: [],
+    attachments,
     history,
   };
 }
@@ -67,13 +67,24 @@ type EventRow = {
   created_at: string;
 };
 
+type AttachmentRow = {
+  id: string;
+  task_id: string;
+  file_name: string;
+  mime_type: string;
+  size_bytes: number;
+  uploaded_by: string | null;
+  uploader_name: string;
+  created_at: string;
+};
+
 // T10: a tela mostra só os mais recentes de cada demanda.
 const HISTORY_LIMIT = 50;
 
 export async function listDemands(): Promise<Demand[]> {
   const user = await getCurrentUser();
   const supabase = await createClient();
-  const [tasks, applied, labels, comments, events] = await Promise.all([
+  const [tasks, applied, labels, comments, events, files] = await Promise.all([
     supabase
       .from("tasks")
       .select(
@@ -93,13 +104,20 @@ export async function listDemands(): Promise<Demand[]> {
       .from("task_events")
       .select("id, task_id, type, changes, actor_id, actor_name, created_at")
       .order("id", { ascending: false }),
+    supabase
+      .from("attachments")
+      .select(
+        "id, task_id, file_name, mime_type, size_bytes, uploaded_by, uploader_name, created_at",
+      )
+      .order("created_at", { ascending: false }),
   ]);
   const error =
     tasks.error ??
     applied.error ??
     labels.error ??
     comments.error ??
-    events.error;
+    events.error ??
+    files.error;
   if (error) throw error;
   const data = tasks.data;
   // T8: etiquetas aplicadas, por demanda, em ordem de nome.
@@ -135,6 +153,19 @@ export async function listDemands(): Promise<Demand[]> {
         text: describeEvent(e.type, e.changes, now),
         mine: e.actor_id === user.id,
       }));
+  // T11: anexos, do mais novo ao mais antigo.
+  const attachmentsOf = (taskId: string) =>
+    (files.data as AttachmentRow[])
+      .filter((f) => f.task_id === taskId)
+      .map((f) => ({
+        id: f.id,
+        name: f.file_name,
+        mime: f.mime_type,
+        size: f.size_bytes,
+        author: f.uploader_name,
+        at: f.created_at,
+        mine: f.uploaded_by === user.id,
+      }));
   const rows = data as TaskRow[];
   // Subtarefa é a demanda filha (parent_task_id); os passos seguem a ordem de criação.
   const steps = rows
@@ -151,6 +182,7 @@ export async function listDemands(): Promise<Demand[]> {
         labelsOf(r.id),
         commentsOf(r.id),
         historyOf(r.id),
+        attachmentsOf(r.id),
       ),
     );
 }
