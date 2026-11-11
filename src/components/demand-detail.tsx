@@ -1,4 +1,5 @@
 import { dayLabel } from "@/lib/comments";
+import { zoned } from "@/lib/zone";
 import type { Demand, DemandState } from "@/lib/demand-labels";
 import { CommentThread } from "./comment-thread";
 import type { Label } from "@/lib/labels";
@@ -197,7 +198,7 @@ export function HistoryList({
                   dateTime={h.at}
                   suppressHydrationWarning
                 >
-                  {new Date(h.at).getHours()}h
+                  {zoned(new Date(h.at)).hour}h
                 </time>
                 <div>
                   <span className="history-who">

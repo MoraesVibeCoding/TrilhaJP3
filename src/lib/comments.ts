@@ -1,22 +1,22 @@
-const startOfDay = (date: Date) =>
-  new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+import { dayNumber, TIME_ZONE, zoned } from "./zone";
 
-// "hoje", "ontem", "30 de out."; o ano só aparece quando não é o atual.
+// "hoje", "ontem", "30 de out." no dia de São Paulo; o ano só aparece quando não é o atual.
 export function dayLabel(iso: string, now: Date): string {
   const when = new Date(iso);
-  const days = Math.round((startOfDay(now) - startOfDay(when)) / 86_400_000);
+  const days = dayNumber(now) - dayNumber(when);
   if (days <= 0) return "hoje";
   if (days === 1) return "ontem";
   return new Intl.DateTimeFormat("pt-BR", {
+    timeZone: TIME_ZONE,
     day: "numeric",
     month: "short",
-    ...(when.getFullYear() !== now.getFullYear() && { year: "numeric" }),
+    ...(zoned(when).year !== zoned(now).year && { year: "numeric" }),
   }).format(when);
 }
 
 // "hoje, 15h", "ontem, 9h", "30 de out., 9h".
 export function formatCommentTime(iso: string, now: Date): string {
-  return `${dayLabel(iso, now)}, ${new Date(iso).getHours()}h`;
+  return `${dayLabel(iso, now)}, ${zoned(new Date(iso)).hour}h`;
 }
 
 export type CommentPart = { text: string } | { href: string };
