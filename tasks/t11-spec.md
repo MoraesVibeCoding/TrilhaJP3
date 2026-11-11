@@ -1,6 +1,6 @@
 # T11: anexos
 
-Status: **aguardando aprovação do Pedro.** Decisões do Pedro em 2026-11-11:
+Status: **aprovada pelo Pedro em 2026-11-11 ("De acordo").** Decisões do Pedro em 2026-11-11:
 
 - só quem enviou remove o anexo, e o arquivo é apagado de vez;
 - imagens aparecem com miniatura; PDFs e documentos, com ícone, nome e tamanho;
