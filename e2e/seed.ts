@@ -67,7 +67,23 @@ export async function resetDemo() {
     .delete()
     .eq("organization_id", current.organizationId);
   if (error) throw error;
+  await removeFiles(admin, current.organizationId);
   await seedTasks(admin, current);
+}
+
+// T13: apagar a demanda leva a linha do anexo, não o arquivo; um teste que falhou antes de remover deixaria órfão.
+export async function removeFiles(
+  admin: SupabaseClient,
+  organizationId: string,
+) {
+  // import() dinâmico: o Playwright compila o e2e/ para CommonJS, e o script é um módulo ES.
+  const { listObjects } = await import("../scripts/storage.mjs");
+  const files = await listObjects(admin, `${organizationId}/`);
+  if (!files.length) return;
+  const { error } = await admin.storage
+    .from("attachments")
+    .remove(files.map((f) => f.path));
+  if (error) throw error;
 }
 
 async function seedTasks(

@@ -78,7 +78,10 @@ Antes de entrar dado real:
    Entrada inválida recusada pelo `zod` não é logada: é defeito do cliente, e não do servidor.
 
 3. `src/proxy.ts` grava o `requestId` no cabeçalho `x-request-id` da requisição, sobrescrevendo o que o cliente mandar. A sessão do Supabase não muda.
-4. `scripts/storage-orphans.mjs` e `scripts/storage-backup.mjs`, com o código comum num módulo do próprio `scripts/`.
+4. `scripts/storage.mjs`, um arquivo só com o código comum e os comandos `orphans`, `backup` e `restore` (decidido na fatia 3):
+   - o backup grava um `manifest.json` com caminho, tamanho e tipo de cada arquivo;
+   - `npm run storage:restore -- <pasta>` envia os arquivos de volta, porque o bucket recusa envio sem tipo;
+   - o E2E apaga os arquivos da empresa de teste no `resetDemo` e no fim da execução. Antes, um teste que falhava antes de remover o anexo deixava um órfão (17 no projeto de teste em 2026-11-13).
 5. Banco: nenhuma migração.
 
 ## 5. Fora do escopo

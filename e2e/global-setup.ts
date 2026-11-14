@@ -2,7 +2,7 @@
 // Precisa de NEXT_PUBLIC_SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY; usuário e empresa são apagados no fim.
 import { chromium, type FullConfig } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
-import { seedDemo } from "./seed";
+import { removeFiles, seedDemo } from "./seed";
 
 export const STORAGE_STATE = "e2e/.auth/user.json";
 
@@ -55,6 +55,7 @@ export default async function globalSetup(config: FullConfig) {
   await browser.close();
 
   return async () => {
+    await removeFiles(admin, org.data.id);
     await admin.from("organizations").delete().eq("id", org.data.id);
     await admin.auth.admin.deleteUser(data.user.id);
   };
