@@ -75,7 +75,7 @@ Regras de modelagem propostas (podem ser vetadas):
 2. Validação de entrada em toda borda (formulários, ações do servidor) com um esquema tipado (zod).
 3. Anexos: lista de tipos permitidos, limite de 10 MB e bloqueio de executáveis, validados no servidor e na configuração do bucket. Os detalhes de configuração do bucket serão confirmados na documentação na tarefa T11.
 4. Segredos nunca vão para o repositório nem para o navegador. Só a chave pública do Supabase vai ao cliente, e a chave de serviço fica apenas no servidor. O repositório terá a varredura de segredos nativa do GitHub ativada nas configurações (decisão de 2026-10-21: o gitleaks-action exige licença para repositórios de organização).
-5. Cabeçalhos de segurança e proteção contra XSS (conteúdo de comentários é sempre escapado).
+5. Cabeçalhos de segurança e proteção contra XSS (conteúdo de comentários é sempre escapado). **T13, decisão do Pedro em 2026-11-11:** a CSP não usa nonce, porque o nonce é incompatível com o `cacheComponents` (guia do Next 16.4); aceita os scripts inline do Next e fecha o resto. Revisão em `docs/SEGURANCA.md`.
 
 ### 4.4 Estilo de código
 
@@ -98,7 +98,7 @@ Ciclo Red-Green-Refactor. Pirâmide: 80% unitários, 15% integração, 5% E2E.
 ### 4.6 Observabilidade e entrega
 
 - Logs estruturados em JSON, com id de requisição.
-- Métricas RED (taxa, erros, duração) das rotas principais, via OpenTelemetry. A forma exata de integração com a hospedagem será confirmada na documentação na tarefa T13.
+- Métricas RED (taxa, erros, duração) das rotas principais. **T13, decisão do Pedro em 2026-11-11:** pelas métricas que a Vercel já mede de cada requisição, sem OpenTelemetry nem serviço externo. Quais aparecem sem o Observability Plus é conferido na T14.
 - CI no GitHub Actions: formatação, lint, tipos, testes e build.
 - Deploy com prévia por branch. Rollback pelo painel da hospedagem. Mudanças de banco em duas etapas (adicionar, depois remover) para que o rollback do app seja seguro.
 
