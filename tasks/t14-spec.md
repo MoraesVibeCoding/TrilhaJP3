@@ -1,6 +1,6 @@
 # T14: produção
 
-Status: **aguardando aprovação do Pedro.**
+Status: **fatias 1 e 3 aprovadas pelo Pedro em 2026-11-16, para hoje; o resto, depois.**
 
 Decisões do Pedro em 2026-11-16:
 
@@ -14,6 +14,14 @@ Confirmado pelo Pedro, também em 2026-11-16, que promover o projeto exige 3 pas
 1. um projeto de teste novo;
 2. a troca dos segredos do CI e deste ambiente, feita pelo Pedro;
 3. a limpeza dos restos de teste no projeto promovido.
+
+**Mudança de 2026-11-16, decidida pelo Pedro ("hoje, com proteção mínima"):** o Pedro quer usar o app com dados reais hoje.
+
+- Hoje entram só a fatia 1 (banco de teste separado e troca de segredos) e a fatia 3 (deploy).
+- O Pedro faz um backup manual antes do primeiro dado real e contrata os planos Pro hoje ou nos próximos dias.
+- A limpeza (fatia 2), o ensaio de rollback (fatia 4) e o guia (fatia 5) ficam para depois.
+- Até o Pro, o uso real fica no Hobby e no Free, contra o ADR 0001: o Pedro aceitou o risco em 2026-11-16, ciente de 3 coisas: o Hobby não permite uso comercial, o Free não tem backup automático e o Free pausa um projeto parado.
+- Os restos de teste no banco promovido ficam invisíveis para o Pedro, porque a RLS só mostra a empresa dele, e serão limpos na fatia 2.
 
 Base: `docs/SPEC.md` (seção 4.6 e linha T14 da seção 6), ADR 0001, `docs/STATUS.md` (pendências 4 e 8), `docs/SEGURANCA.md` (S3), `docs/OPERACAO-BACKUP.md`.
 
