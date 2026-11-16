@@ -10,6 +10,7 @@ import {
 } from "@/lib/attachments";
 import { getCurrentUser } from "@/lib/auth";
 import { MAX_CAPTURED, validateTitle } from "@/lib/capture";
+import { currentRequestId, logError } from "@/lib/log";
 import { parseDemand, type DemandField } from "@/lib/demand-input";
 import { priorityValue } from "@/lib/demand-labels";
 import {
@@ -31,6 +32,12 @@ async function update(taskId: string, change: object) {
     .update(change)
     .eq("id", taskId)
     .select("id");
+  // T13: o erro do banco já vai para o log pelo cliente; aqui fica a recusa silenciosa da RLS.
+  if (!error && !data?.length)
+    logError("tasks.update.no_rows", {
+      requestId: await currentRequestId(),
+      target: "rest/tasks",
+    });
   return !error && !!data?.length;
 }
 

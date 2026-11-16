@@ -7,6 +7,12 @@ const db = vi.hoisted(() => ({
 }));
 
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
+// T13: o log da recusa sem erro do banco (o erro do banco é logado pelo cliente do Supabase).
+const log = vi.hoisted(() => ({ logError: vi.fn() }));
+vi.mock("@/lib/log", () => ({
+  logError: log.logError,
+  currentRequestId: async () => "req-1",
+}));
 vi.mock("@/lib/auth", () => ({
   getCurrentUser: async () => ({ id: "u1", organizationId: "org-1" }),
 }));
@@ -100,6 +106,16 @@ describe("moveDemand", () => {
     await expect(moveDemand(ID, "doing")).resolves.toBe(false);
     await expect(moveDemand(ID, "doing")).resolves.toBe(false);
     expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
+  test("T13: a recusa sem erro do banco (RLS, nenhuma linha) fica no log e a ação segue devolvendo false", async () => {
+    log.logError.mockClear();
+    db.results = [{ data: [] }];
+    await expect(moveDemand(ID, "doing")).resolves.toBe(false);
+    expect(log.logError).toHaveBeenCalledWith("tasks.update.no_rows", {
+      requestId: "req-1",
+      target: "rest/tasks",
+    });
   });
 });
 

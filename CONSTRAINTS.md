@@ -15,7 +15,7 @@ Verificado por: `node scripts/floor-guard.mjs --base origin/main` (leitura do di
 
 ## Imposto com números
 
-Os limites de comportamento (marcados com ⏳) **avisam até 2026-11-06 e depois bloqueiam**. O piso e os demais bloqueiam desde já.
+Os limites de comportamento (marcados com ⏳) **avisaram até 2026-11-06 e bloqueiam desde então**; o bloqueio no CI foi ligado na T13, em 2026-11-15. O piso e os demais sempre bloquearam.
 
 | Dimensão                                       | Regra                                                                                                                                          | Verificado por                                                                          | Roda em                        |
 | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------ |
@@ -28,7 +28,7 @@ Os limites de comportamento (marcados com ⏳) **avisam até 2026-11-06 e depois
 | Cobertura do projeto                           | Linhas ≥ 96.6%, instruções ≥ 96.4%, ramos ≥ 92.9%, funções ≥ 95.6%                                                                             | `npx vitest run --coverage` (limites no `vitest.config.mts`)                            | fim da tarefa, CI              |
 | Segurança do código ⏳                         | Nenhum achado de severidade ERROR                                                                                                              | `semgrep scan --config p/default --config p/owasp-top-ten --severity ERROR --error src` | CI                             |
 | Segurança das dependências                     | Nada de severidade alta ou acima                                                                                                               | `npm audit --audit-level=high`                                                          | CI                             |
-| Segurança das dependências, segunda opinião ⏳ | Nada de severidade alta ou acima                                                                                                               | `osv-scanner scan source -r .`                                                          | CI                             |
+| Segurança das dependências, segunda opinião ⏳ | Nada de severidade alta ou acima                                                                                                               | `node scripts/osv-gate.mjs`                                                             | CI                             |
 | Acessibilidade                                 | Zero violações críticas ou sérias, regras WCAG 2.1 A e AA (axe-core), 10 telas: Retomar, as 3 visões da Demandas e a janela, em claro e escuro | `npx playwright test e2e/accessibility.spec.ts`                                         | CI, fim de tarefa de interface |
 
 Cada linha tem o comando que dá o veredito. Orçamento de tempo: o que roda a cada edição e no fim da tarefa fica em até 90 s (`npm run check:task`); scanners e E2E completos ficam no CI, sem limite.
@@ -38,6 +38,7 @@ Cada linha tem o comando que dá o veredito. Orçamento de tempo: o que roda a c
 - **80% no código novo:** alto o bastante para forçar um teste, baixo o bastante para uma linha de configuração.
 - **Projeto: o valor de hoje menos 0,5%:** a cobertura medida em 2026-10-23 foi 97,12% das linhas; 0,5% absorve a variação de um arquivo sem relação. Ninguém precisa escolher uma meta: o limite é não piorar.
 - **Segurança: nada alto ou acima:** abaixo disso é, na maior parte, ruído.
+- **osv-scanner pelo `scripts/osv-gate.mjs`:** o `osv-scanner` falha com qualquer severidade e não tem opção de limite. O script aplica a regra acima: bloqueia CVSS 7 ou mais, e também achado sem nota, que pode ser alto. Médio e abaixo aparecem no log. Escolha do Pedro em 2026-11-15, no lugar de ignorar achados por id.
 - **Acessibilidade zero crítico ou sério:** é regra do produto (`PRODUCT.md`, WCAG 2.1 AA) e a única checagem que o agente não pode contornar escrevendo código que não funciona: o axe-core é externo.
 
 ### O que foi verificado e o que não foi

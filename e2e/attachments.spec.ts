@@ -50,6 +50,8 @@ test(
     const doc = `contrato-${stamp}.pdf`;
     await page.goto("/");
     await page.getByRole("button", { name: title }).click();
+    // A janela chega em streaming pela rota interceptada; o campo de arquivo liga depois.
+    await page.waitForLoadState("networkidle");
     await dialog(page).locator("summary", { hasText: "Anexos" }).click();
     await dialog(page)
       .getByLabel("Escolher arquivos")

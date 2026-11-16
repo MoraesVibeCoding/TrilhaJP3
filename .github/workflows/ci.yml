@@ -29,30 +29,26 @@ jobs:
       - run: npm run format:check
       - run: npm run lint
       - run: npm run typecheck
-      # CONSTRAINTS.md: piso, segredos e cobertura do projeto bloqueiam; os demais avisam até 2026-11-06.
+      # CONSTRAINTS.md: todas bloqueiam (os avisos venceram em 2026-11-06; ligados na T13).
       - run: npm run check:floor
+      # Versões fixas (T13): @latest mudaria o veredito sem mudança no repositório.
       - name: Instalar gitleaks e osv-scanner
-        continue-on-error: true
         run: |
-          go install github.com/zricethezav/gitleaks/v8@latest
-          go install github.com/google/osv-scanner/v2/cmd/osv-scanner@latest
+          go install github.com/zricethezav/gitleaks/v8@v8.28.0
+          go install github.com/google/osv-scanner/v2/cmd/osv-scanner@v2.2.2
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
       - name: Segredos (gitleaks)
-        continue-on-error: true # avisa até 2026-11-06, ainda não verificado no GitHub
         run: npm run check:secrets
       - run: npx vitest run --coverage
       - name: Cobertura do código novo
-        continue-on-error: true # avisa até 2026-11-06
         run: node scripts/coverage-changed.mjs --base origin/main
       - run: npm audit --audit-level=high
       - name: Segurança do código (semgrep)
-        continue-on-error: true # avisa até 2026-11-06, ainda não verificado no GitHub
         run: |
-          pipx install semgrep
+          pipx install semgrep==1.182.1
           semgrep scan --config p/default --config p/owasp-top-ten --severity ERROR --error src
-      - name: Segurança das dependências (osv-scanner)
-        continue-on-error: true # avisa até 2026-11-06, ainda não verificado no GitHub
-        run: osv-scanner scan source -r .
+      - name: Segurança das dependências (osv-scanner, Alto ou acima)
+        run: node scripts/osv-gate.mjs
       - run: npm run build
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}

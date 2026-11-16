@@ -1,10 +1,10 @@
 # STATUS — TrilhaJp3
 
-Atualizado em 2026-11-11 (T10 e fuso mesclados, PRs #15 e #16; T11 construída na branch `claude/t11-spec`). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
+Atualizado em 2026-11-15 (T11 mesclada, PR #17; T13 construída na branch `claude/t13-spec`). Leia junto com `docs/SPEC.md` (aprovada, "DE ACORDO" do Pedro).
 
 ## Próxima ação
 
-Pedro: revisar a PR da T11 (anexos, branch `claude/t11-spec`, spec `tasks/t11-spec.md`). Depois: T13 (endurecimento e observabilidade).
+Pedro: revisar a PR da T13 (endurecimento e observabilidade, branch `claude/t13-spec`, spec `tasks/t13-spec.md`, revisão em `docs/SEGURANCA.md`). Depois: rodar o teste de restauração do banco e dos anexos no seu computador (`docs/OPERACAO-BACKUP.md`) e seguir para a T14 (produção).
 
 ## Conserto da janela (2026-11-04, PR #12)
 
@@ -35,7 +35,7 @@ Ver `docs/PRINCIPIOS-OBJETIVOS.md`, seção 5.
 
 ## Em uma frase
 
-TrilhaJp3 é o sistema de gestão da empresa (Moraes Coding). A v1 é o módulo Projetos e demandas. Prontas e em `main`: T0, T1-R, T2 (empresas e RLS), T3 (login), T4 (projetos), T12 (PWA) e as telas da T5b e T6a a T6d. A T5 (demandas reais) está em `main` (PR #5). A troca de marca para Moraes Coding está em `main` (PR #9). A T7 (subtarefas) está em `main` (PR #10). A T8 (etiquetas) está em `main` (PR #11). O conserto da janela está em `main` (PR #12). A T9 (comentários) está em `main` (PRs #13 e #14). A T10 (histórico) está em `main` (PR #15), e as datas saem sempre no fuso de São Paulo (PR #16). A T11 (anexos: bucket privado, miniaturas, só quem enviou remove) está construída na branch `claude/t11-spec`. Próximas: T13, T14.
+TrilhaJp3 é o sistema de gestão da empresa (Moraes Coding). A v1 é o módulo Projetos e demandas. Prontas e em `main`: T0, T1-R, T2 (empresas e RLS), T3 (login), T4 (projetos), T12 (PWA) e as telas da T5b e T6a a T6d. A T5 (demandas reais) está em `main` (PR #5). A troca de marca para Moraes Coding está em `main` (PR #9). A T7 (subtarefas) está em `main` (PR #10). A T8 (etiquetas) está em `main` (PR #11). O conserto da janela está em `main` (PR #12). A T9 (comentários) está em `main` (PRs #13 e #14). A T10 (histórico) está em `main` (PR #15), e as datas saem sempre no fuso de São Paulo (PR #16). A T11 (anexos: bucket privado, miniaturas, só quem enviou remove) está em `main` (PR #17). A T13 (cabeçalhos de segurança e CSP, logs JSON com id da requisição, órfãos, backup e restauração dos anexos, revisão OWASP e checagens de segurança do CI bloqueando) está construída na branch `claude/t13-spec`. Próxima: T14.
 
 ## Decisões fechadas (resumo)
 
@@ -71,7 +71,12 @@ Comandos: `npm run db:migrate` (aplica `supabase/migrations/` pela Management AP
 4. **Empresa e dono (T3), 2026-10-26:** a migração `20261026190000_moraes_codevibe` cria a empresa Moraes CodeVibe (id `5d35ad87-c91e-4d87-a95a-11d421149f19`). O vínculo `owner` do Pedro **não está no repositório** (o repositório é público e o e-mail não entra nele): foi criado por consulta avulsa pela Management API, achando o usuário pelo e-mail. **Repetir em produção (T14)** depois de o Pedro criar o usuário lá: `insert into public.memberships (organization_id, user_id, role) select '5d35ad87-c91e-4d87-a95a-11d421149f19', id, 'owner' from auth.users where lower(email) = '<e-mail do Pedro>' on conflict do nothing;`. O teste `supabase/tests/company.test.ts` confere que a empresa existe com exatamente um dono.
 5. **Docker:** o ambiente de nuvem não tem daemon do Docker, então o Supabase local não sobe lá. Os testes de RLS usam o projeto Supabase de teste.
 6. **Marca:** o pedido de registro no INPI ainda não foi feito. O Pedro disse que fará.
-7. `npm audit --audit-level=high`: 0 vulnerabilidades em 2026-10-26 (os 5 alertas antigos do ESLint sumiram).
+7. `npm audit --audit-level=high`: 0 vulnerabilidades em 2026-10-26 (os 5 alertas antigos do ESLint sumiram). Em 2026-11-15: 0 nas dependências de produção, 8 moderadas nas de desenvolvimento.
+8. **T13, 2026-11-15:**
+   - pendências de segurança S3 (senha vazada, só no Supabase Pro), S4 (`minimatch` Médio, só do lint, revisar até 2026-12-15) e S6 (MFA), em `docs/SEGURANCA.md`;
+   - o teste de restauração do banco e dos anexos ainda não rodou: depende do computador do Pedro;
+   - na T14, conferir quais métricas o painel da Vercel mostra sem o Observability Plus;
+   - 17 anexos órfãos de execuções antigas do E2E foram removidos do projeto de teste em 2026-11-15, a pedido do Pedro.
 
 ## Notas de ambiente
 
