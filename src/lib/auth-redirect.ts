@@ -18,12 +18,18 @@ export function safeNext(value: string | null | undefined): string {
   return url.pathname + url.search;
 }
 
+export const FORGOT_PATH = "/entrar/esqueci";
+// O link do e-mail troca o token por sessão: abre com ou sem sessão (tasks/senha-spec.md).
+export const CONFIRM_PATH = "/auth/confirm";
+
 // Para onde mandar a requisição, ou null para seguir.
 export function redirectFor(
   pathname: string,
   search: string,
   signedIn: boolean,
 ): string | null {
+  if (pathname === CONFIRM_PATH) return null;
+  if (pathname === FORGOT_PATH) return signedIn ? "/" : null;
   if (pathname === LOGIN_PATH) {
     return signedIn ? safeNext(new URLSearchParams(search).get("de")) : null;
   }

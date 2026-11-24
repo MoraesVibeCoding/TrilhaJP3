@@ -1,6 +1,6 @@
 # Senha: trocar logado e recuperar pelo e-mail
 
-Status: **aguardando aprovação do Pedro.**
+Status: **aprovada pelo Pedro em 2026-11-24 ("De acordo").**
 
 Decisões do Pedro em 2026-11-24:
 

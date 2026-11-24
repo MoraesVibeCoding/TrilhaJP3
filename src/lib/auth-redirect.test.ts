@@ -47,4 +47,18 @@ describe("redirectFor", () => {
   test("com sessão, rota do app segue", () => {
     expect(redirectFor("/demandas", "", true)).toBeNull();
   });
+
+  test("senha: o esqueci e a rota do link do e-mail abrem sem sessão", () => {
+    expect(redirectFor("/entrar/esqueci", "", false)).toBeNull();
+    expect(
+      redirectFor("/auth/confirm", "?token_hash=x&type=recovery", false),
+    ).toBeNull();
+    // logado, o esqueci não faz sentido; o link do e-mail ainda vale (troca de sessão)
+    expect(redirectFor("/entrar/esqueci", "", true)).toBe("/");
+    expect(redirectFor("/auth/confirm", "?token_hash=x", true)).toBeNull();
+    // a tela Nova senha precisa da sessão do link
+    expect(redirectFor("/nova-senha", "", false)).toBe(
+      `${LOGIN_PATH}?de=%2Fnova-senha`,
+    );
+  });
 });
